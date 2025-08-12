@@ -1,0 +1,14 @@
+#kc-error-message .instruction,
+.kcAlertClass,
+.kcInputErrorMessageClass {
+  @apply text-red-500;
+}
+
+.kcAlertClass.alert-info .kcAlertTitleClass, /* login-verify-email WithInfoMessage */
+.alert.alert-warning /* delete-account-confirm Default */ {
+  @apply text-yellow-500;
+}
+
+.kcAlertClass.alert-success .kcAlertTitleClass /* login-verify-email WithSuccessMessage */ {
+  @apply text-green-500;
+}

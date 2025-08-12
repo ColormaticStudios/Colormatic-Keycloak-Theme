@@ -1,0 +1,49 @@
+{
+  "plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
+  "singleQuote": false,
+  "tabWidth": 2,
+  "useTabs": false,
+  "htmlWhitespaceSensitivity": "ignore",
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "tabWidth": 2,
+        "useTabs": false
+      }
+    },
+    {
+      "files": "*.css",
+      "options": {
+        "tabWidth": 2,
+        "useTabs": false
+      }
+    },
+    {
+      "files": "*.json",
+      "options": {
+        "tabWidth": 2,
+        "useTabs": false
+      }
+    },
+    {
+      "files": "*.svelte",
+      "options": {
+        "tabWidth": 2,
+        "useTabs": false
+      }
+    },
+    {
+      "files": "*.js",
+      "options": {
+        "useTabs": true
+      }
+    },
+    {
+      "files": "*.ts",
+      "options": {
+        "useTabs": true
+      }
+    }
+  ]
+}

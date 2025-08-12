@@ -1,0 +1,26 @@
+.kcButtonClass {
+  @apply hover:cursor-pointer;
+  @apply inline;
+  @apply rounded-md;
+  @apply px-4 py-1;
+}
+
+.kcButtonClass.kcButtonDefaultClass {
+  @apply border border-white;
+}
+
+.kcButtonClass.kcButtonPrimaryClass {
+  @apply bg-slate-950 text-white dark:bg-white dark:text-black;
+}
+
+.kcButtonBlockClass {
+  @apply my-2 block w-full;
+}
+
+.kcButtonLargeClass {
+  @apply text-lg;
+}
+
+.kcFormButtonsWrapperClass {
+  @apply block w-full;
+}

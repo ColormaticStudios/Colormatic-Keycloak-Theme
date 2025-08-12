@@ -1,0 +1,117 @@
+/*/
+ * To work on this file, I recommend having the storybook open.
+ * Select the element you want to style (or check the style for)
+ * and find its kc* class in here. If it's not present, create it
+ * in the order it appears in the layout.
+/*/
+
+@import "tailwindcss";
+@import "./button";
+@import "./alert";
+@import "./fixes";
+
+.kcBodyClass {
+  @apply bg-slate-100 dark:bg-slate-950;
+}
+
+.kcLoginClass {
+  @apply flex flex-col items-center;
+  @apply dark:text-white;
+  @apply mt-[10%];
+}
+
+.kcHeaderClass {
+  @apply text-4xl lg:text-6xl;
+  @apply tracking-widest uppercase;
+  @apply mb-[5%];
+}
+
+.kcFormCardClass {
+  @apply rounded-2xl border p-6;
+  @apply border-slate-300 bg-white;
+  @apply dark:border-slate-800 dark:bg-slate-900;
+  @apply w-full lg:w-[50%];
+}
+
+.kcFormCardClass a {
+  @apply underline;
+}
+
+.kcFormHeaderClass {
+  @apply pb-4;
+}
+
+.kcFormHeaderClass h1 {
+  @apply text-2xl;
+}
+
+.kcLocaleMainClass,
+.kcLocaleWrapperClass,
+.kcLocaleDropDownClass {
+  @apply inline; /* The locale select is heavily nested */
+}
+
+.kcLocaleMainClass {
+  @apply float-right;
+}
+
+.kcFormHeaderClass button {
+  @apply rounded-md bg-slate-200 dark:bg-white dark:text-black;
+  @apply px-2 py-1;
+}
+
+.kcLocaleListClass {
+  @apply hidden; /* When you click the *show* button, an overriding display: block will be applied. */
+  @apply max-h-[335px] w-fit overflow-scroll;
+  /*/
+   * The max height is a specific number (335px) so that at the default text size,
+   * the bottom language name will be cut off in the middle to communicate to the
+   * user that this list is scrollable.
+  /*/
+  @apply rounded-lg border border-slate-300 p-2 dark:border-slate-700;
+  @apply absolute z-1;
+  @apply bg-white dark:bg-slate-800;
+}
+
+.kcFormGroupClass {
+  @apply flex flex-col;
+  @apply my-6;
+}
+
+.kcLabelWrapperClass,
+.kcLabelClass {
+  @apply pb-2;
+}
+
+.kcInputClass {
+  @apply rounded-md border border-slate-300 dark:border-slate-700;
+  @apply dark:bg-slate-800;
+  @apply p-1;
+  @apply flex-grow; /* For password fields, don't be half-width because of password show button. */
+}
+
+.kcInputGroup {
+  @apply flex;
+}
+
+.kcFormSettingClass {
+  @apply flex flex-row justify-between;
+}
+
+.kcSignUpClass {
+  @apply pt-4 text-right;
+}
+
+#kc-form-buttons {
+  @apply flex flex-row justify-between;
+  @apply mt-4;
+}
+
+#kc-totp-secret-qr-code {
+  @apply mx-auto p-4;
+}
+
+.kcRecoveryCodesActions {
+  @apply flex justify-between;
+  @apply py-3;
+}
