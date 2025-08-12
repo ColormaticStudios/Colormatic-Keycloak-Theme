@@ -8,7 +8,7 @@
   import { onMount } from "svelte";
   import type { I18n } from "./i18n";
   import type { KcContext } from "./KcContext";
-  import "../main.css";
+  import "./main.css";
 
   const {
     displayInfo = false,
