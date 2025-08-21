@@ -22,16 +22,6 @@ ul {
   /*/
 }
 
-#kc-form-buttons button {
-  margin-left: 0px !important;
-  /*/
-   * For some reason, in the delete-account-confirm form,
-   * the cancel button has a margin-left of calc(100% - 220px).
-   * I have no idea why this happens, but I don't want it
-   * messing up the layout.
-  /*/
-}
-
 .kcInputWrapperClass .kcInputClass {
   width: 100%;
   /*/

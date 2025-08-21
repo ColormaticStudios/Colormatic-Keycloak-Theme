@@ -68,7 +68,6 @@
             "kcButtonDefaultClass",
             "kcButtonLargeClass",
           )}
-          style:margin-left={"calc(100% - 220px)"}
           type="submit"
           name="cancel-aia"
           value="true"
