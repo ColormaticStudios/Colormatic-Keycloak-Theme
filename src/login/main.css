@@ -71,11 +71,21 @@
   @apply rounded-lg border border-slate-300 p-2 dark:border-slate-700;
   @apply absolute z-1;
   @apply bg-white dark:bg-slate-800;
+  @apply list-none;
+}
+
+.kcLocaleListClass li a {
+  @apply no-underline;
+}
+
+.kcLocaleListClass li:nth-child(odd) {
+  @apply bg-slate-100 dark:bg-slate-800;
+  /* I don't really have a good alternating bg color for dark theme */
 }
 
 .kcFormGroupClass {
   @apply flex flex-col;
-  @apply my-6;
+  @apply mt-4;
 }
 
 .kcLabelWrapperClass,
@@ -92,6 +102,12 @@
 
 .kcInputGroup {
   @apply flex;
+}
+
+.kcFormPasswordVisibilityButtonClass {
+  @apply ml-1 px-2;
+  @apply rounded-md border border-slate-300 dark:border-slate-700;
+  @apply dark:bg-slate-800;
 }
 
 .kcFormSettingClass {
