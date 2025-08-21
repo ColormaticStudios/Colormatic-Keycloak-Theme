@@ -1,9 +1,8 @@
 <script lang="ts">
-  import LogoutOtherSessions from "@keycloakify/svelte/login/components/LogoutOtherSessions.svelte";
-  import type { UserProfileFormFieldsProps } from "@keycloakify/svelte/login/components/UserProfileFormFieldsProps";
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
+  import LogoutOtherSessions from "../components/LogoutOtherSessions.svelte";
+  import type { UserProfileFormFieldsProps } from "../components/UserProfileFormFieldsProps";
+  import type { PageProps } from "./PageProps";
   import { useState } from "@keycloakify/svelte/tools/useState";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
   import type { Component } from "svelte";
   import type { I18n } from "../i18n";
   import type { KcContext } from "../KcContext";
@@ -26,11 +25,6 @@
     doMakeUserConfirmPassword,
   }: UpdateEmailProps = $props();
 
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
-
   const { msg, msgStr } = $i18n;
 
   const [isFormSubmittable, setIsFormSubmittable] = useState(false);
@@ -51,45 +45,44 @@
   {/snippet}
   <form
     id="kc-update-email-form"
-    class={kcClsx("kcFormClass")}
+    class="kcFormClass"
     action={url.loginAction}
     method="post"
   >
     <UserProfileFormFields
       {kcContext}
       {i18n}
-      {kcClsx}
       onIsFormSubmittableValueChange={setIsFormSubmittable}
       {doMakeUserConfirmPassword}
     />
 
-    <div class={kcClsx("kcFormGroupClass")}>
-      <div id="kc-form-options" class={kcClsx("kcFormOptionsClass")}>
-        <div class={kcClsx("kcFormOptionsWrapperClass")}></div>
+    <div class="kcFormGroupClass">
+      <div id="kc-form-options" class="kcFormOptionsClass">
+        <div class="kcFormOptionsWrapperClass"></div>
       </div>
 
-      <LogoutOtherSessions {kcClsx} {i18n} />
+      <LogoutOtherSessions {i18n} />
 
-      <div id="kc-form-buttons" class={kcClsx("kcFormButtonsClass")}>
+      <div id="kc-form-buttons" class="kcFormButtonsClass">
         <input
           disabled={!$isFormSubmittable}
-          class={kcClsx(
-            "kcButtonClass",
-            "kcButtonPrimaryClass",
-            "kcButtonBlockClass",
-            "kcButtonLargeClass",
-          )}
+          class="
+            kcButtonClass
+            kcButtonPrimaryClass
+            kcButtonBlockClass
+            kcButtonLargeClass
+          "
           type="submit"
           value={msgStr("doSubmit")}
         />
         {#if isAppInitiatedAction}
           <button
-            class={kcClsx(
-              "kcButtonClass",
-              "kcButtonDefaultClass",
-              "kcButtonLargeClass",
-              "kcButtonBlockClass",
-            )}
+            class="
+              kcButtonClass
+              kcButtonDefaultClass
+              kcButtonLargeClass
+              kcButtonBlockClass
+            "
             type="submit"
             name="cancel-aia"
             value="true"

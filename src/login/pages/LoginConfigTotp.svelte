@@ -1,8 +1,7 @@
 <script lang="ts">
-  import LogoutOtherSessions from "@keycloakify/svelte/login/components/LogoutOtherSessions.svelte";
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
+  import LogoutOtherSessions from "../components/LogoutOtherSessions.svelte";
+  import type { PageProps } from "./PageProps";
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
@@ -16,11 +15,6 @@
     Extract<KcContext, { pageId: "login-config-totp.ftl" }>,
     I18n
   > = $props();
-
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
 
   const { url, isAppInitiatedAction, totp, mode, messagesPerField } = kcContext;
 
@@ -107,32 +101,32 @@
   </ol>
   <form
     action={url.loginAction}
-    class={kcClsx("kcFormClass")}
+    class="kcFormClass"
     id="kc-totp-settings-form"
     method="post"
   >
-    <div class={kcClsx("kcFormGroupClass")}>
-      <div class={kcClsx("kcLabelWrapperClass")}>
-        <label for="totp" class={kcClsx("kcLabelClass")}>
+    <div class="kcFormGroupClass">
+      <div class="kcLabelWrapperClass">
+        <label for="totp" class="kcLabelClass">
           {@render msg("authenticatorCode")()}
         </label>
         {" "}
         <span class="required">*</span>
       </div>
-      <div class={kcClsx("kcInputWrapperClass")}>
+      <div class="kcInputWrapperClass">
         <input
           type="text"
           id="totp"
           name="totp"
           autocomplete="off"
-          class={kcClsx("kcInputClass")}
+          class="kcInputClass"
           aria-invalid={messagesPerField.existsError("totp")}
         />
 
         {#if messagesPerField.existsError("totp")}
           <span
             id="input-error-otp-code"
-            class={kcClsx("kcInputErrorMessageClass")}
+            class="kcInputErrorMessageClass"
             aria-live="polite"
           >
             {@html kcSanitize(messagesPerField.get("totp"))}
@@ -148,9 +142,9 @@
       {#if mode}<input type="hidden" id="mode" value={mode} />{/if}
     </div>
 
-    <div class={kcClsx("kcFormGroupClass")}>
-      <div class={kcClsx("kcLabelWrapperClass")}>
-        <label for="userLabel" class={kcClsx("kcLabelClass")}>
+    <div class="kcFormGroupClass">
+      <div class="kcLabelWrapperClass">
+        <label for="userLabel" class="kcLabelClass">
           {@render msg("loginTotpDeviceName")()}
         </label>
         {" "}
@@ -158,19 +152,19 @@
             *
           </span>{/if}
       </div>
-      <div class={kcClsx("kcInputWrapperClass")}>
+      <div class="kcInputWrapperClass">
         <input
           type="text"
           id="userLabel"
           name="userLabel"
           autocomplete="off"
-          class={kcClsx("kcInputClass")}
+          class="kcInputClass"
           aria-invalid={messagesPerField.existsError("userLabel")}
         />
         {#if messagesPerField.existsError("userLabel")}
           <span
             id="input-error-otp-label"
-            class={kcClsx("kcInputErrorMessageClass")}
+            class="kcInputErrorMessageClass"
             aria-live="polite"
           >
             {@html kcSanitize(messagesPerField.get("userLabel"))}
@@ -179,30 +173,30 @@
       </div>
     </div>
 
-    <div class={kcClsx("kcFormGroupClass")}>
-      <LogoutOtherSessions {kcClsx} {i18n} />
+    <div class="kcFormGroupClass">
+      <LogoutOtherSessions {i18n} />
     </div>
 
     {#if isAppInitiatedAction}
       <input
         type="submit"
-        class={kcClsx(
-          "kcButtonClass",
-          "kcButtonPrimaryClass",
-          "kcButtonLargeClass",
-          "kcButtonBlockClass",
-        )}
+        class="
+          kcButtonClass
+          kcButtonPrimaryClass
+          kcButtonLargeClass
+          kcButtonBlockClass
+        "
         id="saveTOTPBtn"
         value={msgStr("doSubmit")}
       />
       <button
         type="submit"
-        class={kcClsx(
-          "kcButtonClass",
-          "kcButtonDefaultClass",
-          "kcButtonLargeClass",
-          "kcButtonBlockClass",
-        )}
+        class="
+          kcButtonClass
+          kcButtonDefaultClass
+          kcButtonLargeClass
+          kcButtonBlockClass
+        "
         id="cancelTOTPBtn"
         name="cancel-aia"
         value="true"
@@ -212,12 +206,12 @@
     {:else}
       <input
         type="submit"
-        class={kcClsx(
-          "kcButtonClass",
-          "kcButtonPrimaryClass",
-          "kcButtonLargeClass",
-          "kcButtonBlockClass",
-        )}
+        class="
+          kcButtonClass
+          kcButtonPrimaryClass
+          kcButtonLargeClass
+          kcButtonBlockClass
+        "
         id="saveTOTPBtn"
         value={msgStr("doSubmit")}
       />

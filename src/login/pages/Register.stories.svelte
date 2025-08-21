@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
   import { defineMeta } from "@storybook/addon-svelte-csf";
-  import { Attribute } from "keycloakify/login";
+  import type { Attribute } from "keycloakify/login";
   import type { KcPageStoryProps } from "../KcPageStory";
   import KcPageStory from "../KcPageStory.svelte";
 

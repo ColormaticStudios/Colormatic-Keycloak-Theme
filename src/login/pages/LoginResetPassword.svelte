@@ -1,7 +1,6 @@
 <script lang="ts">
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
+  import type { PageProps } from "./PageProps";
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
@@ -15,11 +14,6 @@
     Extract<KcContext, { pageId: "login-reset-password.ftl" }>,
     I18n
   > = $props();
-
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
 
   const { url, realm, auth, messagesPerField } = kcContext;
 
@@ -46,13 +40,13 @@
   {/snippet}
   <form
     id="kc-reset-password-form"
-    class={kcClsx("kcFormClass")}
+    class="kcFormClass"
     action={url.loginAction}
     method="post"
   >
-    <div class={kcClsx("kcFormGroupClass")}>
-      <div class={kcClsx("kcLabelWrapperClass")}>
-        <label for="username" class={kcClsx("kcLabelClass")}>
+    <div class="kcFormGroupClass">
+      <div class="kcLabelWrapperClass">
+        <label for="username" class="kcLabelClass">
           {#if !realm.loginWithEmailAllowed}
             {@render msg("username")()}
           {:else if !realm.registrationEmailAsUsername}
@@ -62,13 +56,13 @@
           {/if}
         </label>
       </div>
-      <div class={kcClsx("kcInputWrapperClass")}>
+      <div class="kcInputWrapperClass">
         <!-- svelte-ignore a11y_autofocus -->
         <input
           type="text"
           id="username"
           name="username"
-          class={kcClsx("kcInputClass")}
+          class="kcInputClass"
           autofocus
           value={auth.attemptedUsername ?? ""}
           aria-invalid={messagesPerField.existsError("username")}
@@ -76,7 +70,7 @@
         {#if messagesPerField.existsError("username")}
           <span
             id="input-error-username"
-            class={kcClsx("kcInputErrorMessageClass")}
+            class="kcInputErrorMessageClass"
             aria-live="polite"
           >
             {@html kcSanitize(messagesPerField.get("username"))}
@@ -84,23 +78,23 @@
         {/if}
       </div>
     </div>
-    <div class={kcClsx("kcFormGroupClass", "kcFormSettingClass")}>
-      <div id="kc-form-options" class={kcClsx("kcFormOptionsClass")}>
-        <div class={kcClsx("kcFormOptionsWrapperClass")}>
+    <div class="kcFormGroupClass kcFormSettingClass">
+      <div id="kc-form-options" class="kcFormOptionsClass">
+        <div class="kcFormOptionsWrapperClass">
           <span>
             <a href={url.loginUrl}>{@render msg("backToLogin")()}</a>
           </span>
         </div>
       </div>
 
-      <div id="kc-form-buttons" class={kcClsx("kcFormButtonsClass")}>
+      <div id="kc-form-buttons" class="kcFormButtonsClass">
         <input
-          class={kcClsx(
-            "kcButtonClass",
-            "kcButtonPrimaryClass",
-            "kcButtonBlockClass",
-            "kcButtonLargeClass",
-          )}
+          class="
+            kcButtonClass
+            kcButtonPrimaryClass
+            kcButtonBlockClass
+            kcButtonLargeClass
+          "
           type="submit"
           value={msgStr("doSubmit")}
         />

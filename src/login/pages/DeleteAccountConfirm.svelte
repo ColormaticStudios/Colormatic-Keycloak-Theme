@@ -1,6 +1,5 @@
 <script lang="ts">
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+  import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
@@ -15,11 +14,6 @@
     I18n
   > = $props();
 
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
-
   const { url, triggered_from_aia } = kcContext;
 
   const { msg, msgStr } = $i18n;
@@ -33,17 +27,17 @@
   <form action={url.loginAction} class="form-vertical" method="post">
     <div
       class="alert alert-warning"
-      style:margin-top={"0"}
-      style:margin-bottom={"30px"}
+      style:margin-top="0"
+      style:margin-bottom="30px"
     >
       <span class="pficon pficon-warning-triangle-o"></span>
       {@render msg("irreversibleAction")()}
     </div>
     <p>{@render msg("deletingImplies")()}</p>
     <ul
-      style:color={"#72767b"}
-      style:list-style={"disc"}
-      style:list-style-position={"inside"}
+      style:color="#72767b"
+      style:list-style="disc"
+      style:list-style-position="inside"
     >
       <li>{@render msg("loggingOutImmediately")()}</li>
       <li>{@render msg("errasingData")()}</li>
@@ -53,21 +47,21 @@
     </p>
     <div id="kc-form-buttons">
       <input
-        class={kcClsx(
-          "kcButtonClass",
-          "kcButtonPrimaryClass",
-          "kcButtonLargeClass",
-        )}
+        class="
+          kcButtonClass
+          kcButtonPrimaryClass
+          kcButtonLargeClass
+		  "
         type="submit"
         value={msgStr("doConfirmDelete")}
       />
       {#if triggered_from_aia}
         <button
-          class={kcClsx(
-            "kcButtonClass",
-            "kcButtonDefaultClass",
-            "kcButtonLargeClass",
-          )}
+          class="
+            kcButtonClass
+            kcButtonDefaultClass
+            kcButtonLargeClass
+          "
           type="submit"
           name="cancel-aia"
           value="true"

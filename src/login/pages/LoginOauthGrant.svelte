@@ -1,6 +1,5 @@
 <script lang="ts">
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+  import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
@@ -18,11 +17,6 @@
   const { url, oauth, client } = kcContext;
 
   const { msg, msgStr, advancedMsg, advancedMsgStr } = $i18n;
-
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes} bodyClassName="oauth">
@@ -73,30 +67,30 @@
 
     <form class="form-actions" action={url.oauthAction} method="POST">
       <input type="hidden" name="code" value={oauth.code} />
-      <div class={kcClsx("kcFormGroupClass")}>
+      <div class="kcFormGroupClass">
         <div id="kc-form-options">
-          <div class={kcClsx("kcFormOptionsWrapperClass")}></div>
+          <div class="kcFormOptionsWrapperClass"></div>
         </div>
 
         <div id="kc-form-buttons">
-          <div class={kcClsx("kcFormButtonsWrapperClass")}>
+          <div class="kcFormButtonsWrapperClass">
             <input
-              class={kcClsx(
-                "kcButtonClass",
-                "kcButtonPrimaryClass",
-                "kcButtonLargeClass",
-              )}
+              class="
+                kcButtonClass
+                kcButtonPrimaryClass
+                kcButtonLargeClass
+              "
               name="accept"
               id="kc-login"
               type="submit"
               value={msgStr("doYes")}
             />
             <input
-              class={kcClsx(
-                "kcButtonClass",
-                "kcButtonDefaultClass",
-                "kcButtonLargeClass",
-              )}
+              class="
+                kcButtonClass
+                kcButtonDefaultClass
+                kcButtonLargeClass
+              "
               name="cancel"
               id="kc-cancel"
               type="submit"

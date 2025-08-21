@@ -1,8 +1,7 @@
 <script lang="ts">
-  import LogoutOtherSessions from "@keycloakify/svelte/login/components/LogoutOtherSessions.svelte";
+  import LogoutOtherSessions from "../components/LogoutOtherSessions.svelte";
   import { useScript } from "@keycloakify/svelte/login/pages/LoginRecoveryAuthnCodeConfig.useScript";
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+  import type { PageProps } from "./PageProps";
   import { clsx } from "keycloakify/tools/clsx";
   import type { I18n } from "../i18n";
   import type { KcContext } from "../KcContext";
@@ -17,11 +16,6 @@
     Extract<KcContext, { pageId: "login-recovery-authn-code-config.ftl" }>,
     I18n
   > = $props();
-
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
 
   const { recoveryAuthnCodesConfigBean, isAppInitiatedAction } = kcContext;
 
@@ -41,7 +35,7 @@
       "pf-c-alert",
       "pf-m-warning",
       "pf-m-inline",
-      kcClsx("kcRecoveryCodesWarning"),
+      "kcRecoveryCodesWarning",
     )}
     aria-label="Warning alert"
   >
@@ -57,7 +51,7 @@
     </div>
   </div>
 
-  <ol id={olRecoveryCodesListId} class={kcClsx("kcRecoveryCodesList")}>
+  <ol id={olRecoveryCodesListId} class="kcRecoveryCodesList">
     {#each recoveryAuthnCodesConfigBean.generatedRecoveryAuthnCodesList as code, index}
       <li>
         <span>{index + 1}:</span>
@@ -67,7 +61,7 @@
   </ol>
 
   <!-- actions -->
-  <div class={kcClsx("kcRecoveryCodesActions")}>
+  <div class="kcRecoveryCodesActions">
     <button
       id="printRecoveryCodes"
       class={clsx(
@@ -110,9 +104,9 @@
   </div>
 
   <!-- confirmation checkbox -->
-  <div class={kcClsx("kcFormOptionsClass")}>
+  <div class="kcFormOptionsClass">
     <input
-      class={kcClsx("kcCheckInputClass")}
+      class="kcCheckInputClass"
       type="checkbox"
       id="kcRecoveryCodesConfirmationCheck"
       name="kcRecoveryCodesConfirmationCheck"
@@ -129,7 +123,7 @@
 
   <form
     action={kcContext.url.loginAction}
-    class={kcClsx("kcFormGroupClass")}
+    class="kcFormGroupClass"
     id="kc-recovery-codes-settings-form"
     method="post"
   >
@@ -150,27 +144,27 @@
       value={msgStr("recovery-codes-label-default")}
     />
 
-    <LogoutOtherSessions {kcClsx} {i18n} />
+    <LogoutOtherSessions {i18n} />
 
     {#if isAppInitiatedAction}
       <input
         type="submit"
-        class={kcClsx(
-          "kcButtonClass",
-          "kcButtonPrimaryClass",
-          "kcButtonLargeClass",
-        )}
+        class="
+          kcButtonClass
+          kcButtonPrimaryClass
+          kcButtonLargeClass
+        "
         id="saveRecoveryAuthnCodesBtn"
         value={msgStr("recovery-codes-action-complete")}
         disabled
       />
       <button
         type="submit"
-        class={kcClsx(
-          "kcButtonClass",
-          "kcButtonDefaultClass",
-          "kcButtonLargeClass",
-        )}
+        class="
+          kcButtonClass
+          kcButtonDefaultClass
+          kcButtonLargeClass
+        "
         id="cancelRecoveryAuthnCodesBtn"
         name="cancel-aia"
         value="true"
@@ -180,12 +174,12 @@
     {:else}
       <input
         type="submit"
-        class={kcClsx(
-          "kcButtonClass",
-          "kcButtonPrimaryClass",
-          "kcButtonBlockClass",
-          "kcButtonLargeClass",
-        )}
+        class="
+          kcButtonClass
+          kcButtonPrimaryClass
+          kcButtonBlockClass
+          kcButtonLargeClass
+        "
         id="saveRecoveryAuthnCodesBtn"
         value={msgStr("recovery-codes-action-complete")}
         disabled

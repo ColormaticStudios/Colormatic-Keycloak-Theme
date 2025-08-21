@@ -1,7 +1,6 @@
 <script lang="ts">
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
+  import type { PageProps } from "./PageProps";
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
@@ -10,11 +9,6 @@
     I18n
   > = $props();
   const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
-
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
 
   const { code } = kcContext;
 
@@ -32,7 +26,7 @@
   <div id="kc-code">
     {#if code.success}
       <p>{@render msg("copyCodeInstruction")()}</p>
-      <input id="code" class={kcClsx("kcTextareaClass")} value={code.code} />
+      <input id="code" class="kcTextareaClass" value={code.code} />
     {:else if code.error}
       <p id="error">{@html kcSanitize(code.error)}</p>
     {/if}

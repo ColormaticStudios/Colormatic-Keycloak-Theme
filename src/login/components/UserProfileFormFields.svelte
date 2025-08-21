@@ -2,7 +2,7 @@
   import FieldErrors from "./FieldErrors.svelte";
   import GroupLabel from "./GroupLabel.svelte";
   import InputFieldByType from "./InputFieldByType.svelte";
-  import type { UserProfileFormFieldsProps } from "@keycloakify/svelte/login/components/UserProfileFormFieldsProps";
+  import type { UserProfileFormFieldsProps } from "./UserProfileFormFieldsProps";
   import { useUserProfileForm } from "@keycloakify/svelte/login/lib/useUserProfileForm";
   import { onMount } from "svelte";
   import { derived } from "svelte/store";
@@ -13,7 +13,6 @@
   const {
     kcContext,
     i18n,
-    kcClsx,
     onIsFormSubmittableValueChange,
     doMakeUserConfirmPassword,
     beforeField,
@@ -46,36 +45,35 @@
 
 {#each $formFieldStates as formFieldState, i}
   {@const { attribute, valueOrValues } = formFieldState}
-  <GroupLabel {attribute} {groupNameRef} {i18n} {kcClsx} />
+  <GroupLabel {attribute} {groupNameRef} {i18n} />
   {#if beforeField}
     {@render beforeField({
       attribute,
       dispatchFormAction,
       displayableErrors: $displayableErrors[i],
       valueOrValues,
-      kcClsx,
       i18n,
     })}
   {/if}
   <div
-    class={kcClsx("kcFormGroupClass")}
+    class="kcFormGroupClass"
     style:display={attribute.annotations.inputType === "hidden" ||
     (attribute.name === "password-confirm" && !doMakeUserConfirmPassword)
       ? "none"
       : undefined}
   >
-    <div class={kcClsx("kcLabelWrapperClass")}>
-      <label for={attribute.name} class={kcClsx("kcLabelClass")}>
+    <div class="kcLabelWrapperClass">
+      <label for={attribute.name} class="kcLabelClass">
         {@render advancedMsg(attribute.displayName ?? "")()}
       </label>
       {#if attribute.required}
         *
       {/if}
     </div>
-    <div class={kcClsx("kcInputWrapperClass")}>
+    <div class="kcInputWrapperClass">
       {#if attribute.annotations.inputHelperTextBefore !== undefined}
         <div
-          class={kcClsx("kcInputHelperTextBeforeClass")}
+          class="kcInputHelperTextBeforeClass"
           id={`form-help-text-before-${attribute.name}`}
           aria-live="polite"
         >
@@ -87,17 +85,12 @@
         {valueOrValues}
         displayableErrors={$displayableErrors[i]}
         {dispatchFormAction}
-        {kcClsx}
         {i18n}
       />
-      <FieldErrors
-        {attribute}
-        bind:displayableErrors={$displayableErrors[i]}
-        {kcClsx}
-      />
+      <FieldErrors {attribute} bind:displayableErrors={$displayableErrors[i]} />
       {#if attribute.annotations.inputHelperTextAfter !== undefined}
         <div
-          class={kcClsx("kcInputHelperTextAfterClass")}
+          class="kcInputHelperTextAfterClass"
           id={`form-help-text-after-${attribute.name}`}
           aria-live="polite"
         >
@@ -111,7 +104,6 @@
           dispatchFormAction,
           displayableErrors: $displayableErrors[i],
           valueOrValues,
-          kcClsx,
           i18n,
         })}
       {/if}

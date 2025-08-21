@@ -1,7 +1,6 @@
 <script lang="ts">
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
+  import type { PageProps } from "./PageProps";
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
@@ -15,11 +14,6 @@
     Extract<KcContext, { pageId: "login-recovery-authn-code-input.ftl" }>,
     I18n
   > = $props();
-
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
 
   const { url, messagesPerField, recoveryAuthnCodesInputBean } = kcContext;
 
@@ -38,20 +32,20 @@
   {/snippet}
   <form
     id="kc-recovery-code-login-form"
-    class={kcClsx("kcFormClass")}
+    class="kcFormClass"
     action={url.loginAction}
     method="post"
   >
-    <div class={kcClsx("kcFormGroupClass")}>
-      <div class={kcClsx("kcLabelWrapperClass")}>
-        <label for="recoveryCodeInput" class={kcClsx("kcLabelClass")}>
+    <div class="kcFormGroupClass">
+      <div class="kcLabelWrapperClass">
+        <label for="recoveryCodeInput" class="kcLabelClass">
           {@render msg(
             "auth-recovery-code-prompt",
             `${recoveryAuthnCodesInputBean.codeNumber}`,
           )()}
         </label>
       </div>
-      <div class={kcClsx("kcInputWrapperClass")}>
+      <div class="kcInputWrapperClass">
         <!-- svelte-ignore a11y_autofocus -->
         <input
           tabindex={1}
@@ -60,13 +54,13 @@
           aria-invalid={messagesPerField.existsError("recoveryCodeInput")}
           autocomplete="off"
           type="text"
-          class={kcClsx("kcInputClass")}
+          class="kcInputClass"
           autofocus
         />
         {#if messagesPerField.existsError("recoveryCodeInput")}
           <span
             id="input-error"
-            class={kcClsx("kcInputErrorMessageClass")}
+            class="kcInputErrorMessageClass"
             aria-live="polite"
           >
             {@html kcSanitize(messagesPerField.get("recoveryCodeInput"))}
@@ -75,18 +69,18 @@
       </div>
     </div>
 
-    <div class={kcClsx("kcFormGroupClass")}>
-      <div id="kc-form-options" class={kcClsx("kcFormOptionsWrapperClass")}>
-        <div class={kcClsx("kcFormOptionsWrapperClass")}></div>
+    <div class="kcFormGroupClass">
+      <div id="kc-form-options" class="kcFormOptionsWrapperClass">
+        <div class="kcFormOptionsWrapperClass"></div>
       </div>
-      <div id="kc-form-buttons" class={kcClsx("kcFormButtonsClass")}>
+      <div id="kc-form-buttons" class="kcFormButtonsClass">
         <input
-          class={kcClsx(
-            "kcButtonClass",
-            "kcButtonPrimaryClass",
-            "kcButtonBlockClass",
-            "kcButtonLargeClass",
-          )}
+          class="
+            kcButtonClass
+            kcButtonPrimaryClass
+            kcButtonBlockClass
+            kcButtonLargeClass
+          "
           name="login"
           id="kc-login"
           type="submit"

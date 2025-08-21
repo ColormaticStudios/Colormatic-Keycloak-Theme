@@ -3,7 +3,6 @@
   import type { TemplateProps } from "@keycloakify/svelte/login/TemplateProps";
   import { useSetClassName } from "@keycloakify/svelte/tools/useSetClassName";
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
   import { clsx } from "keycloakify/tools/clsx";
   import { onMount } from "svelte";
   import type { I18n } from "./i18n";
@@ -22,10 +21,8 @@
     kcContext,
     i18n,
     doUseDefaultCss,
-    classes,
     children,
   }: TemplateProps<KcContext, I18n> = $props();
-  const { kcClsx } = getKcClsx({ doUseDefaultCss, classes });
 
   const { msgStr, currentLanguage, enabledLanguages } = $i18n;
 
@@ -36,35 +33,32 @@
   });
   useSetClassName({
     qualifiedName: "html",
-    className: kcClsx("kcHtmlClass"),
+    className: "kcHtmlClass",
   });
 
   useSetClassName({
     qualifiedName: "body",
-    className: bodyClassName ?? kcClsx("kcBodyClass"),
+    className: bodyClassName ?? "kcBodyClass",
   });
   const { isReadyToRender } = useInitialize({ kcContext, doUseDefaultCss });
 </script>
 
 {#if $isReadyToRender}
-  <div class={kcClsx("kcLoginClass")}>
-    <div id="kc-header" class={kcClsx("kcHeaderClass")}>
-      <div id="kc-header-wrapper" class={kcClsx("kcHeaderWrapperClass")}>
+  <div class="kcLoginClass">
+    <div id="kc-header" class="kcHeaderClass">
+      <div id="kc-header-wrapper" class="kcHeaderWrapperClass">
         {msgStr("loginTitleHtml", realm.displayNameHtml)}
       </div>
     </div>
 
-    <div class={kcClsx("kcFormCardClass")}>
-      <header class={kcClsx("kcFormHeaderClass")}>
+    <div class="kcFormCardClass">
+      <header class="kcFormHeaderClass">
         {#if enabledLanguages.length > 1}
-          <div class={kcClsx("kcLocaleMainClass")} id="kc-locale">
-            <div id="kc-locale-wrapper" class={kcClsx("kcLocaleWrapperClass")}>
+          <div class="kcLocaleMainClass" id="kc-locale">
+            <div id="kc-locale-wrapper" class="kcLocaleWrapperClass">
               <div
                 id="kc-locale-dropdown"
-                class={clsx(
-                  "menu-button-links",
-                  kcClsx("kcLocaleDropDownClass"),
-                )}
+                class={clsx("menu-button-links", "kcLocaleDropDownClass")}
               >
                 <button
                   tabindex={1}
@@ -83,15 +77,15 @@
                   aria-labelledby="kc-current-locale-link"
                   aria-activedescendant=""
                   id="language-switch1"
-                  class={kcClsx("kcLocaleListClass")}
+                  class="kcLocaleListClass"
                 >
-                  {#each enabledLanguages as enabledLanguage, i}
+                  {#each enabledLanguages as enabledLanguage, i (enabledLanguage.label)}
                     {@const { label, href } = enabledLanguage}
-                    <li class={kcClsx("kcLocaleListItemClass")} role="none">
+                    <li class="kcLocaleListItemClass" role="none">
                       <a
                         role="menuitem"
                         id={`language-${i + 1}`}
-                        class={kcClsx("kcLocaleItemClass")}
+                        class="kcLocaleItemClass"
                         {href}
                       >
                         {label}
@@ -107,7 +101,7 @@
           {#if !(auth !== undefined && auth.showUsername && !auth.showResetCredentials)}
             <h1 id="kc-page-title">{@render headerNode?.()}</h1>
           {:else}
-            <div id="kc-username" class={kcClsx("kcFormGroupClass")}>
+            <div id="kc-username" class="kcFormGroupClass">
               <!-- svelte-ignore a11y_label_has_associated_control -->
               <label id="kc-attempted-username">{auth.attemptedUsername}</label>
               <a
@@ -116,7 +110,7 @@
                 aria-label={msgStr("restartLoginTooltip")}
               >
                 <div class="kc-login-tooltip">
-                  <i class={kcClsx("kcResetFlowIcon")}></i>
+                  <i class="kcResetFlowIcon"></i>
                   <span class="kc-tooltip-text">
                     {msgStr("restartLoginTooltip")}
                   </span>
@@ -126,8 +120,8 @@
           {/if}
         {/snippet}
         {#if displayRequiredFields}
-          <div class={kcClsx("kcContentWrapperClass")}>
-            <div class={clsx(kcClsx("kcLabelWrapperClass"), "subtitle")}>
+          <div class="kcContentWrapperClass">
+            <div class="kcLabelWrapperClass subtitle">
               <span class="subtitle">
                 <span class="required">*</span>
                 {msgStr("requiredFields")}
@@ -146,22 +140,22 @@
             <div
               class={clsx(
                 `alert-${message.type}`,
-                kcClsx("kcAlertClass"),
+                "kcAlertClass",
                 `pf-m-${message?.type === "error" ? "danger" : message.type}`,
               )}
             >
               <div class="pf-c-alert__icon">
                 {#if message.type === "success"}
-                  <span class={kcClsx("kcFeedbackSuccessIcon")}></span>
+                  <span class="kcFeedbackSuccessIcon"></span>
                 {:else if message.type === "warning"}
-                  <span class={kcClsx("kcFeedbackWarningIcon")}></span>
+                  <span class="kcFeedbackWarningIcon"></span>
                 {:else if message.type === "error"}
-                  <span class={kcClsx("kcFeedbackErrorIcon")}></span>
+                  <span class="kcFeedbackErrorIcon"></span>
                 {:else if message.type === "info"}
-                  <span class={kcClsx("kcFeedbackInfoIcon")}></span>
+                  <span class="kcFeedbackInfoIcon"></span>
                 {/if}
               </div>
-              <span class={kcClsx("kcAlertTitleClass")}>
+              <span class="kcAlertTitleClass">
                 {@html kcSanitize(message.summary)}
               </span>
             </div>
@@ -173,7 +167,7 @@
               action={url.loginAction}
               method="post"
             >
-              <div class={kcClsx("kcFormGroupClass")}>
+              <div class="kcFormGroupClass">
                 <input type="hidden" name="tryAnotherWay" value="on" />
                 <!-- svelte-ignore a11y_invalid_attribute -->
                 <a
@@ -193,11 +187,8 @@
           {/if}
           {@render socialProvidersNode?.()}
           {#if displayInfo}
-            <div id="kc-info" class={kcClsx("kcSignUpClass")}>
-              <div
-                id="kc-info-wrapper"
-                class={kcClsx("kcInfoAreaWrapperClass")}
-              >
+            <div id="kc-info" class="kcSignUpClass">
+              <div id="kc-info-wrapper" class="kcInfoAreaWrapperClass">
                 {@render infoNode?.()}
               </div>
             </div>

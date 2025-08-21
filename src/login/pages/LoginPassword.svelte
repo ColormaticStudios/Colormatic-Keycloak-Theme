@@ -1,9 +1,8 @@
 <script lang="ts">
-  import PasswordWrapper from "@keycloakify/svelte/login/components/PasswordWrapper.svelte";
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
+  import PasswordWrapper from "../components/PasswordWrapper.svelte";
+  import type { PageProps } from "./PageProps";
   import { useState } from "@keycloakify/svelte/tools/useState";
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
   import { clsx } from "keycloakify/tools/clsx";
   import type { I18n } from "../i18n";
   import type { KcContext } from "../KcContext";
@@ -18,11 +17,6 @@
     Extract<KcContext, { pageId: "login-password.ftl" }>,
     I18n
   > = $props();
-
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
 
   const { realm, url, messagesPerField } = kcContext;
 
@@ -53,17 +47,17 @@
         action={url.loginAction}
         method="post"
       >
-        <div class={clsx(kcClsx("kcFormGroupClass"), "no-bottom-margin")}>
-          <label for="password" class={kcClsx("kcLabelClass")}>
+        <div class={clsx("kcFormGroupClass", "no-bottom-margin")}>
+          <label for="password" class="kcLabelClass">
             {@render msg("password")()}
           </label>
 
-          <PasswordWrapper {kcClsx} {i18n} passwordInputId="password">
+          <PasswordWrapper {i18n} passwordInputId="password">
             <!-- svelte-ignore a11y_autofocus -->
             <input
               tabindex={2}
               id="password"
-              class={kcClsx("kcInputClass")}
+              class="kcInputClass"
               name="password"
               type="password"
               autofocus
@@ -78,16 +72,16 @@
           {#if messagesPerField.existsError("password")}
             <span
               id="input-error-password"
-              class={kcClsx("kcInputErrorMessageClass")}
+              class="kcInputErrorMessageClass"
               aria-live="polite"
             >
               {@html kcSanitize(messagesPerField.get("password"))}
             </span>
           {/if}
         </div>
-        <div class={kcClsx("kcFormGroupClass", "kcFormSettingClass")}>
+        <div class="kcFormGroupClass kcFormSettingClass">
           <div id="kc-form-options"></div>
-          <div class={kcClsx("kcFormOptionsWrapperClass")}>
+          <div class="kcFormOptionsWrapperClass">
             {#if realm.resetPasswordAllowed}
               <span>
                 <a tabindex={5} href={url.loginResetCredentialsUrl}>
@@ -97,15 +91,15 @@
             {/if}
           </div>
         </div>
-        <div id="kc-form-buttons" class={kcClsx("kcFormGroupClass")}>
+        <div id="kc-form-buttons" class="kcFormGroupClass">
           <input
             tabindex={4}
-            class={kcClsx(
-              "kcButtonClass",
-              "kcButtonPrimaryClass",
-              "kcButtonBlockClass",
-              "kcButtonLargeClass",
-            )}
+            class="
+              kcButtonClass
+              kcButtonPrimaryClass
+              kcButtonBlockClass
+              kcButtonLargeClass
+            "
             name="login"
             id="kc-login"
             type="submit"

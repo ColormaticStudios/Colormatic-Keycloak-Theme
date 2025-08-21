@@ -1,6 +1,5 @@
 <script lang="ts">
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+  import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
@@ -15,11 +14,6 @@
     I18n
   > = $props();
 
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
-
   const { url, x509 } = kcContext;
 
   const { msg, msgStr } = $i18n;
@@ -31,59 +25,59 @@
   {/snippet}
   <form
     id="kc-x509-login-info"
-    class={kcClsx("kcFormClass")}
+    class="kcFormClass"
     action={url.loginAction}
     method="post"
   >
-    <div class={kcClsx("kcFormGroupClass")}>
-      <div class={kcClsx("kcLabelWrapperClass")}>
-        <label for="certificate_subjectDN" class={kcClsx("kcLabelClass")}>
+    <div class="kcFormGroupClass">
+      <div class="kcLabelWrapperClass">
+        <label for="certificate_subjectDN" class="kcLabelClass">
           {@render msg("clientCertificate")()}
         </label>
       </div>
       {#if x509.formData.subjectDN}
-        <div class={kcClsx("kcLabelWrapperClass")}>
+        <div class="kcLabelWrapperClass">
           <!-- svelte-ignore a11y_label_has_associated_control -->
-          <label id="certificate_subjectDN" class={kcClsx("kcLabelClass")}>
+          <label id="certificate_subjectDN" class="kcLabelClass">
             {x509.formData.subjectDN}
           </label>
         </div>
       {:else}
-        <div class={kcClsx("kcLabelWrapperClass")}>
-          <label id="certificate_subjectDN" class={kcClsx("kcLabelClass")}>
+        <div class="kcLabelWrapperClass">
+          <label id="certificate_subjectDN" class="kcLabelClass">
             {@render msg("noCertificate")()}
           </label>
         </div>
       {/if}
     </div>
-    <div class={kcClsx("kcFormGroupClass")}>
+    <div class="kcFormGroupClass">
       {#if x509.formData.isUserEnabled}
-        <div class={kcClsx("kcLabelWrapperClass")}>
-          <label for="username" class={kcClsx("kcLabelClass")}>
+        <div class="kcLabelWrapperClass">
+          <label for="username" class="kcLabelClass">
             {msg("doX509Login")}
           </label>
         </div>
-        <div class={kcClsx("kcLabelWrapperClass")}>
+        <div class="kcLabelWrapperClass">
           <!-- svelte-ignore a11y_label_has_associated_control -->
-          <label id="username" class={kcClsx("kcLabelClass")}>
+          <label id="username" class="kcLabelClass">
             {x509.formData.username}
           </label>
         </div>
       {/if}
     </div>
-    <div class={kcClsx("kcFormGroupClass")}>
-      <div id="kc-form-options" class={kcClsx("kcFormOptionsClass")}>
-        <div class={kcClsx("kcFormOptionsWrapperClass")}></div>
+    <div class="kcFormGroupClass">
+      <div id="kc-form-options" class="kcFormOptionsClass">
+        <div class="kcFormOptionsWrapperClass"></div>
       </div>
-      <div id="kc-form-buttons" class={kcClsx("kcFormButtonsClass")}>
-        <div class={kcClsx("kcFormButtonsWrapperClass")}>
+      <div id="kc-form-buttons" class="kcFormButtonsClass">
+        <div class="kcFormButtonsWrapperClass">
           <div id="kc-form-buttons">
             <input
-              class={kcClsx(
-                "kcButtonClass",
-                "kcButtonPrimaryClass",
-                "kcButtonLargeClass",
-              )}
+              class="
+                kcButtonClass
+                kcButtonPrimaryClass
+                kcButtonLargeClass
+              "
               name="login"
               id="kc-login"
               type="submit"
@@ -91,11 +85,11 @@
             />
             {#if x509.formData.isUserEnabled}
               <input
-                class={kcClsx(
-                  "kcButtonClass",
-                  "kcButtonDefaultClass",
-                  "kcButtonLargeClass",
-                )}
+                class="
+                  kcButtonClass
+                  kcButtonDefaultClass
+                  kcButtonLargeClass
+                "
                 name="cancel"
                 id="kc-cancel"
                 type="submit"

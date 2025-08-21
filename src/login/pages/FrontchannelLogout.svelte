@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
+  import type { PageProps } from "./PageProps";
   import { onMount } from "svelte";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";

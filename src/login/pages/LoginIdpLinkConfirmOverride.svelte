@@ -1,6 +1,5 @@
 <script lang="ts">
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+  import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
@@ -14,11 +13,6 @@
     Extract<KcContext, { pageId: "login-idp-link-confirm-override.ftl" }>,
     I18n
   > = $props();
-
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
 
   const { url, idpDisplayName } = kcContext;
 
@@ -39,12 +33,12 @@
     <br />
     <button
       type="submit"
-      class={kcClsx(
-        "kcButtonClass",
-        "kcButtonDefaultClass",
-        "kcButtonBlockClass",
-        "kcButtonLargeClass",
-      )}
+      class="
+        kcButtonClass
+        kcButtonDefaultClass
+        kcButtonBlockClass
+        kcButtonLargeClass
+      "
       name="submitAction"
       id="confirmOverride"
       value="confirmOverride"

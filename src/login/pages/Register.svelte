@@ -1,8 +1,7 @@
 <script lang="ts">
-  import type { UserProfileFormFieldsProps } from "@keycloakify/svelte/login/components/UserProfileFormFieldsProps";
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
+  import type { UserProfileFormFieldsProps } from "../components/UserProfileFormFieldsProps";
+  import type { PageProps } from "./PageProps";
   import { useState } from "@keycloakify/svelte/tools/useState";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
   import { clsx } from "keycloakify/tools/clsx";
   import type { Component } from "svelte";
   import TermsAcceptance from "../components/TermsAcceptance.svelte";
@@ -26,10 +25,6 @@
     UserProfileFormFields,
     doMakeUserConfirmPassword,
   } = props;
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
 
   const {
     messageHeader,
@@ -65,21 +60,19 @@
   {/snippet}
   <form
     id="kc-register-form"
-    class={kcClsx("kcFormClass")}
+    class="kcFormClass"
     action={url.registrationAction}
     method="post"
   >
     <UserProfileFormFields
       {kcContext}
       {i18n}
-      {kcClsx}
       onIsFormSubmittableValueChange={setIsFormSubmittable}
       {doMakeUserConfirmPassword}
     />
     {#if termsAcceptanceRequired}
       <TermsAcceptance
         {i18n}
-        {kcClsx}
         {messagesPerField}
         areTermsAccepted={$areTermsAccepted}
         onAreTermsAcceptedValueChange={setAreTermsAccepted}
@@ -87,7 +80,7 @@
     {/if}
     {#if recaptchaRequired && (recaptchaVisible || recaptchaAction === undefined)}
       <div class="form-group">
-        <div class={kcClsx("kcInputWrapperClass")}>
+        <div class="kcInputWrapperClass">
           <div
             class="g-recaptcha"
             data-size="compact"
@@ -97,24 +90,22 @@
         </div>
       </div>
     {/if}
-    <div class={kcClsx("kcFormGroupClass")}>
-      <div id="kc-form-options" class={kcClsx("kcFormOptionsClass")}>
-        <div class={kcClsx("kcFormOptionsWrapperClass")}>
+    <div class="kcFormGroupClass">
+      <div id="kc-form-options" class="kcFormOptionsClass">
+        <div class="kcFormOptionsWrapperClass">
           <span>
             <a href={url.loginUrl}>{@render msg("backToLogin")()}</a>
           </span>
         </div>
       </div>
       {#if recaptchaRequired && !recaptchaVisible && recaptchaAction !== undefined}
-        <div id="kc-form-buttons" class={kcClsx("kcFormButtonsClass")}>
+        <div id="kc-form-buttons" class="kcFormButtonsClass">
           <button
             class={clsx(
-              kcClsx(
-                "kcButtonClass",
-                "kcButtonPrimaryClass",
-                "kcButtonBlockClass",
-                "kcButtonLargeClass",
-              ),
+              "kcButtonClass",
+              "kcButtonPrimaryClass",
+              "kcButtonBlockClass",
+              "kcButtonLargeClass",
               "g-recaptcha",
             )}
             data-sitekey={recaptchaSiteKey}
@@ -130,16 +121,16 @@
           </button>
         </div>
       {:else}
-        <div id="kc-form-buttons" class={kcClsx("kcFormButtonsClass")}>
+        <div id="kc-form-buttons" class="kcFormButtonsClass">
           <input
             disabled={!$isFormSubmittable ||
               (termsAcceptanceRequired && !$areTermsAccepted)}
-            class={kcClsx(
-              "kcButtonClass",
-              "kcButtonPrimaryClass",
-              "kcButtonBlockClass",
-              "kcButtonLargeClass",
-            )}
+            class="
+              kcButtonClass
+              kcButtonPrimaryClass
+              kcButtonBlockClass
+              kcButtonLargeClass
+            "
             type="submit"
             value={msgStr("doRegister")}
           />

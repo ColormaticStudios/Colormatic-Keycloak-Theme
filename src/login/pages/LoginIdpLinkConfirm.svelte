@@ -1,6 +1,5 @@
 <script lang="ts">
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+  import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
@@ -15,11 +14,6 @@
     I18n
   > = $props();
 
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
-
   const { url, idpAlias } = kcContext;
 
   const { msg } = $i18n;
@@ -30,15 +24,15 @@
     {@render msg("confirmLinkIdpTitle")()}
   {/snippet}
   <form id="kc-register-form" action={url.loginAction} method="post">
-    <div class={kcClsx("kcFormGroupClass")}>
+    <div class="kcFormGroupClass">
       <button
         type="submit"
-        class={kcClsx(
-          "kcButtonClass",
-          "kcButtonDefaultClass",
-          "kcButtonBlockClass",
-          "kcButtonLargeClass",
-        )}
+        class="
+          kcButtonClass
+          kcButtonDefaultClass
+          kcButtonBlockClass
+          kcButtonLargeClass
+        "
         name="submitAction"
         id="updateProfile"
         value="updateProfile"
@@ -47,12 +41,12 @@
       </button>
       <button
         type="submit"
-        class={kcClsx(
-          "kcButtonClass",
-          "kcButtonDefaultClass",
-          "kcButtonBlockClass",
-          "kcButtonLargeClass",
-        )}
+        class="
+          kcButtonClass
+          kcButtonDefaultClass
+          kcButtonBlockClass
+          kcButtonLargeClass
+        "
         name="submitAction"
         id="linkAccount"
         value="linkAccount"

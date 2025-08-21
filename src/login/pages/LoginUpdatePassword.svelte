@@ -1,9 +1,8 @@
 <script lang="ts">
-  import LogoutOtherSessions from "@keycloakify/svelte/login/components/LogoutOtherSessions.svelte";
-  import PasswordWrapper from "@keycloakify/svelte/login/components/PasswordWrapper.svelte";
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
+  import LogoutOtherSessions from "../components/LogoutOtherSessions.svelte";
+  import PasswordWrapper from "../components/PasswordWrapper.svelte";
+  import type { PageProps } from "./PageProps";
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
   import type { I18n } from "../i18n";
   import type { KcContext } from "../KcContext";
 
@@ -17,11 +16,6 @@
     Extract<KcContext, { pageId: "login-update-password.ftl" }>,
     I18n
   > = $props();
-
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
 
   const { msg, msgStr } = $i18n;
 
@@ -40,24 +34,24 @@
   {/snippet}
   <form
     id="kc-passwd-update-form"
-    class={kcClsx("kcFormClass")}
+    class="kcFormClass"
     action={url.loginAction}
     method="post"
   >
-    <div class={kcClsx("kcFormGroupClass")}>
-      <div class={kcClsx("kcLabelWrapperClass")}>
-        <label for="password-new" class={kcClsx("kcLabelClass")}>
+    <div class="kcFormGroupClass">
+      <div class="kcLabelWrapperClass">
+        <label for="password-new" class="kcLabelClass">
           {@render msg("passwordNew")()}
         </label>
       </div>
-      <div class={kcClsx("kcInputWrapperClass")}>
-        <PasswordWrapper {kcClsx} {i18n} passwordInputId="password-new">
+      <div class="kcInputWrapperClass">
+        <PasswordWrapper {i18n} passwordInputId="password-new">
           <!-- svelte-ignore a11y_autofocus -->
           <input
             type="password"
             id="password-new"
             name="password-new"
-            class={kcClsx("kcInputClass")}
+            class="kcInputClass"
             autofocus
             autocomplete="new-password"
             aria-invalid={messagesPerField.existsError(
@@ -70,7 +64,7 @@
         {#if messagesPerField.existsError("password")}
           <span
             id="input-error-password"
-            class={kcClsx("kcInputErrorMessageClass")}
+            class="kcInputErrorMessageClass"
             aria-live="polite"
           >
             {@html kcSanitize(messagesPerField.get("password"))}
@@ -79,20 +73,20 @@
       </div>
     </div>
 
-    <div class={kcClsx("kcFormGroupClass")}>
-      <div class={kcClsx("kcLabelWrapperClass")}>
-        <label for="password-confirm" class={kcClsx("kcLabelClass")}>
+    <div class="kcFormGroupClass">
+      <div class="kcLabelWrapperClass">
+        <label for="password-confirm" class="kcLabelClass">
           {@render msg("passwordConfirm")()}
         </label>
       </div>
-      <div class={kcClsx("kcInputWrapperClass")}>
-        <PasswordWrapper {kcClsx} {i18n} passwordInputId="password-confirm">
+      <div class="kcInputWrapperClass">
+        <PasswordWrapper {i18n} passwordInputId="password-confirm">
           <!-- svelte-ignore a11y_autofocus -->
           <input
             type="password"
             id="password-confirm"
             name="password-confirm"
-            class={kcClsx("kcInputClass")}
+            class="kcInputClass"
             autofocus
             autocomplete="new-password"
             aria-invalid={messagesPerField.existsError(
@@ -105,7 +99,7 @@
         {#if messagesPerField.existsError("password-confirm")}
           <span
             id="input-error-password-confirm"
-            class={kcClsx("kcInputErrorMessageClass")}
+            class="kcInputErrorMessageClass"
             aria-live="polite"
           >
             {@html kcSanitize(messagesPerField.get("password-confirm"))}
@@ -113,26 +107,26 @@
         {/if}
       </div>
     </div>
-    <div class={kcClsx("kcFormGroupClass")}>
-      <LogoutOtherSessions {kcClsx} {i18n} />
-      <div id="kc-form-buttons" class={kcClsx("kcFormButtonsClass")}>
+    <div class="kcFormGroupClass">
+      <LogoutOtherSessions {i18n} />
+      <div id="kc-form-buttons" class="kcFormButtonsClass">
         <input
-          class={kcClsx(
-            "kcButtonClass",
-            "kcButtonPrimaryClass",
-            !isAppInitiatedAction && "kcButtonBlockClass",
-            "kcButtonLargeClass",
-          )}
+          class="
+            kcButtonClass
+            kcButtonPrimaryClass
+				{!isAppInitiatedAction ? 'kcButtonBlockClass' : ''}
+            kcButtonLargeClass
+          "
           type="submit"
           value={msgStr("doSubmit")}
         />
         {#if isAppInitiatedAction}
           <button
-            class={kcClsx(
-              "kcButtonClass",
-              "kcButtonDefaultClass",
-              "kcButtonLargeClass",
-            )}
+            class="
+              kcButtonClass
+              kcButtonDefaultClass
+              kcButtonLargeClass
+            "
             type="submit"
             name="cancel-aia"
             value="true"

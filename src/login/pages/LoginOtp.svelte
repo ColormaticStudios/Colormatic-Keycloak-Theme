@@ -1,7 +1,6 @@
 <script lang="ts">
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
+  import type { PageProps } from "./PageProps";
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
@@ -15,11 +14,6 @@
     Extract<KcContext, { pageId: "login-otp.ftl" }>,
     I18n
   > = $props();
-
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
 
   const { otpLogin, url, messagesPerField } = kcContext;
 
@@ -38,18 +32,18 @@
   {/snippet}
   <form
     id="kc-otp-login-form"
-    class={kcClsx("kcFormClass")}
+    class="kcFormClass"
     action={url.loginAction}
     method="post"
   >
     {#if otpLogin.userOtpCredentials.length > 1}
-      <div class={kcClsx("kcFormGroupClass")}>
-        <ul class={kcClsx("kcInputWrapperClass")}>
+      <div class="kcFormGroupClass">
+        <ul class="kcInputWrapperClass">
           {#each otpLogin.userOtpCredentials as otpCredential, index}
             <li>
               <input
                 id={`kc-otp-credential-${index}`}
-                class={kcClsx("kcLoginOTPListInputClass")}
+                class="kcLoginOTPListInputClass"
                 type="radio"
                 name="selectedCredentialId"
                 value={otpCredential.id}
@@ -58,17 +52,17 @@
               <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
               <label
                 for={`kc-otp-credential-${index}`}
-                class={kcClsx("kcLoginOTPListClass")}
+                class="kcLoginOTPListClass"
                 tabindex={index}
               >
-                <span class={kcClsx("kcLoginOTPListItemHeaderClass")}>
-                  <span class={kcClsx("kcLoginOTPListItemIconBodyClass")}>
+                <span class="kcLoginOTPListItemHeaderClass">
+                  <span class="kcLoginOTPListItemIconBodyClass">
                     <i
-                      class={kcClsx("kcLoginOTPListItemIconClass")}
+                      class="kcLoginOTPListItemIconClass"
                       aria-hidden="true"
                     ></i>
                   </span>
-                  <span class={kcClsx("kcLoginOTPListItemTitleClass")}>
+                  <span class="kcLoginOTPListItemTitleClass">
                     {otpCredential.userLabel}
                   </span>
                 </span>
@@ -79,27 +73,27 @@
       </div>
     {/if}
 
-    <div class={kcClsx("kcFormGroupClass")}>
-      <div class={kcClsx("kcLabelWrapperClass")}>
-        <label for="otp" class={kcClsx("kcLabelClass")}>
+    <div class="kcFormGroupClass">
+      <div class="kcLabelWrapperClass">
+        <label for="otp" class="kcLabelClass">
           {@render msg("loginOtpOneTime")()}
         </label>
       </div>
-      <div class={kcClsx("kcInputWrapperClass")}>
+      <div class="kcInputWrapperClass">
         <!-- svelte-ignore a11y_autofocus -->
         <input
           id="otp"
           name="otp"
           autocomplete="off"
           type="text"
-          class={kcClsx("kcInputClass")}
+          class="kcInputClass"
           autofocus
           aria-invalid={messagesPerField.existsError("totp")}
         />
         {#if messagesPerField.existsError("totp")}
           <span
             id="input-error-otp-code"
-            class={kcClsx("kcInputErrorMessageClass")}
+            class="kcInputErrorMessageClass"
             aria-live="polite"
           >
             {@html kcSanitize(messagesPerField.get("totp"))}
@@ -108,18 +102,18 @@
       </div>
     </div>
 
-    <div class={kcClsx("kcFormGroupClass")}>
-      <div id="kc-form-options" class={kcClsx("kcFormOptionsClass")}>
-        <div class={kcClsx("kcFormOptionsWrapperClass")}></div>
+    <div class="kcFormGroupClass">
+      <div id="kc-form-options" class="kcFormOptionsClass">
+        <div class="kcFormOptionsWrapperClass"></div>
       </div>
-      <div id="kc-form-buttons" class={kcClsx("kcFormButtonsClass")}>
+      <div id="kc-form-buttons" class="kcFormButtonsClass">
         <input
-          class={kcClsx(
-            "kcButtonClass",
-            "kcButtonPrimaryClass",
-            "kcButtonBlockClass",
-            "kcButtonLargeClass",
-          )}
+          class="
+            kcButtonClass
+            kcButtonPrimaryClass
+            kcButtonBlockClass
+            kcButtonLargeClass
+          "
           name="login"
           id="kc-login"
           type="submit"

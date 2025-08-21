@@ -1,6 +1,5 @@
 <script lang="ts">
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+  import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
@@ -14,11 +13,6 @@
     Extract<KcContext, { pageId: "logout-confirm.ftl" }>,
     I18n
   > = $props();
-
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
 
   const { url, client, logoutConfirm } = kcContext;
 
@@ -34,19 +28,16 @@
     <p class="instruction">{@render msg("logoutConfirmHeader")()}</p>
     <form class="form-actions" action={url.logoutConfirmAction} method="POST">
       <input type="hidden" name="session_code" value={logoutConfirm.code} />
-      <div class={kcClsx("kcFormGroupClass")}>
-        <div id="kc-form-options">
-          <div class={kcClsx("kcFormOptionsWrapperClass")}></div>
-        </div>
-        <div id="kc-form-buttons" class={kcClsx("kcFormGroupClass")}>
+      <div class="kcFormGroupClass">
+        <div id="kc-form-buttons" class="kcFormGroupClass">
           <input
             tabindex={4}
-            class={kcClsx(
-              "kcButtonClass",
-              "kcButtonPrimaryClass",
-              "kcButtonBlockClass",
-              "kcButtonLargeClass",
-            )}
+            class="
+              kcButtonClass
+              kcButtonPrimaryClass
+              kcButtonBlockClass
+              kcButtonLargeClass
+            "
             name="confirmLogout"
             id="kc-logout"
             type="submit"

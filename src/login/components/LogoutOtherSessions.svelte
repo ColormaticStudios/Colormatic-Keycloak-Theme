@@ -1,15 +1,14 @@
 <script lang="ts">
-  import type { KcClsx } from "keycloakify/login/lib/kcClsx";
   import type { I18n } from "../i18n";
   import type { Readable } from "svelte/store";
 
-  const { kcClsx, i18n }: { kcClsx: KcClsx; i18n: Readable<I18n> } = $props();
+  const { i18n }: { i18n: Readable<I18n> } = $props();
 
   const { msg } = $i18n;
 </script>
 
-<div id="kc-form-options" class={kcClsx("kcFormOptionsClass")}>
-  <div class={kcClsx("kcFormOptionsWrapperClass")}>
+<div id="kc-form-options" class="kcFormOptionsClass">
+  <div class="kcFormOptionsWrapperClass">
     <div class="checkbox">
       <label>
         <input

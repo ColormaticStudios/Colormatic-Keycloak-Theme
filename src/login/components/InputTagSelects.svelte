@@ -1,13 +1,12 @@
 <script lang="ts">
-  import type { InputFieldByTypeProps } from "@keycloakify/svelte/login/components/InputFieldByTypeProps";
-  import { inputLabel } from "@keycloakify/svelte/login/components/inputLabel";
+  import type { InputFieldByTypeProps } from "./InputFieldByTypeProps";
+  import { inputLabel } from "./inputLabel";
   import { assert } from "keycloakify/tools/assert";
   import type { I18n } from "../i18n";
 
   const {
     attribute,
     dispatchFormAction,
-    kcClsx,
     i18n,
     valueOrValues,
     displayableErrors,
@@ -25,16 +24,16 @@
       case "select-radiobuttons":
         return {
           inputType: "radio",
-          classDiv: kcClsx("kcInputClassRadio"),
-          classInput: kcClsx("kcInputClassRadioInput"),
-          classLabel: kcClsx("kcInputClassRadioLabel"),
+          classDiv: "kcInputClassRadio",
+          classInput: "kcInputClassRadioInput",
+          classLabel: "kcInputClassRadioLabel",
         };
       case "multiselect-checkboxes":
         return {
           inputType: "checkbox",
-          classDiv: kcClsx("kcInputClassCheckbox"),
-          classInput: kcClsx("kcInputClassCheckboxInput"),
-          classLabel: kcClsx("kcInputClassCheckboxLabel"),
+          classDiv: "kcInputClassCheckbox",
+          classInput: "kcInputClassCheckboxInput",
+          classLabel: "kcInputClassCheckboxLabel",
         };
       default:
         return {
@@ -117,7 +116,7 @@
     />
     <label
       for={`${attribute.name}-${option}`}
-      class={`${classLabel}${attribute.readOnly ? ` ${kcClsx("kcInputClassRadioCheckboxLabelDisabled")}` : ""}`}
+      class={`${classLabel}${attribute.readOnly ? ` $"kcInputClassRadioCheckboxLabelDisabled"` : ""}`}
     >
       {@render inputLabel($i18n, attribute, option)()}
     </label>

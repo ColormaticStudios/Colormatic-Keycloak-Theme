@@ -1,18 +1,16 @@
 <script lang="ts">
   import { useReducer } from "@keycloakify/svelte/tools/useReducer";
-  import type { KcClsx } from "keycloakify/login/lib/kcClsx";
   import { assert } from "keycloakify/tools/assert";
   import { onMount, type Snippet } from "svelte";
   import type { I18n } from "../i18n";
   import type { Readable } from "svelte/store";
 
   const props: {
-    kcClsx: KcClsx;
     i18n: Readable<I18n>;
     passwordInputId: string;
     children: Snippet;
   } = $props();
-  const { kcClsx, i18n, passwordInputId, children } = props;
+  const { i18n, passwordInputId, children } = props;
 
   const { msgStr } = $i18n;
 

@@ -1,6 +1,5 @@
 <script lang="ts">
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+  import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
@@ -16,7 +15,6 @@
   > = $props();
   const { url, auth } = kcContext;
 
-  const { kcClsx } = getKcClsx({ doUseDefaultCss, classes });
   const { msg, advancedMsg } = $i18n;
 </script>
 
@@ -26,37 +24,37 @@
   {/snippet}
   <form
     id="kc-select-credential-form"
-    class={kcClsx("kcFormClass")}
+    class="kcFormClass"
     action={url.loginAction}
     method="post"
   >
-    <div class={kcClsx("kcSelectAuthListClass")}>
+    <div class="kcSelectAuthListClass">
       {#each auth.authenticationSelections as authenticationSelection}
         <button
-          class={kcClsx("kcSelectAuthListItemClass")}
+          class="kcSelectAuthListItemClass"
           type="submit"
           name="authenticationExecution"
           value={authenticationSelection.authExecId}
         >
-          <div class={kcClsx("kcSelectAuthListItemIconClass")}>
+          <div class="kcSelectAuthListItemIconClass">
             <i
-              class={kcClsx(
-                "kcSelectAuthListItemIconPropertyClass",
-                authenticationSelection.iconCssClass,
-              )}
+              class="
+                kcSelectAuthListItemIconPropertyClass
+					 {authenticationSelection.iconCssClass}
+              "
             ></i>
           </div>
-          <div class={kcClsx("kcSelectAuthListItemBodyClass")}>
-            <div class={kcClsx("kcSelectAuthListItemHeadingClass")}>
+          <div class="kcSelectAuthListItemBodyClass">
+            <div class="kcSelectAuthListItemHeadingClass">
               {@render advancedMsg(authenticationSelection.displayName)()}
             </div>
-            <div class={kcClsx("kcSelectAuthListItemDescriptionClass")}>
+            <div class="kcSelectAuthListItemDescriptionClass">
               {@render advancedMsg(authenticationSelection.helpText)()}
             </div>
           </div>
-          <div class={kcClsx("kcSelectAuthListItemFillClass")}></div>
-          <div class={kcClsx("kcSelectAuthListItemArrowClass")}>
-            <i class={kcClsx("kcSelectAuthListItemArrowIconClass")}></i>
+          <div class="kcSelectAuthListItemFillClass"></div>
+          <div class="kcSelectAuthListItemArrowClass">
+            <i class="kcSelectAuthListItemArrowIconClass"></i>
           </div>
         </button>
       {/each}

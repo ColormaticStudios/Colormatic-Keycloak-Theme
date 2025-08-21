@@ -1,6 +1,5 @@
 <script lang="ts">
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+  import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
@@ -14,11 +13,6 @@
     Extract<KcContext, { pageId: "login-reset-otp.ftl" }>,
     I18n
   > = $props();
-
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
 
   const { url, messagesPerField, configuredOtpCredentials } = kcContext;
 
@@ -37,19 +31,19 @@
   {/snippet}
   <form
     id="kc-otp-reset-form"
-    class={kcClsx("kcFormClass")}
+    class="kcFormClass"
     action={url.loginAction}
     method="post"
   >
-    <div class={kcClsx("kcInputWrapperClass")}>
-      <div class={kcClsx("kcInfoAreaWrapperClass")}>
+    <div class="kcInputWrapperClass">
+      <div class="kcInfoAreaWrapperClass">
         <p id="kc-otp-reset-form-description">{msg("otp-reset-description")}</p>
         <ul>
           {#each configuredOtpCredentials.userOtpCredentials as otpCredential, index}
             <li>
               <input
                 id={`kc-otp-credential-${index}`}
-                class={kcClsx("kcLoginOTPListInputClass")}
+                class="kcLoginOTPListInputClass"
                 type="radio"
                 name="selectedCredentialId"
                 value={otpCredential.id}
@@ -59,17 +53,17 @@
               <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
               <label
                 for={`kc-otp-credential-${index}`}
-                class={kcClsx("kcLoginOTPListClass")}
+                class="kcLoginOTPListClass"
                 tabindex={index}
               >
-                <span class={kcClsx("kcLoginOTPListItemHeaderClass")}>
-                  <span class={kcClsx("kcLoginOTPListItemIconBodyClass")}>
+                <span class="kcLoginOTPListItemHeaderClass">
+                  <span class="kcLoginOTPListItemIconBodyClass">
                     <i
-                      class={kcClsx("kcLoginOTPListItemIconClass")}
+                      class="kcLoginOTPListItemIconClass"
                       aria-hidden="true"
                     ></i>
                   </span>
-                  <span class={kcClsx("kcLoginOTPListItemTitleClass")}>
+                  <span class="kcLoginOTPListItemTitleClass">
                     {otpCredential.userLabel}
                   </span>
                 </span>
@@ -77,16 +71,16 @@
             </li>
           {/each}
         </ul>
-        <div class={kcClsx("kcFormGroupClass")}>
-          <div id="kc-form-buttons" class={kcClsx("kcFormButtonsClass")}>
+        <div class="kcFormGroupClass">
+          <div id="kc-form-buttons" class="kcFormButtonsClass">
             <input
               id="kc-otp-reset-form-submit"
-              class={kcClsx(
-                "kcButtonClass",
-                "kcButtonPrimaryClass",
-                "kcButtonBlockClass",
-                "kcButtonLargeClass",
-              )}
+              class="
+                kcButtonClass
+                kcButtonPrimaryClass
+                kcButtonBlockClass
+                kcButtonLargeClass
+              "
               type="submit"
               value={msgStr("doSubmit")}
             />

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { useScript } from "@keycloakify/svelte/login/pages/LoginPasskeysConditionalAuthenticate.useScript";
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
-  import { type ClassKey, getKcClsx } from "keycloakify/login/lib/kcClsx";
+  import type { PageProps } from "./PageProps";
+  import { type ClassKey, } from "keycloakify/login/lib/kcClsx";
   import { clsx } from "keycloakify/tools/clsx";
   import type { CxArg } from "keycloakify/tools/clsx_withTransform";
   import type { KcContext } from "../KcContext";
@@ -34,11 +34,6 @@
 
   const { msg, msgStr, advancedMsg } = $i18n;
 
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
-
   const authButtonId = "authenticateWebAuthnButton";
 
   useScript({ authButtonId, kcContext, i18n });
@@ -68,13 +63,9 @@
     <input type="hidden" id="userHandle" name="userHandle" />
     <input type="hidden" id="error" name="error" />
   </form>
-  <div
-    class={kcClsx("kcFormGroupClass")}
-    no-bottom-margin={true}
-    style:margin-bottom={"0"}
-  >
+  <div class="kcFormGroupClass">
     {#if authenticators !== undefined && Object.keys(authenticators).length !== 0}
-      <form id="authn_select" class={kcClsx("kcFormClass")}>
+      <form id="authn_select" class="kcFormClass">
         {#each authenticators.authenticators as authenticator}
           <input
             type="hidden"
@@ -86,41 +77,40 @@
       </form>
       {#if shouldDisplayAuthenticators}
         {#if authenticators.authenticators.length > 1}
-          <p class={kcClsx("kcSelectAuthListItemTitle")}>
+          <p class="kcSelectAuthListItemTitle">
             {msg("passkey-available-authenticators")}
           </p>
         {/if}
-        <div class={kcClsx("kcFormClass")}>
+        <div class="kcFormClass">
           {#each authenticators.authenticators as authenticator, i}
             <div
               id={`kc-webauthn-authenticator-item-${i}`}
-              class={kcClsx("kcSelectAuthListItemClass")}
+              class="kcSelectAuthListItemClass"
             >
               <i
                 class={clsx(
                   (() => {
-                    const klass = kcClsx(
-                      authenticator.transports.iconClass as CxArg<ClassKey>,
-                    );
+                    const klass = authenticator.transports
+                      .iconClass as CxArg<ClassKey>;
                     if (klass === authenticator.transports.iconClass) {
-                      return kcClsx("kcWebAuthnDefaultIcon");
+                      return "kcWebAuthnDefaultIcon";
                     }
                     return klass;
                   })(),
-                  kcClsx("kcSelectAuthListItemIconPropertyClass"),
+                  "kcSelectAuthListItemIconPropertyClass",
                 )}
               ></i>
-              <div class={kcClsx("kcSelectAuthListItemBodyClass")}>
+              <div class="kcSelectAuthListItemBodyClass">
                 <div
                   id={`kc-webauthn-authenticator-label-${i}`}
-                  class={kcClsx("kcSelectAuthListItemHeadingClass")}
+                  class="kcSelectAuthListItemHeadingClass"
                 >
                   {advancedMsg(authenticator.label)}
                 </div>
                 {#if authenticator.transports !== undefined && authenticator.transports.displayNameProperties !== undefined && authenticator.transports.displayNameProperties.length !== 0}
                   <div
                     id={`kc-webauthn-authenticator-transport-${i}`}
-                    class={kcClsx("kcSelectAuthListItemDescriptionClass")}
+                    class="kcSelectAuthListItemDescriptionClass"
                   >
                     {#each authenticator.transports.displayNameProperties as nameProperty, i}
                       <span>{advancedMsg(nameProperty)}</span>
@@ -129,7 +119,7 @@
                     {/each}
                   </div>
                 {/if}
-                <div class={kcClsx("kcSelectAuthListItemDescriptionClass")}>
+                <div class="kcSelectAuthListItemDescriptionClass">
                   <span id={`kc-webauthn-authenticator-createdlabel-${i}`}>
                     {msg("passkey-createdAt-label")}
                   </span>
@@ -138,7 +128,7 @@
                   </span>
                 </div>
               </div>
-              <div class={kcClsx("kcSelectAuthListItemFillClass")}></div>
+              <div class="kcSelectAuthListItemFillClass"></div>
             </div>
           {/each}
         </div>
@@ -163,8 +153,8 @@
             }}
           >
             {#if !usernameHidden}
-              <div class={kcClsx("kcFormGroupClass")}>
-                <label for="username" class={kcClsx("kcLabelClass")}>
+              <div class="kcFormGroupClass">
+                <label for="username" class="kcLabelClass">
                   {msg("passkey-autofill-select")}
                 </label>
                 <!-- svelte-ignore a11y_autofocus -->
@@ -172,7 +162,7 @@
                   tabindex={1}
                   id="username"
                   aria-invalid={messagesPerField.existsError("username")}
-                  class={kcClsx("kcInputClass")}
+                  class="kcInputClass"
                   name="username"
                   value={login.username ?? ""}
                   autocomplete="username webauthn"
@@ -182,7 +172,7 @@
                 {#if messagesPerField.existsError("username")}
                   <span
                     id="input-error-username"
-                    class={kcClsx("kcInputErrorMessageClass")}
+                    class="kcInputErrorMessageClass"
                     aria-live="polite"
                   >
                     {messagesPerField.get("username")}
@@ -194,7 +184,7 @@
         {/if}
         <div
           id="kc-form-passkey-button"
-          class={kcClsx("kcFormButtonsClass")}
+          class="kcFormButtonsClass"
           style:display={"none"}
         >
           <!-- svelte-ignore a11y_autofocus -->
@@ -203,12 +193,12 @@
             type="button"
             autofocus
             value={msgStr("passkey-doAuthenticate")}
-            class={kcClsx(
-              "kcButtonClass",
-              "kcButtonPrimaryClass",
-              "kcButtonBlockClass",
-              "kcButtonLargeClass",
-            )}
+            class="
+              kcButtonClass
+              kcButtonPrimaryClass
+              kcButtonBlockClass
+              kcButtonLargeClass
+            "
           />
         </div>
       </div>

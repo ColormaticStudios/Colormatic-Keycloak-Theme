@@ -1,7 +1,7 @@
 <script lang="ts">
   import AddRemoveButtonsMultiValuedAttribute from "./AddRemoveButtonsMultiValuedAttribute.svelte";
   import FieldErrors from "./FieldErrors.svelte";
-  import type { InputFieldByTypeProps } from "@keycloakify/svelte/login/components/InputFieldByTypeProps";
+  import type { InputFieldByTypeProps } from "./InputFieldByTypeProps";
   import { assert } from "keycloakify/tools/assert";
   import type { I18n } from "../i18n";
 
@@ -9,7 +9,6 @@
   let {
     attribute,
     fieldIndex,
-    kcClsx,
     dispatchFormAction,
     valueOrValues,
     i18n,
@@ -46,7 +45,7 @@
   id={attribute.name}
   name={attribute.name}
   bind:value
-  class={kcClsx("kcInputClass")}
+  class="kcInputClass"
   aria-invalid={displayableErrors.find(
     (error) => error.fieldIndex === fieldIndex,
   ) !== undefined}
@@ -98,8 +97,7 @@
 />
 {#if fieldIndex !== undefined && valueOrValues instanceof Array}
   {@const values = valueOrValues}
-  <FieldErrors {attribute} {kcClsx} bind:displayableErrors {fieldIndex}
-  ></FieldErrors>
+  <FieldErrors {attribute} bind:displayableErrors {fieldIndex}></FieldErrors>
   <AddRemoveButtonsMultiValuedAttribute
     {attribute}
     {values}

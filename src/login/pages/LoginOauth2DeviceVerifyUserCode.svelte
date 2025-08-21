@@ -1,6 +1,5 @@
 <script lang="ts">
-  import type { PageProps } from "@keycloakify/svelte/login/pages/PageProps";
-  import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+  import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
@@ -18,11 +17,6 @@
   const { url } = kcContext;
 
   const { msg, msgStr } = $i18n;
-
-  const { kcClsx } = getKcClsx({
-    doUseDefaultCss,
-    classes,
-  });
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes}>
@@ -31,44 +25,44 @@
   {/snippet}
   <form
     id="kc-user-verify-device-user-code-form"
-    class={kcClsx("kcFormClass")}
+    class="kcFormClass"
     action={url.oauth2DeviceVerificationAction}
     method="post"
   >
-    <div class={kcClsx("kcFormGroupClass")}>
-      <div class={kcClsx("kcLabelWrapperClass")}>
-        <label for="device-user-code" class={kcClsx("kcLabelClass")}>
+    <div class="kcFormGroupClass">
+      <div class="kcLabelWrapperClass">
+        <label for="device-user-code" class="kcLabelClass">
           {@render msg("verifyOAuth2DeviceUserCode")()}
         </label>
       </div>
 
-      <div class={kcClsx("kcInputWrapperClass")}>
+      <div class="kcInputWrapperClass">
         <!-- svelte-ignore a11y_autofocus -->
         <input
           id="device-user-code"
           name="device_user_code"
           autocomplete="off"
           type="text"
-          class={kcClsx("kcInputClass")}
+          class="kcInputClass"
           autofocus
         />
       </div>
     </div>
 
-    <div class={kcClsx("kcFormGroupClass")}>
-      <div id="kc-form-options" class={kcClsx("kcFormOptionsClass")}>
-        <div class={kcClsx("kcFormOptionsWrapperClass")}></div>
+    <div class="kcFormGroupClass">
+      <div id="kc-form-options" class="kcFormOptionsClass">
+        <div class="kcFormOptionsWrapperClass"></div>
       </div>
 
-      <div id="kc-form-buttons" class={kcClsx("kcFormButtonsClass")}>
-        <div class={kcClsx("kcFormButtonsWrapperClass")}>
+      <div id="kc-form-buttons" class="kcFormButtonsClass">
+        <div class="kcFormButtonsWrapperClass">
           <input
-            class={kcClsx(
-              "kcButtonClass",
-              "kcButtonPrimaryClass",
-              "kcButtonLargeClass",
-              "kcButtonBlockClass",
-            )}
+            class="
+              kcButtonClass
+              kcButtonPrimaryClass
+              kcButtonLargeClass
+              kcButtonBlockClass
+            "
             type="submit"
             value={msgStr("doSubmit")}
           />

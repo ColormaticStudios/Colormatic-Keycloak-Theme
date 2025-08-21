@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { InputFieldByTypeProps } from "@keycloakify/svelte/login/components/InputFieldByTypeProps";
+  import type { InputFieldByTypeProps } from "./InputFieldByTypeProps";
   import InputTag from "./InputTag.svelte";
   import InputTagSelects from "./InputTagSelects.svelte";
   import PasswordWrapper from "./PasswordWrapper.svelte";
@@ -31,11 +31,7 @@
       <InputTag {...props} bind:displayableErrors />
     {/snippet}
     {#if ["password", "password-confirm"].includes(attribute.name)}
-      <PasswordWrapper
-        kcClsx={props.kcClsx}
-        i18n={props.i18n}
-        passwordInputId={attribute.name}
-      >
+      <PasswordWrapper i18n={props.i18n} passwordInputId={attribute.name}>
         {@render inputNode()}
       </PasswordWrapper>
     {:else}
