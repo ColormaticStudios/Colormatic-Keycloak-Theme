@@ -9,7 +9,7 @@ export default defineConfig({
 		svelte(),
 		tailwindcss(),
 		keycloakify({
-			themeName: "keycloakify-starter-svelte",
+			themeName: "colormatic-keycloak-theme",
 			accountThemeImplementation: "none",
 		}),
 	],
