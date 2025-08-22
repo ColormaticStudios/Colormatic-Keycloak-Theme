@@ -61,10 +61,8 @@
             </div>
           </div>
 
-          <!-- Spacer / Fill -->
           <div class="kcSelectAuthListItemFillClass flex-1"></div>
 
-          <!-- Right arrow -->
           <div
             class="kcSelectAuthListItemArrowClass ml-3 text-slate-400 dark:text-slate-500"
           >
