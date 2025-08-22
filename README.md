@@ -7,7 +7,7 @@ Some things that need to be done:
 - [x] Unify the architecture of all the forms
 - [x] Fix the random spacing around the place
 - [ ] Build a proper unified design language
-- [ ] Customize the colors to thematically align Colormatic
+- [ ] Customize the colors to thematically align with Colormatic
 - [x] Integrate proper components (like [Shadcn/Svelte](https://www.shadcn-svelte.com/))
 - [ ] User feedback
 
