@@ -30,7 +30,7 @@
   @apply rounded-2xl border p-6;
   @apply border-slate-300 bg-white;
   @apply dark:border-slate-800 dark:bg-slate-900;
-  @apply w-full lg:w-[50%] xl:w-[40%];
+  @apply w-[90%] lg:w-[50%] xl:w-[40%];
 }
 
 .kcFormCardClass a {
