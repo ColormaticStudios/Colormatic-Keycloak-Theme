@@ -12,14 +12,13 @@
 .kcButtonClass.kcButtonPrimaryClass {
   @apply bg-slate-950 text-white dark:bg-white dark:text-black;
   @apply duration-150;
-}
-
-.kcButtonClass.kcButtonPrimaryClass:hover {
-  @apply bg-slate-700 dark:bg-slate-200;
+  @apply hover:bg-slate-700 hover:dark:bg-slate-300;
 }
 
 .kcButtonClass.kcButtonRedClass {
   @apply bg-red-500 text-white;
+  @apply duration-150;
+  @apply hover:bg-red-600;
 }
 
 .kcButtonBlockClass {
