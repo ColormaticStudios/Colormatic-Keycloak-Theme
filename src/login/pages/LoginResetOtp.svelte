@@ -37,40 +37,56 @@
   >
     <div class="kcInputWrapperClass">
       <div class="kcInfoAreaWrapperClass">
-        <p id="kc-otp-reset-form-description">{msg("otp-reset-description")}</p>
-        <ul>
-          {#each configuredOtpCredentials.userOtpCredentials as otpCredential, index}
-            <li>
+        <p id="kc-otp-reset-form-description">
+          {@render msg("otp-reset-description")()}
+        </p>
+        <div class="grid gap-3 pt-2 sm:grid-cols-2">
+          {#each configuredOtpCredentials.userOtpCredentials as otpCredential, index (index)}
+            <div class="relative">
               <input
                 id={`kc-otp-credential-${index}`}
-                class="kcLoginOTPListInputClass"
+                class="peer sr-only"
                 type="radio"
                 name="selectedCredentialId"
                 value={otpCredential.id}
-                checked={otpCredential.id ===
-                  configuredOtpCredentials.selectedCredentialId}
+                checked={otpCredential.id === otpCredential}
               />
+
               <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
               <label
                 for={`kc-otp-credential-${index}`}
-                class="kcLoginOTPListClass"
-                tabindex={index}
+                tabindex={index + 1}
+                class="block cursor-pointer rounded-lg border border-slate-300
+                  bg-white p-2 shadow-sm transition peer-checked:border-indigo-500
+                  peer-checked:ring-2 peer-checked:ring-indigo-400 hover:shadow-md
+                  dark:border-slate-700 dark:bg-slate-800"
               >
-                <span class="kcLoginOTPListItemHeaderClass">
-                  <span class="kcLoginOTPListItemIconBodyClass">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700"
+                  >
                     <i
-                      class="kcLoginOTPListItemIconClass"
+                      class="bi bi-lock-fill text-xl text-slate-500 dark:text-slate-300"
                       aria-hidden="true"
                     ></i>
-                  </span>
-                  <span class="kcLoginOTPListItemTitleClass">
+                  </div>
+                  <span class="font-medium text-slate-900 dark:text-slate-100">
                     {otpCredential.userLabel}
                   </span>
-                </span>
+                </div>
               </label>
-            </li>
+
+              <div
+                class="pointer-events-none absolute top-4 right-3 hidden h-5 w-5
+                  items-center justify-center rounded-full bg-green-500
+                  text-white peer-checked:flex"
+              >
+                <i class="bi bi-check"></i>
+              </div>
+            </div>
           {/each}
-        </ul>
+        </div>
+
         <div class="kcFormGroupClass">
           <div id="kc-form-buttons" class="kcFormButtonsClass">
             <input

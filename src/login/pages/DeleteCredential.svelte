@@ -28,11 +28,11 @@
     {@render msg("deleteCredentialMessage", credentialLabel)()}
   </div>
   <form class="form-actions" action={url.loginAction} method="POST">
-    <div id="kc-form-buttons">
+    <div id="kc-form-buttons" class="kcFormButtonsWrapperClass">
       <input
         class="
           kcButtonClass
-          kcButtonPrimaryClass
+          kcButtonRedClass
           kcButtonLargeClass
         "
         name="accept"

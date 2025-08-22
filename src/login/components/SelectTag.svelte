@@ -75,7 +75,7 @@
     })}
 >
   {#if !isMultiple}<option value=""></option>{/if}
-  {#each options as option}
+  {#each options as option, i (i)}
     <option value={option}>
       {@render inputLabel($i18n, attribute, option)()}
     </option>

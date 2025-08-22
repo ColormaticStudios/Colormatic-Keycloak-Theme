@@ -24,7 +24,7 @@
   <div id="kc-error-message">
     <p class="instruction">{@html kcSanitize(message.summary)}</p>
     {#if !skipLink && client !== undefined && client.baseUrl !== undefined}
-      <p>
+      <p class="pt-2">
         <a id="backToApplication" href={client.baseUrl}>
           {@render msg("backToApplication")()}
         </a>

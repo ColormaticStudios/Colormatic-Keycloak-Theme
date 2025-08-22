@@ -53,18 +53,15 @@
       )}
     </p>
     {#if !skipLink}
-      {#if pageRedirectUri}
-        <p>
+      <p class="pt-2">
+        {#if pageRedirectUri}
           <a href={pageRedirectUri}>{@render msg("backToApplication")()}</a>
-        </p>
-      {:else if actionUri}
-        <p>
+        {:else if actionUri}
           <a href={actionUri}>{@render msg("proceedWithAction")()}</a>
-        </p>
-      {:else if client.baseUrl}<p>
+        {:else if client.baseUrl}
           <a href={client.baseUrl}>{@render msg("backToApplication")()}</a>
-        </p>
-      {/if}
+        {/if}
+      </p>
     {/if}
   </div>
 </Template>

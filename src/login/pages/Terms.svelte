@@ -22,7 +22,7 @@
   {/snippet}
   <div id="kc-terms-text">{@render msg("termsText")()}</div>
   <form class="form-actions" action={url.loginAction} method="POST">
-    <div id="kc-form-buttons">
+    <div id="kc-form-buttons" class="kcFormButtonsWrapperClass">
       <input
         class="
           kcButtonClass

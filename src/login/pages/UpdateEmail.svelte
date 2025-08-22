@@ -63,7 +63,7 @@
 
       <LogoutOtherSessions {i18n} />
 
-      <div id="kc-form-buttons" class="kcFormButtonsClass">
+      <div id="kc-form-buttons" class="kcFormButtonsWrapperClass">
         <input
           disabled={!$isFormSubmittable}
           class="

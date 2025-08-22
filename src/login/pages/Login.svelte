@@ -48,7 +48,7 @@
     <div id="kc-registration-container">
       <div id="kc-registration">
         <span>
-          {@render msg("noAccount")()}{" "}
+          {@render msg("noAccount")()}&nbsp;
           <a tabindex={8} href={url.registrationUrl}>
             {@render msg("doRegister")()}
           </a>
@@ -67,7 +67,7 @@
             ? 'kcFormSocialAccountListGridClass'
             : ''}"
         >
-          {#each providers as p}
+          {#each providers as p (p.alias)}
             <li>
               <a
                 id={`social-${p.alias}`}
@@ -191,7 +191,7 @@
                       type="checkbox"
                       checked={!!login.rememberMe}
                     />
-                    {" "}
+                    &nbsp;
                     {@render msg("rememberMe")()}
                   </label>
                 </div>

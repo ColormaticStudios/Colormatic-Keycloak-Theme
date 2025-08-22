@@ -33,7 +33,7 @@
   <div id="kc-oauth" class="content-area">
     <h3>{@render msg("oauthGrantRequest")()}</h3>
     <ul>
-      {#each oauth.clientScopesRequested as clientScope}
+      {#each oauth.clientScopesRequested as clientScope, i (i)}
         <li>
           <span>
             {@render advancedMsg(clientScope.consentScreenText)()}

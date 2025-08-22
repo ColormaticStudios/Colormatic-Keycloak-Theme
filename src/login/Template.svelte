@@ -7,6 +7,8 @@
   import { onMount } from "svelte";
   import type { I18n } from "./i18n";
   import type { KcContext } from "./KcContext";
+  import { ModeWatcher, toggleMode } from "mode-watcher";
+  import { Button } from "../lib/components/ui/button/index.js";
   import "./main.css";
 
   const {
@@ -43,6 +45,23 @@
   const { isReadyToRender } = useInitialize({ kcContext, doUseDefaultCss });
 </script>
 
+<ModeWatcher />
+
+<Button
+  onclick={toggleMode}
+  variant="outline"
+  size="icon"
+  class="fixed right-[20px] bottom-[20px]"
+>
+  <i
+    class="bi bi-brightness-high-fill h-[1.2rem] w-[1.2rem] scale-100 rotate-0 !transition-all dark:scale-0 dark:-rotate-90"
+  ></i>
+  <i
+    class="bi bi-moon-fill absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 !transition-all dark:scale-100 dark:rotate-0"
+  ></i>
+  <span class="sr-only">Toggle theme</span>
+</Button>
+
 {#if $isReadyToRender}
   <div class="kcLoginClass">
     <div id="kc-header" class="kcHeaderClass">
@@ -54,7 +73,7 @@
     <div class="kcFormCardClass">
       <header class="kcFormHeaderClass">
         {#if enabledLanguages.length > 1}
-          <div class="kcLocaleMainClass" id="kc-locale">
+          <div class="kcLocaleMainClass float-right" id="kc-locale">
             <div id="kc-locale-wrapper" class="kcLocaleWrapperClass">
               <div
                 id="kc-locale-dropdown"
@@ -68,6 +87,7 @@
                   aria-expanded="false"
                   aria-controls="language-switch1"
                 >
+                  <i class="bi bi-globe2"></i>
                   {currentLanguage.label}
                 </button>
                 <!-- svelte-ignore a11y_incorrect_aria_attribute_type -->

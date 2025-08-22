@@ -82,7 +82,7 @@
       <div class="form-group">
         <div class="kcInputWrapperClass">
           <div
-            class="g-recaptcha"
+            class="g-recaptcha flex justify-center pt-4"
             data-size="compact"
             data-sitekey={recaptchaSiteKey}
             data-action={recaptchaAction}
@@ -91,13 +91,6 @@
       </div>
     {/if}
     <div class="kcFormGroupClass">
-      <div id="kc-form-options" class="kcFormOptionsClass">
-        <div class="kcFormOptionsWrapperClass">
-          <span>
-            <a href={url.loginUrl}>{@render msg("backToLogin")()}</a>
-          </span>
-        </div>
-      </div>
       {#if recaptchaRequired && !recaptchaVisible && recaptchaAction !== undefined}
         <div id="kc-form-buttons" class="kcFormButtonsClass">
           <button
@@ -136,6 +129,13 @@
           />
         </div>
       {/if}
+      <div id="kc-form-options" class="kcFormOptionsClass">
+        <div class="kcFormOptionsWrapperClass">
+          <span>
+            <a href={url.loginUrl}>{@render msg("backToLogin")()}</a>
+          </span>
+        </div>
+      </div>
     </div>
   </form>
 </Template>

@@ -80,7 +80,7 @@
     </div>
     <div class="kcFormGroupClass kcFormSettingClass">
       <div id="kc-form-options" class="kcFormOptionsClass">
-        <div class="kcFormOptionsWrapperClass">
+        <div class="kcFormOptionsWrapperClass pt-3">
           <span>
             <a href={url.loginUrl}>{@render msg("backToLogin")()}</a>
           </span>

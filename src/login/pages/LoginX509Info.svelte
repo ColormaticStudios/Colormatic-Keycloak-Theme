@@ -54,7 +54,7 @@
       {#if x509.formData.isUserEnabled}
         <div class="kcLabelWrapperClass">
           <label for="username" class="kcLabelClass">
-            {msg("doX509Login")}
+            {@render msg("doX509Login")()}
           </label>
         </div>
         <div class="kcLabelWrapperClass">
@@ -69,35 +69,31 @@
       <div id="kc-form-options" class="kcFormOptionsClass">
         <div class="kcFormOptionsWrapperClass"></div>
       </div>
-      <div id="kc-form-buttons" class="kcFormButtonsClass">
-        <div class="kcFormButtonsWrapperClass">
-          <div id="kc-form-buttons">
-            <input
-              class="
+      <div id="kc-form-buttons" class="kcFormButtonsWrapperClass">
+        <input
+          class="
                 kcButtonClass
                 kcButtonPrimaryClass
                 kcButtonLargeClass
               "
-              name="login"
-              id="kc-login"
-              type="submit"
-              value={msgStr("doContinue")}
-            />
-            {#if x509.formData.isUserEnabled}
-              <input
-                class="
+          name="login"
+          id="kc-login"
+          type="submit"
+          value={msgStr("doContinue")}
+        />
+        {#if x509.formData.isUserEnabled}
+          <input
+            class="
                   kcButtonClass
                   kcButtonDefaultClass
                   kcButtonLargeClass
                 "
-                name="cancel"
-                id="kc-cancel"
-                type="submit"
-                value={msgStr("doIgnore")}
-              />
-            {/if}
-          </div>
-        </div>
+            name="cancel"
+            id="kc-cancel"
+            type="submit"
+            value={msgStr("doIgnore")}
+          />
+        {/if}
       </div>
     </div>
   </form>

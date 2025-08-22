@@ -1,15 +1,15 @@
 # Colormatic Keycloak Theme
 
-This theme was built with Keycloakify. It's still early in development and needs a lot of work to be ready.
+This project was built from the [Keycloakify Svelte Starter](https://github.com/keycloakify/keycloakify-starter-svelte)
 
 Some things that need to be done:
 
-- Unify the architecture of all the forms
-- Fix the random spacing around the place (related to the previous issue)
-- Build a proper unified design language
-- Customize the colors to thematically align Colormatic
-- Integrate proper components (like [Shadcn/Svelte](https://www.shadcn-svelte.com/))
-- User feedback
+- [x] Unify the architecture of all the forms
+- [x] Fix the random spacing around the place
+- [ ] Build a proper unified design language
+- [ ] Customize the colors to thematically align Colormatic
+- [x] Integrate proper components (like [Shadcn/Svelte](https://www.shadcn-svelte.com/))
+- [ ] User feedback
 
 # Testing the theme locally
 
@@ -30,4 +30,3 @@ yarn run build-keycloak-theme
 
 Note that by default Keycloakify generates multiple .jar files for different versions of Keycloak.
 
-Built from: [Keycloakify Svelte Starter](https://github.com/keycloakify/keycloakify-starter-svelte)

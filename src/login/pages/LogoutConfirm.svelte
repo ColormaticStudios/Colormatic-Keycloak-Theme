@@ -28,22 +28,20 @@
     <p class="instruction">{@render msg("logoutConfirmHeader")()}</p>
     <form class="form-actions" action={url.logoutConfirmAction} method="POST">
       <input type="hidden" name="session_code" value={logoutConfirm.code} />
-      <div class="kcFormGroupClass">
-        <div id="kc-form-buttons" class="kcFormGroupClass">
-          <input
-            tabindex={4}
-            class="
+      <div id="kc-form-buttons" class="kcFormGroupClass">
+        <input
+          tabindex={4}
+          class="
               kcButtonClass
               kcButtonPrimaryClass
               kcButtonBlockClass
               kcButtonLargeClass
             "
-            name="confirmLogout"
-            id="kc-logout"
-            type="submit"
-            value={msgStr("doLogout")}
-          />
-        </div>
+          name="confirmLogout"
+          id="kc-logout"
+          type="submit"
+          value={msgStr("doLogout")}
+        />
       </div>
     </form>
     <div id="kc-info-message">

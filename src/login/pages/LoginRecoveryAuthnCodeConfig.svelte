@@ -52,7 +52,7 @@
   </div>
 
   <ol id={olRecoveryCodesListId} class="kcRecoveryCodesList">
-    {#each recoveryAuthnCodesConfigBean.generatedRecoveryAuthnCodesList as code, index}
+    {#each recoveryAuthnCodesConfigBean.generatedRecoveryAuthnCodesList as code, index (index)}
       <li>
         <span>{index + 1}:</span>
         {code.slice(0, 4)}-{code.slice(4, 8)}-{code.slice(8)}
@@ -61,7 +61,7 @@
   </ol>
 
   <!-- actions -->
-  <div class="kcRecoveryCodesActions">
+  <div class="kcRecoveryCodesActions flex justify-around py-3">
     <button
       id="printRecoveryCodes"
       class={clsx(

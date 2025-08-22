@@ -55,7 +55,7 @@
   <button
     id={`kc-add${idPostfix}`}
     type="button"
-    class="pf-c-button pf-m-inline pf-m-link"
+    class="kcButtonClass kcButtonDefaultClass"
     onclick={() =>
       dispatchFormAction("formAction", {
         action: "update",

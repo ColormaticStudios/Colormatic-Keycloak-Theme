@@ -24,19 +24,20 @@
     {@render msg("pageExpiredTitle")()}
   {/snippet}
 
+  <!--
+  This is so Prettier doesn't stick a space between the link
+  and the period.
+  -->
+  <!-- prettier-ignore -->
   <p id="instruction1" class="instruction">
     {@render msg("pageExpiredMsg1")()}
     <a id="loginRestartLink" href={url.loginRestartFlowUrl}>
       {@render msg("doClickHere")()}
-    </a>
-    {" "}
-    .
+    </a>.
     <br />
-    {@render msg("pageExpiredMsg2")()}{" "}
+    {@render msg("pageExpiredMsg2")()}
     <a id="loginContinueLink" href={url.loginAction}>
       {@render msg("doClickHere")()}
-    </a>
-    {" "}
-    .
+    </a>.
   </p>
 </Template>

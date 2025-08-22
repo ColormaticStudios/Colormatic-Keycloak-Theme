@@ -25,32 +25,24 @@
   {/snippet}
 
   <form action={url.loginAction} class="form-vertical" method="post">
-    <div
-      class="alert alert-warning"
-      style:margin-top="0"
-      style:margin-bottom="30px"
-    >
-      <span class="pficon pficon-warning-triangle-o"></span>
+    <div class="alert alert-warning pb-2">
+      <i class="bi bi-exclamation-triangle-fill"></i>
       {@render msg("irreversibleAction")()}
     </div>
     <p>{@render msg("deletingImplies")()}</p>
-    <ul
-      style:color="#72767b"
-      style:list-style="disc"
-      style:list-style-position="inside"
-    >
+    <ul class="text-slate-500">
       <li>{@render msg("loggingOutImmediately")()}</li>
       <li>{@render msg("errasingData")()}</li>
     </ul>
     <p class="delete-account-text">
       {@render msg("finalDeletionConfirmation")()}
     </p>
-    <div id="kc-form-buttons">
+    <div id="kc-form-buttons" class="kcFormButtonsWrapperClass">
       <input
         class="
           kcButtonClass
-          kcButtonPrimaryClass
           kcButtonLargeClass
+          kcButtonRedClass
 		  "
         type="submit"
         value={msgStr("doConfirmDelete")}

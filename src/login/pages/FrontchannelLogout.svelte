@@ -38,13 +38,13 @@
   {/snippet}
   <p>{@render msg("frontchannel-logout.message")()}</p>
   <ul>
-    {#each logout.clients as client}
+    {#each logout.clients as client (client.name)}
       <li>
         {client.name}
         <!-- svelte-ignore a11y_missing_attribute -->
         <iframe
           src={client.frontChannelLogoutUrl}
-          style:display={"none"}
+          style:display="none"
         ></iframe>
       </li>{/each}
   </ul>

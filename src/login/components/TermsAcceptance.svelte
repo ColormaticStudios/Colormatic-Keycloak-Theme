@@ -23,9 +23,8 @@
   const { msg } = $i18n;
 </script>
 
-<div class="form-group">
+<div class="form-group pt-4">
   <div class="kcInputWrapperClass">
-    {@render msg("termsTitle")()}
     <div id="kc-registration-terms-text">{@render msg("termsText")()}</div>
   </div>
 </div>

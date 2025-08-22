@@ -1,7 +1,7 @@
 <script lang="ts">
   import { useScript } from "@keycloakify/svelte/login/pages/LoginPasskeysConditionalAuthenticate.useScript";
   import type { PageProps } from "./PageProps";
-  import { type ClassKey, } from "keycloakify/login/lib/kcClsx";
+  import { type ClassKey } from "keycloakify/login/lib/kcClsx";
   import { clsx } from "keycloakify/tools/clsx";
   import type { CxArg } from "keycloakify/tools/clsx_withTransform";
   import type { KcContext } from "../KcContext";

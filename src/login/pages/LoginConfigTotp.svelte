@@ -4,6 +4,7 @@
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import * as InputOTP from "../../lib/components/ui/input-otp/index.js";
 
   const {
     Template,
@@ -19,6 +20,8 @@
   const { url, isAppInitiatedAction, totp, mode, messagesPerField } = kcContext;
 
   const { msg, msgStr, advancedMsg } = $i18n;
+
+  let OTPValue = $state("");
 </script>
 
 <Template
@@ -36,7 +39,7 @@
       <p>{@render msg("loginTotpStep1")()}</p>
 
       <ul id="kc-totp-supported-apps">
-        {#each totp.supportedApplications as app}
+        {#each totp.supportedApplications as app, i (i)}
           <li>{@render advancedMsg(app)()}</li>
         {/each}
       </ul>
@@ -85,6 +88,7 @@
           id="kc-totp-secret-qr-code"
           src={`data:image/png;base64, ${totp.totpSecretQrCode}`}
           alt="Figure: Barcode"
+          class="mx-auto rounded-[28px] p-4"
         />
         <br />
         <p>
@@ -110,18 +114,37 @@
         <label for="totp" class="kcLabelClass">
           {@render msg("authenticatorCode")()}
         </label>
-        {" "}
+        &nbsp;
         <span class="required">*</span>
       </div>
       <div class="kcInputWrapperClass">
         <input
-          type="text"
+          type="hidden"
           id="totp"
           name="totp"
           autocomplete="off"
           class="kcInputClass"
+          value={OTPValue}
           aria-invalid={messagesPerField.existsError("totp")}
         />
+
+        <div class="flex justify-center">
+          <InputOTP.Root maxlength={6} bind:value={OTPValue}>
+            {#snippet children({ cells })}
+              <InputOTP.Group>
+                {#each cells.slice(0, 3) as cell, i (i)}
+                  <InputOTP.Slot {cell} />
+                {/each}
+              </InputOTP.Group>
+              <InputOTP.Separator />
+              <InputOTP.Group>
+                {#each cells.slice(3, 6) as cell, i (i)}
+                  <InputOTP.Slot {cell} />
+                {/each}
+              </InputOTP.Group>
+            {/snippet}
+          </InputOTP.Root>
+        </div>
 
         {#if messagesPerField.existsError("totp")}
           <span
@@ -147,7 +170,7 @@
         <label for="userLabel" class="kcLabelClass">
           {@render msg("loginTotpDeviceName")()}
         </label>
-        {" "}
+        &nbsp;
         {#if totp.otpCredentials.length >= 1}<span class="required">
             *
           </span>{/if}

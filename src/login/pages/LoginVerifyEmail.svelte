@@ -28,7 +28,6 @@
       {@render msg("emailVerifyInstruction2")()}
       <br />
       <a href={url.loginAction}>{@render msg("doClickHere")()}</a>
-      &nbsp;
       {@render msg("emailVerifyInstruction3")()}
     </p>
   {/snippet}
