@@ -65,7 +65,7 @@
 				{social.providers.length > 3 ? 'kcFormSocialAccountListGridClass' : ''}
           "
         >
-          {#each social.providers as p}
+          {#each social.providers as p, i (i)}
             <li>
               <a
                 id={`social-${p.alias}`}
@@ -157,7 +157,6 @@
                       type="checkbox"
                       checked={!!login.rememberMe}
                     />
-                    {" "}
                     {@render msg("rememberMe")()}
                   </label>
                 </div>

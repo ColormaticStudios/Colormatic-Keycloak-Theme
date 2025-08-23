@@ -1,7 +1,7 @@
 <script lang="ts">
   import { useScript } from "@keycloakify/svelte/login/pages/LoginPasskeysConditionalAuthenticate.useScript";
   import type { PageProps } from "./PageProps";
-  import { type ClassKey } from "keycloakify/login/lib/kcClsx";
+  import type { ClassKey } from "keycloakify/login/lib/kcClsx";
   import { clsx } from "keycloakify/tools/clsx";
   import type { CxArg } from "keycloakify/tools/clsx_withTransform";
   import type { KcContext } from "../KcContext";
@@ -66,7 +66,7 @@
   <div class="kcFormGroupClass">
     {#if authenticators !== undefined && Object.keys(authenticators).length !== 0}
       <form id="authn_select" class="kcFormClass">
-        {#each authenticators.authenticators as authenticator}
+        {#each authenticators.authenticators as authenticator (authenticator.credentialId)}
           <input
             type="hidden"
             name="authn_use_chk"
@@ -82,7 +82,7 @@
           </p>
         {/if}
         <div class="kcFormClass">
-          {#each authenticators.authenticators as authenticator, i}
+          {#each authenticators.authenticators as authenticator, i (i)}
             <div
               id={`kc-webauthn-authenticator-item-${i}`}
               class="kcSelectAuthListItemClass"
@@ -112,7 +112,7 @@
                     id={`kc-webauthn-authenticator-transport-${i}`}
                     class="kcSelectAuthListItemDescriptionClass"
                   >
-                    {#each authenticator.transports.displayNameProperties as nameProperty, i}
+                    {#each authenticator.transports.displayNameProperties as nameProperty, i (i)}
                       <span>{advancedMsg(nameProperty)}</span>
                       {#if i !== authenticator.transports.displayNameProperties.length - 1}
                         <span>,</span>{/if}
@@ -141,7 +141,7 @@
             id="kc-form-login"
             action={url.loginAction}
             method="post"
-            style:display={"none"}
+            style:display="none"
             onsubmit={(event) => {
               try {
                 event.currentTarget.login.disabled = true;
@@ -185,7 +185,7 @@
         <div
           id="kc-form-passkey-button"
           class="kcFormButtonsClass"
-          style:display={"none"}
+          style:display="none"
         >
           <!-- svelte-ignore a11y_autofocus -->
           <input

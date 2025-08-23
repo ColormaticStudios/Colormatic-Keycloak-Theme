@@ -3,7 +3,7 @@
   import GroupLabel from "./GroupLabel.svelte";
   import InputFieldByType from "./InputFieldByType.svelte";
   import type { UserProfileFormFieldsProps } from "./UserProfileFormFieldsProps";
-  import { useUserProfileForm } from "@keycloakify/svelte/login/lib/useUserProfileForm";
+  import { useUserProfileForm } from "../lib/useUserProfileForm";
   import { onMount } from "svelte";
   import { derived } from "svelte/store";
   import type { I18n } from "../i18n";

@@ -1,7 +1,4 @@
-import type {
-	FormAction,
-	FormFieldError,
-} from "@keycloakify/svelte/login/lib/useUserProfileForm";
+import type { FormAction, FormFieldError } from "../lib/useUserProfileForm";
 import type { Attribute } from "keycloakify/login/KcContext";
 import type { EventDispatcher } from "svelte";
 import type { Readable } from "svelte/store";
