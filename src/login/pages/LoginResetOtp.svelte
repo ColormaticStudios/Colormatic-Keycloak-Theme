@@ -49,7 +49,6 @@
                 type="radio"
                 name="selectedCredentialId"
                 value={otpCredential.id}
-                checked={otpCredential.id === otpCredential}
               />
 
               <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
