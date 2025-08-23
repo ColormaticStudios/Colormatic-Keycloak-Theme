@@ -31,7 +31,7 @@
       {@render msg("emailVerifyInstruction3")()}
     </p>
   {/snippet}
-  <p class="instruction">
+  <p class="instruction pb-4">
     {@render msg("emailVerifyInstruction1", user?.email ?? "")()}
   </p>
 </Template>
