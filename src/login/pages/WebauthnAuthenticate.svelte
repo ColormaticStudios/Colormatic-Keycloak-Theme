@@ -2,8 +2,6 @@
   import type { PageProps } from "./PageProps";
   import { useScript } from "@keycloakify/svelte/login/pages/WebauthnAuthenticate.useScript";
   import { clsx } from "keycloakify/tools/clsx";
-  import type { ClassKey } from "keycloakify/login/lib/kcClsx";
-  import type { CxArg } from "keycloakify/tools/clsx_withTransform";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
