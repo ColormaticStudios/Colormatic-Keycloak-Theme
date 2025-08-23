@@ -13,6 +13,10 @@
   @apply bg-slate-950 text-white dark:bg-white dark:text-black;
   @apply duration-150;
   @apply hover:bg-slate-700 hover:dark:bg-slate-300;
+
+  @apply disabled:bg-slate-500 disabled:hover:bg-slate-500;
+  @apply disabled:dark:bg-slate-500 disabled:hover:dark:bg-slate-500;
+  @apply disabled:hover:cursor-not-allowed;
 }
 
 .kcButtonClass.kcButtonRedClass {

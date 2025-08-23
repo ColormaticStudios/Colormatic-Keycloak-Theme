@@ -72,7 +72,7 @@
       )}
       type="button"
     >
-      <i class="pficon-print" aria-hidden="true"></i>
+      <i class="bi bi-printer-fill"></i>
       {@render msg("recovery-codes-print")()}
     </button>
     <button
@@ -85,7 +85,7 @@
       )}
       type="button"
     >
-      <i class="pficon-save" aria-hidden="true"></i>
+      <i class="bi bi-download"></i>
       {@render msg("recovery-codes-download")()}
     </button>
     <button
@@ -98,7 +98,7 @@
       )}
       type="button"
     >
-      <i class="pficon-blueprint" aria-hidden="true"></i>
+      <i class="bi bi-copy"></i>
       {@render msg("recovery-codes-copy")()}
     </button>
   </div>
@@ -116,7 +116,7 @@
           !event.currentTarget.checked;
       }}
     />
-    <label for="kcRecoveryCodesConfirmationCheck">
+    <label for="kcRecoveryCodesConfirmationCheck" class="font-bold">
       {@render msg("recovery-codes-confirmation-message")()}
     </label>
   </div>
