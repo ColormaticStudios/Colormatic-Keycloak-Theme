@@ -26,7 +26,7 @@
     children,
   }: TemplateProps<KcContext, I18n> = $props();
 
-  const { msgStr, currentLanguage, enabledLanguages } = $i18n;
+  const { msgStr } = $i18n;
 
   const { realm, auth, url, message, isAppInitiatedAction } = kcContext;
   onMount(() => {
@@ -72,7 +72,7 @@
 
     <div class="kcFormCardClass">
       <header class="kcFormHeaderClass">
-        {#if enabledLanguages.length > 1}
+        {#if (kcContext.locale?.supported.length ?? 0) > 1}
           <div class="kcLocaleMainClass float-right" id="kc-locale">
             <div id="kc-locale-wrapper" class="kcLocaleWrapperClass">
               <div
@@ -88,7 +88,10 @@
                   aria-controls="language-switch1"
                 >
                   <i class="bi bi-globe2"></i>
-                  {currentLanguage.label}
+                  {kcContext.locale?.supported.find(
+                    (l) =>
+                      l.languageTag === kcContext.locale?.currentLanguageTag,
+                  )?.label}
                 </button>
                 <!-- svelte-ignore a11y_incorrect_aria_attribute_type -->
                 <ul
@@ -99,16 +102,15 @@
                   id="language-switch1"
                   class="kcLocaleListClass"
                 >
-                  {#each enabledLanguages as enabledLanguage, i (enabledLanguage.label)}
-                    {@const { label, href } = enabledLanguage}
+                  {#each kcContext.locale?.supported ?? [] as supported, i (supported.languageTag)}
                     <li class="kcLocaleListItemClass" role="none">
                       <a
                         role="menuitem"
                         id={`language-${i + 1}`}
                         class="kcLocaleItemClass"
-                        {href}
+                        href={supported.url}
                       >
-                        {label}
+                        {supported.label}
                       </a>
                     </li>
                   {/each}
