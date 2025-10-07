@@ -1,7 +1,7 @@
 <script lang="ts">
   import Template from "./Template.svelte";
   import UserProfileFormFields from "./components/UserProfileFormFields.svelte";
-  import type { KcContext } from "keycloakify/login/KcContext";
+  import type { KcContext } from "./KcContext";
   import type { ClassKey } from "keycloakify/login/lib/kcClsx";
   import type { Component } from "svelte";
   import { useI18n } from "./i18n";
@@ -14,7 +14,7 @@
   const doMakeUserConfirmPassword = true;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const page = async (): Promise<{ default?: Component<any> }> => {
+  async function page(): Promise<{ default?: Component<any> }> {
     switch (kcContext.pageId) {
       case "login.ftl":
         return import("./pages/Login.svelte");
@@ -91,7 +91,7 @@
       default:
         return import("@keycloakify/svelte/login/DefaultPage.svelte");
     }
-  };
+  }
 </script>
 
 {#await page() then { default: Page }}

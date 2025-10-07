@@ -111,7 +111,15 @@
   @apply flex flex-row justify-between;
 }
 
+.kcFormSocialAccountSectionClass {
+  @apply w-fit;
+}
+
+#kc-registration-container {
+  @apply w-fit float-right;
+}
+
 #kc-registration {
-  @apply pt-4 text-right;
+  @apply pt-4;
 }
 
