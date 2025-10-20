@@ -39,7 +39,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
   return (
     <>
-      <header className="navbar navbar-default navbar-pf navbar-main header">
+      {/*<header className="navbar navbar-default navbar-pf navbar-main header">
         <nav className="navbar" role="navigation">
           <div className="navbar-header">
             <div className="container">
@@ -79,9 +79,9 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
             </div>
           </div>
         </nav>
-      </header>
+      </header>*/}
 
-      <div className="container">
+      <div className="flex w-full p-4">
         <div className="bs-sidebar col-sm-3">
           <ul>
             <li className={clsx(active === "account" && "active")}>
@@ -119,7 +119,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
           </ul>
         </div>
 
-        <div className="col-sm-9 content-area">
+        <div className="grow-1">
           {message !== undefined && (
             <div className={clsx("alert", `alert-${message.type}`)}>
               {message.type === "success" && <span className="pficon pficon-ok"></span>}
