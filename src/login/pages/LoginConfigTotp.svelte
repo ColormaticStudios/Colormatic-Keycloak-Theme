@@ -103,6 +103,38 @@
       <p>{@render msg("loginTotpStep3DeviceName")()}</p>
     </li>
   </ol>
+
+  <div class="kcFormGroupClass">
+      <div class="kcLabelWrapperClass">
+        <label for="userLabel" class="kcLabelClass">
+          {@render msg("loginTotpDeviceName")()}
+        </label>
+        &nbsp;
+        {#if totp.otpCredentials.length >= 1}<span class="required">
+            *
+          </span>{/if}
+      </div>
+      <div class="kcInputWrapperClass">
+        <input
+          type="text"
+          id="userLabel"
+          name="userLabel"
+          autocomplete="off"
+          class="kcInputClass"
+          aria-invalid={messagesPerField.existsError("userLabel")}
+        />
+        {#if messagesPerField.existsError("userLabel")}
+          <span
+            id="input-error-otp-label"
+            class="kcInputErrorMessageClass"
+            aria-live="polite"
+          >
+            {@html kcSanitize(messagesPerField.get("userLabel"))}
+          </span>
+        {/if}
+      </div>
+    </div>
+
   <form
     action={url.loginAction}
     class="kcFormClass"
@@ -163,37 +195,6 @@
         value={totp.totpSecret}
       />
       {#if mode}<input type="hidden" id="mode" value={mode} />{/if}
-    </div>
-
-    <div class="kcFormGroupClass">
-      <div class="kcLabelWrapperClass">
-        <label for="userLabel" class="kcLabelClass">
-          {@render msg("loginTotpDeviceName")()}
-        </label>
-        &nbsp;
-        {#if totp.otpCredentials.length >= 1}<span class="required">
-            *
-          </span>{/if}
-      </div>
-      <div class="kcInputWrapperClass">
-        <input
-          type="text"
-          id="userLabel"
-          name="userLabel"
-          autocomplete="off"
-          class="kcInputClass"
-          aria-invalid={messagesPerField.existsError("userLabel")}
-        />
-        {#if messagesPerField.existsError("userLabel")}
-          <span
-            id="input-error-otp-label"
-            class="kcInputErrorMessageClass"
-            aria-live="polite"
-          >
-            {@html kcSanitize(messagesPerField.get("userLabel"))}
-          </span>
-        {/if}
-      </div>
     </div>
 
     <div class="kcFormGroupClass">
