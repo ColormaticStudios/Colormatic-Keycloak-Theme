@@ -5,7 +5,7 @@
 
   const args: KcPageStoryProps = { pageId: "login-username.ftl" };
   const { Story } = defineMeta({
-    title: "login/login-username.ft",
+    title: "login/login-username.ftl",
     component: KcPageStory,
     args: args,
   });
