@@ -35,7 +35,7 @@
             justify-between rounded-lg border border-slate-300
             bg-white p-2 shadow-sm transition hover:border-slate-400
             hover:shadow-md dark:border-slate-700 dark:bg-slate-800
-            dark:hover:border-slate-600"
+            dark:hover:border-slate-600 cursor-pointer"
           type="submit"
           name="authenticationExecution"
           value={authenticationSelection.authExecId}
