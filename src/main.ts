@@ -23,3 +23,12 @@ if (window.kcContext) {
 	});
 }
 export default app;
+
+// To test the loading spinner, comment the above code block and uncomment the below code block.
+/*
+const app = mount(Spinner, {
+	target: document.getElementById("kc-root")!,
+});
+
+export default app;
+*/

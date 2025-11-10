@@ -4,13 +4,14 @@
 
 <div class="wrapper" transition:fade>
   <h1>
-    Loading data...
+    Loading...
     <div class="loader"></div>
   </h1>
 </div>
 
 <style>
   .wrapper {
+    font-family: "Noto Sans", sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -20,13 +21,10 @@
     right: 0;
     top: 0;
     bottom: 0;
-    color: #e63800;
-    background: rgb(255 255 255 / 0.9);
   }
 
   /* spinner from https://projects.lukehaas.me/css-loaders/ */
   .loader {
-    color: #e63800;
     font-size: 10px;
     margin: 3rem auto 0;
     width: 1em;
@@ -39,6 +37,15 @@
     -webkit-transform: translateZ(0);
     -ms-transform: translateZ(0);
     transform: translateZ(0);
+  }
+  @media (prefers-color-scheme: dark) {
+    .wrapper {
+      background-color: black;
+      color: white;
+    }
+    .loader {
+      color: white;
+    }
   }
   @-webkit-keyframes load4 {
     0%,
