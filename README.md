@@ -29,4 +29,3 @@ yarn run build-keycloak-theme
 ```
 
 Note that by default Keycloakify generates multiple .jar files for different versions of Keycloak.
-

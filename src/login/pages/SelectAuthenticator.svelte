@@ -31,11 +31,11 @@
     <div class="kcSelectAuthListClass grid gap-4">
       {#each auth.authenticationSelections as authenticationSelection, i (i)}
         <button
-          class="kcSelectAuthListItemClass flex w-full items-center
-            justify-between rounded-lg border border-slate-300
-            bg-white p-2 shadow-sm transition hover:border-slate-400
-            hover:shadow-md dark:border-slate-700 dark:bg-slate-800
-            dark:hover:border-slate-600 cursor-pointer"
+          class="kcSelectAuthListItemClass flex w-full cursor-pointer
+            items-center justify-between rounded-lg border
+            border-slate-300 bg-white p-2 shadow-sm transition
+            hover:border-slate-400 hover:shadow-md dark:border-slate-700
+            dark:bg-slate-800 dark:hover:border-slate-600"
           type="submit"
           name="authenticationExecution"
           value={authenticationSelection.authExecId}

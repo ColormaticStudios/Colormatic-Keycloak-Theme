@@ -116,10 +116,9 @@
 }
 
 #kc-registration-container {
-  @apply w-fit float-right;
+  @apply float-right w-fit;
 }
 
 #kc-registration {
   @apply pt-4;
 }
-
