@@ -16,22 +16,24 @@
     I18n
   > = $props();
 
-  const {
-    url,
-    realm,
-    registrationDisabled,
-    authenticators,
-    shouldDisplayAuthenticators,
-  } = kcContext;
+    const url = $derived(kcContext.url);
+  const realm = $derived(kcContext.realm);
+  const registrationDisabled = $derived(kcContext.registrationDisabled);
+  const authenticators = $derived(kcContext.authenticators);
+  const shouldDisplayAuthenticators = $derived(kcContext.shouldDisplayAuthenticators);
 
-  const { msg, msgStr, advancedMsg } = $i18n;
+    const msg = $derived($i18n.msg);
+  const msgStr = $derived($i18n.msgStr);
+  const advancedMsg = $derived($i18n.advancedMsg);
 
   const authButtonId = "authenticateWebAuthnButton";
+  const getKcContextForScript = () => kcContext;
+  const getI18nForScript = () => i18n;
 
   useScript({
     authButtonId,
-    kcContext,
-    i18n,
+    kcContext: getKcContextForScript(),
+    i18n: getI18nForScript(),
   });
 </script>
 

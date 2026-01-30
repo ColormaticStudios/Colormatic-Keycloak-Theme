@@ -15,8 +15,9 @@
     displayableErrors = $bindable([]),
   }: InputTagProps = $props();
 
-  const { advancedMsgStr } = $i18n;
-  const { inputType } = attribute.annotations;
+  const advancedMsgStr = $derived($i18n.advancedMsgStr);
+  const getAttribute = () => attribute;
+  const inputType = $derived(getAttribute().annotations.inputType);
   let value = $state(
     (() => {
       if (fieldIndex !== undefined) {
@@ -31,7 +32,7 @@
   );
   const html5DataAnnotations = {
     ...Object.fromEntries(
-      Object.entries(attribute.group?.html5DataAnnotations ?? {}).map(
+      Object.entries(getAttribute().group?.html5DataAnnotations ?? {}).map(
         ([key, value]) => [`data-${key}`, value],
       ),
     ),

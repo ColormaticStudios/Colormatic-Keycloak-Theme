@@ -17,13 +17,16 @@
     I18n
   > = $props();
 
-  const { recoveryAuthnCodesConfigBean, isAppInitiatedAction } = kcContext;
+    const recoveryAuthnCodesConfigBean = $derived(kcContext.recoveryAuthnCodesConfigBean);
+  const isAppInitiatedAction = $derived(kcContext.isAppInitiatedAction);
 
-  const { msg, msgStr } = $i18n;
+  const msg = $derived($i18n.msg);
+  const msgStr = $derived($i18n.msgStr);
 
   const olRecoveryCodesListId = "kc-recovery-codes-list";
+  const getI18nForScript = () => i18n;
 
-  useScript({ olRecoveryCodesListId, i18n });
+  useScript({ olRecoveryCodesListId, i18n: getI18nForScript() });
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes}>

@@ -16,17 +16,16 @@
     I18n
   > = $props();
 
-  const {
-    social,
-    realm,
-    url,
-    usernameHidden,
-    login,
-    registrationDisabled,
-    messagesPerField,
-  } = kcContext;
+    const social = $derived(kcContext.social);
+  const realm = $derived(kcContext.realm);
+  const url = $derived(kcContext.url);
+  const usernameHidden = $derived(kcContext.usernameHidden);
+  const login = $derived(kcContext.login);
+  const registrationDisabled = $derived(kcContext.registrationDisabled);
+  const messagesPerField = $derived(kcContext.messagesPerField);
 
-  const { msg, msgStr } = $i18n;
+    const msg = $derived($i18n.msg);
+  const msgStr = $derived($i18n.msgStr);
 
   const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
 </script>

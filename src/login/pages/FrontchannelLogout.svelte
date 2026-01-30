@@ -15,9 +15,10 @@
     I18n
   > = $props();
 
-  const { logout } = kcContext;
+    const logout = $derived(kcContext.logout);
 
-  const { msg, msgStr } = $i18n;
+    const msg = $derived($i18n.msg);
+  const msgStr = $derived($i18n.msgStr);
 
   onMount(() => {
     if (logout.logoutRedirectUri) {

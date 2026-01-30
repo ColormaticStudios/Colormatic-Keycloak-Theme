@@ -14,9 +14,14 @@
     I18n
   > = $props();
 
-  const { url, oauth, client } = kcContext;
+    const url = $derived(kcContext.url);
+  const oauth = $derived(kcContext.oauth);
+  const client = $derived(kcContext.client);
 
-  const { msg, msgStr, advancedMsg, advancedMsgStr } = $i18n;
+    const msg = $derived($i18n.msg);
+  const msgStr = $derived($i18n.msgStr);
+  const advancedMsg = $derived($i18n.advancedMsg);
+  const advancedMsgStr = $derived($i18n.advancedMsgStr);
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes} bodyClassName="oauth">

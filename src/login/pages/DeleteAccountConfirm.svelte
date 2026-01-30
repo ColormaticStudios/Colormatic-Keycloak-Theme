@@ -14,9 +14,11 @@
     I18n
   > = $props();
 
-  const { url, triggered_from_aia } = kcContext;
+    const url = $derived(kcContext.url);
+  const triggered_from_aia = $derived(kcContext.triggered_from_aia);
 
-  const { msg, msgStr } = $i18n;
+    const msg = $derived($i18n.msg);
+  const msgStr = $derived($i18n.msgStr);
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes}>

@@ -17,9 +17,15 @@
     I18n
   > = $props();
 
-  const { url, isAppInitiatedAction, totp, mode, messagesPerField } = kcContext;
+    const url = $derived(kcContext.url);
+  const isAppInitiatedAction = $derived(kcContext.isAppInitiatedAction);
+  const totp = $derived(kcContext.totp);
+  const mode = $derived(kcContext.mode);
+  const messagesPerField = $derived(kcContext.messagesPerField);
 
-  const { msg, msgStr, advancedMsg } = $i18n;
+    const msg = $derived($i18n.msg);
+  const msgStr = $derived($i18n.msgStr);
+  const advancedMsg = $derived($i18n.advancedMsg);
 
   let OTPValue = $state("");
 </script>

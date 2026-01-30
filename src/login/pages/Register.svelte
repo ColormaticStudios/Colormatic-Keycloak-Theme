@@ -26,18 +26,18 @@
     doMakeUserConfirmPassword,
   } = props;
 
-  const {
-    messageHeader,
-    url,
-    messagesPerField,
-    recaptchaRequired,
-    recaptchaVisible,
-    recaptchaSiteKey,
-    recaptchaAction,
-    termsAcceptanceRequired,
-  } = kcContext;
+    const messageHeader = $derived(kcContext.messageHeader);
+  const url = $derived(kcContext.url);
+  const messagesPerField = $derived(kcContext.messagesPerField);
+  const recaptchaRequired = $derived(kcContext.recaptchaRequired);
+  const recaptchaVisible = $derived(kcContext.recaptchaVisible);
+  const recaptchaSiteKey = $derived(kcContext.recaptchaSiteKey);
+  const recaptchaAction = $derived(kcContext.recaptchaAction);
+  const termsAcceptanceRequired = $derived(kcContext.termsAcceptanceRequired);
 
-  const { msg, msgStr, advancedMsg } = $i18n;
+    const msg = $derived($i18n.msg);
+  const msgStr = $derived($i18n.msgStr);
+  const advancedMsg = $derived($i18n.advancedMsg);
 
   const [isFormSubmittable, setIsFormSubmittable] = useState(false);
   const [areTermsAccepted, setAreTermsAccepted] = useState(false);

@@ -12,10 +12,11 @@
     valueOrValues,
   }: InputFieldByTypeProps<I18n> = $props();
 
-  const isMultiple = attribute.annotations.inputType === "multiselect";
+  const getAttribute = () => attribute;
+  const isMultiple = getAttribute().annotations.inputType === "multiselect";
   const options = (() => {
     walk: {
-      const { inputOptionsFromValidation } = attribute.annotations;
+      const { inputOptionsFromValidation } = getAttribute().annotations;
 
       if (inputOptionsFromValidation === undefined) {
         break walk;
@@ -24,7 +25,7 @@
       assert(typeof inputOptionsFromValidation === "string");
 
       const validator = (
-        attribute.validators as Record<string, { options?: string[] }>
+        getAttribute().validators as Record<string, { options?: string[] }>
       )[inputOptionsFromValidation];
 
       if (validator === undefined) {
@@ -38,7 +39,7 @@
       return validator.options;
     }
 
-    return attribute.validators.options?.options ?? [];
+    return getAttribute().validators.options?.options ?? [];
   })();
 </script>
 

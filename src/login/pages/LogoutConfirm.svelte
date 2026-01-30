@@ -14,9 +14,12 @@
     I18n
   > = $props();
 
-  const { url, client, logoutConfirm } = kcContext;
+    const url = $derived(kcContext.url);
+  const client = $derived(kcContext.client);
+  const logoutConfirm = $derived(kcContext.logoutConfirm);
 
-  const { msg, msgStr } = $i18n;
+    const msg = $derived($i18n.msg);
+  const msgStr = $derived($i18n.msgStr);
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes}>

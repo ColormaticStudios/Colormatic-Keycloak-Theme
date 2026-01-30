@@ -25,11 +25,14 @@
     doMakeUserConfirmPassword,
   }: UpdateEmailProps = $props();
 
-  const { msg, msgStr } = $i18n;
+    const msg = $derived($i18n.msg);
+  const msgStr = $derived($i18n.msgStr);
 
   const [isFormSubmittable, setIsFormSubmittable] = useState(false);
 
-  const { url, messagesPerField, isAppInitiatedAction } = kcContext;
+    const url = $derived(kcContext.url);
+  const messagesPerField = $derived(kcContext.messagesPerField);
+  const isAppInitiatedAction = $derived(kcContext.isAppInitiatedAction);
 </script>
 
 <Template

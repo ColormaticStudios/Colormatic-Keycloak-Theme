@@ -20,7 +20,7 @@
     onAreTermsAcceptedValueChange,
   }: TermsAcceptanceProps = $props();
 
-  const { msg } = $i18n;
+    const msg = $derived($i18n.msg);
 </script>
 
 <div class="form-group pt-4">

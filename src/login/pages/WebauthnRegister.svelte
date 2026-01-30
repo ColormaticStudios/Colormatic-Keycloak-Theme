@@ -16,16 +16,21 @@
     I18n
   > = $props();
 
-  const { url, isSetRetry, isAppInitiatedAction } = kcContext;
+    const url = $derived(kcContext.url);
+  const isSetRetry = $derived(kcContext.isSetRetry);
+  const isAppInitiatedAction = $derived(kcContext.isAppInitiatedAction);
 
-  const { msg, msgStr } = $i18n;
+  const msg = $derived($i18n.msg);
+  const msgStr = $derived($i18n.msgStr);
 
   const authButtonId = "authenticateWebAuthnButton";
+  const getKcContextForScript = () => kcContext;
+  const getI18nForScript = () => i18n;
 
   useScript({
     authButtonId,
-    kcContext,
-    i18n,
+    kcContext: getKcContextForScript(),
+    i18n: getI18nForScript(),
   });
 </script>
 

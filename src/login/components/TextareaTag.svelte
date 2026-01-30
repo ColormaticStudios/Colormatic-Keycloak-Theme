@@ -10,9 +10,9 @@
     valueOrValues,
   }: InputFieldByTypeProps<I18n> = $props();
 
-  assert(typeof valueOrValues === "string");
-
-  const value = valueOrValues;
+  const getValueOrValues = () => valueOrValues;
+  const value = getValueOrValues();
+  assert(typeof value === "string");
 </script>
 
 <textarea

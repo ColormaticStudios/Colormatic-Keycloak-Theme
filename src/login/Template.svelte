@@ -4,7 +4,6 @@
   import { useSetClassName } from "@keycloakify/svelte/tools/useSetClassName";
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
   import { clsx } from "keycloakify/tools/clsx";
-  import { onMount } from "svelte";
   import type { I18n } from "./i18n";
   import type { KcContext } from "./KcContext";
   import { ModeWatcher, toggleMode } from "mode-watcher";
@@ -26,12 +25,21 @@
     children,
   }: TemplateProps<KcContext, I18n> = $props();
 
-  const { msgStr, currentLanguage, enabledLanguages } = $i18n;
+  const getKcContext = () => kcContext;
+  const getBodyClassName = () => bodyClassName;
+  const getDoUseDefaultCss = () => doUseDefaultCss;
 
-  const { realm, auth, url, message, isAppInitiatedAction } = kcContext;
-  onMount(() => {
-    document.title =
-      documentTitle ?? msgStr("loginTitle", kcContext.realm.displayName);
+  const msgStr = $derived($i18n.msgStr);
+  const currentLanguage = $derived($i18n.currentLanguage);
+  const enabledLanguages = $derived($i18n.enabledLanguages);
+
+  const realm = $derived(kcContext.realm);
+  const auth = $derived(kcContext.auth);
+  const url = $derived(kcContext.url);
+  const message = $derived(kcContext.message);
+  const isAppInitiatedAction = $derived(kcContext.isAppInitiatedAction);
+  $effect(() => {
+    document.title = documentTitle ?? msgStr("loginTitle", realm.displayName);
   });
   useSetClassName({
     qualifiedName: "html",
@@ -40,9 +48,12 @@
 
   useSetClassName({
     qualifiedName: "body",
-    className: bodyClassName ?? "kcBodyClass",
+    className: getBodyClassName() ?? "kcBodyClass",
   });
-  const { isReadyToRender } = useInitialize({ kcContext, doUseDefaultCss });
+  const { isReadyToRender } = useInitialize({
+    kcContext: getKcContext(),
+    doUseDefaultCss: getDoUseDefaultCss(),
+  });
 </script>
 
 <ModeWatcher />
@@ -193,6 +204,7 @@
                 <a
                   href="#"
                   id="try-another-way"
+                  class="kcButtonClass kcButtonDefaultClass"
                   onclick={() => {
                     document.forms[
                       "kc-select-try-another-way-form" as never

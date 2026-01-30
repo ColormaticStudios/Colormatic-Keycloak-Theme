@@ -13,21 +13,24 @@
     i18n: Readable<I18n>;
   };
   const { attribute, groupNameRef, i18n }: GroupLabelProps = $props();
-  const { advancedMsg } = $i18n;
+  const advancedMsg = $derived($i18n.advancedMsg);
+
+  const getAttribute = () => attribute;
+  const getGroupNameRef = () => groupNameRef;
 
   let isGrouplabel = $state<boolean>(false);
-  if (attribute.group?.name !== groupNameRef.current) {
-    groupNameRef.current = attribute.group?.name ?? "";
+  if (getAttribute().group?.name !== getGroupNameRef().current) {
+    getGroupNameRef().current = getAttribute().group?.name ?? "";
 
-    if (groupNameRef.current !== "") {
-      assert(attribute.group !== undefined);
+    if (getGroupNameRef().current !== "") {
+      assert(getAttribute().group !== undefined);
       isGrouplabel = true;
     }
   }
 
   const html5DataAnnotations = {
     ...Object.fromEntries(
-      Object.entries(attribute.group?.html5DataAnnotations ?? {}).map(
+      Object.entries(getAttribute().group?.html5DataAnnotations ?? {}).map(
         ([key, value]) => [`data-${key}`, value],
       ),
     ),

@@ -8,7 +8,8 @@
 
   const { kcContext }: { kcContext: KcContext } = $props();
 
-  const { i18n } = useI18n({ kcContext });
+  const getKcContextForI18n = () => kcContext;
+  const { i18n } = useI18n({ kcContext: getKcContextForI18n() });
 
   const classes = {} satisfies { [key in ClassKey]?: string };
   const doMakeUserConfirmPassword = true;

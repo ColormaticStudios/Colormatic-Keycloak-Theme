@@ -15,9 +15,13 @@
     I18n
   > = $props();
 
-  const { url, realm, auth, messagesPerField } = kcContext;
+    const url = $derived(kcContext.url);
+  const realm = $derived(kcContext.realm);
+  const auth = $derived(kcContext.auth);
+  const messagesPerField = $derived(kcContext.messagesPerField);
 
-  const { msg, msgStr } = $i18n;
+    const msg = $derived($i18n.msg);
+  const msgStr = $derived($i18n.msgStr);
 </script>
 
 <Template

@@ -14,9 +14,10 @@
     I18n
   > = $props();
 
-  const { msgStr, msg } = $i18n;
+    const msgStr = $derived($i18n.msgStr);
+  const msg = $derived($i18n.msg);
 
-  const { samlPost } = kcContext;
+    const samlPost = $derived(kcContext.samlPost);
 
   let htmlFormElement: HTMLFormElement | null = $state(null);
 

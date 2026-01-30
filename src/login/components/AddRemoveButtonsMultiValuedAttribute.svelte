@@ -24,15 +24,19 @@
     dispatchFormAction,
     i18n,
   }: AddRemoveButtonsMultiValuedAttributeProps = $props();
-  const { msg } = $i18n;
+  const msg = $derived($i18n.msg);
+
+  const getAttribute = () => attribute;
+  const getValues = () => values;
+  const getFieldIndex = () => fieldIndex;
 
   const { hasAdd, hasRemove } = getButtonToDisplayForMultivaluedAttributeField({
-    attribute,
-    values,
-    fieldIndex,
+    attribute: getAttribute(),
+    values: getValues(),
+    fieldIndex: getFieldIndex(),
   });
 
-  const idPostfix = `-${attribute.name}-${fieldIndex + 1}`;
+  const idPostfix = `-${getAttribute().name}-${getFieldIndex() + 1}`;
 </script>
 
 {#if hasRemove}

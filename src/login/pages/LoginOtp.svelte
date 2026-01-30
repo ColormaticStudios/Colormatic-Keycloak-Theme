@@ -16,9 +16,12 @@
     I18n
   > = $props();
 
-  const { otpLogin, url, messagesPerField } = kcContext;
+    const otpLogin = $derived(kcContext.otpLogin);
+  const url = $derived(kcContext.url);
+  const messagesPerField = $derived(kcContext.messagesPerField);
 
-  const { msg, msgStr } = $i18n;
+    const msg = $derived($i18n.msg);
+  const msgStr = $derived($i18n.msgStr);
 
   let OTPValue = $state("");
 </script>

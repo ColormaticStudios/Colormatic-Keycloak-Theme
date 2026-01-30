@@ -21,22 +21,28 @@
     I18n
   > = $props();
 
-  const {
-    messagesPerField,
-    login,
-    url,
-    usernameHidden,
-    shouldDisplayAuthenticators,
-    authenticators,
-    registrationDisabled,
-    realm,
-  } = kcContext;
+    const messagesPerField = $derived(kcContext.messagesPerField);
+  const login = $derived(kcContext.login);
+  const url = $derived(kcContext.url);
+  const usernameHidden = $derived(kcContext.usernameHidden);
+  const shouldDisplayAuthenticators = $derived(kcContext.shouldDisplayAuthenticators);
+  const authenticators = $derived(kcContext.authenticators);
+  const registrationDisabled = $derived(kcContext.registrationDisabled);
+  const realm = $derived(kcContext.realm);
 
-  const { msg, msgStr, advancedMsg } = $i18n;
+    const msg = $derived($i18n.msg);
+  const msgStr = $derived($i18n.msgStr);
+  const advancedMsg = $derived($i18n.advancedMsg);
 
   const authButtonId = "authenticateWebAuthnButton";
+  const getKcContextForScript = () => kcContext;
+  const getI18nForScript = () => i18n;
 
-  useScript({ authButtonId, kcContext, i18n });
+  useScript({
+    authButtonId,
+    kcContext: getKcContextForScript(),
+    i18n: getI18nForScript(),
+  });
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes}>

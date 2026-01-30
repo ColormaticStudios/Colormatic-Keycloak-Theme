@@ -113,7 +113,7 @@ export type I18nLike = Pick<I18n, "advancedMsg" | "advancedMsgStr">;
 export type ParamsOfUseUserProfileForm = {
 	kcContext: KcContextLike;
 	doMakeUserConfirmPassword: boolean;
-	i18n: I18nLike;
+	i18n: Readable<I18nLike>;
 };
 
 {
@@ -150,10 +150,9 @@ export function useUserProfileForm(
 		return () => unsubscribe();
 	});
 
-	const { advancedMsg, advancedMsgStr } = i18n;
 	const formState: Readable<FormState> = derived(
-		formState_reactless,
-		($formState) => ({
+		[formState_reactless, i18n],
+		([$formState, $i18n]) => ({
 			isFormSubmittable: $formState.isFormSubmittable,
 			formFieldStates: $formState.formFieldStates.map(
 				(formFieldState_reactless) => ({
@@ -161,10 +160,10 @@ export function useUserProfileForm(
 					valueOrValues: formFieldState_reactless.valueOrValues,
 					displayableErrors: formFieldState_reactless.displayableErrors.map(
 						(formFieldError_reactless) => ({
-							errorMessage: advancedMsg(
+							errorMessage: $i18n.advancedMsg(
 								...formFieldError_reactless.advancedMsgArgs,
 							),
-							errorMessageStr: advancedMsgStr(
+							errorMessageStr: $i18n.advancedMsgStr(
 								...formFieldError_reactless.advancedMsgArgs,
 							),
 							source: formFieldError_reactless.source,

@@ -12,17 +12,16 @@
     classes,
   }: PageProps<Extract<KcContext, { pageId: "info.ftl" }>, I18n> = $props();
 
-  const { advancedMsgStr, msg } = $i18n;
+    const advancedMsgStr = $derived($i18n.advancedMsgStr);
+  const msg = $derived($i18n.msg);
 
-  const {
-    messageHeader,
-    message,
-    requiredActions,
-    skipLink,
-    pageRedirectUri,
-    actionUri,
-    client,
-  } = kcContext;
+    const messageHeader = $derived(kcContext.messageHeader);
+  const message = $derived(kcContext.message);
+  const requiredActions = $derived(kcContext.requiredActions);
+  const skipLink = $derived(kcContext.skipLink);
+  const pageRedirectUri = $derived(kcContext.pageRedirectUri);
+  const actionUri = $derived(kcContext.actionUri);
+  const client = $derived(kcContext.client);
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes} displayMessage={false}>

@@ -4,7 +4,7 @@
 
   const { i18n }: { i18n: Readable<I18n> } = $props();
 
-  const { msg } = $i18n;
+    const msg = $derived($i18n.msg);
 </script>
 
 <div id="kc-form-options" class="kcFormOptionsClass">

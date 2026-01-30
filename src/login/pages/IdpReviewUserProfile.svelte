@@ -24,9 +24,11 @@
     doMakeUserConfirmPassword,
   }: IdpReviewUserProfileProps = $props();
 
-  const { msg, msgStr } = $i18n;
+    const msg = $derived($i18n.msg);
+  const msgStr = $derived($i18n.msgStr);
 
-  const { url, messagesPerField } = kcContext;
+    const url = $derived(kcContext.url);
+  const messagesPerField = $derived(kcContext.messagesPerField);
 
   const [isFomSubmittable, setIsFomSubmittable] = useState(false);
 </script>

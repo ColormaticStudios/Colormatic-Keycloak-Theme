@@ -19,11 +19,11 @@
     afterField,
   } = props;
 
-  const { advancedMsg } = $i18n;
+  const advancedMsg = $derived($i18n.advancedMsg);
 
   const { formState, dispatchFormAction } = useUserProfileForm({
     kcContext,
-    i18n: $i18n,
+    i18n,
     doMakeUserConfirmPassword,
   });
   onMount(() => {

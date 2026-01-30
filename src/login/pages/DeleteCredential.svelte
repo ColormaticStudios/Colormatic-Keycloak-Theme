@@ -14,9 +14,11 @@
     I18n
   > = $props();
 
-  const { msgStr, msg } = $i18n;
+    const msgStr = $derived($i18n.msgStr);
+  const msg = $derived($i18n.msg);
 
-  const { url, credentialLabel } = kcContext;
+    const url = $derived(kcContext.url);
+  const credentialLabel = $derived(kcContext.credentialLabel);
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes} displayMessage={false}>
