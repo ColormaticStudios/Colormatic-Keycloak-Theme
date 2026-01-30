@@ -62,13 +62,13 @@
   onclick={toggleMode}
   variant="outline"
   size="icon"
-  class="fixed right-[20px] bottom-[20px]"
+  class="fixed right-5 bottom-5"
 >
   <i
-    class="bi bi-brightness-high-fill h-[1.2rem] w-[1.2rem] scale-100 rotate-0 !transition-all dark:scale-0 dark:-rotate-90"
+    class="bi bi-brightness-high-fill h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all! dark:scale-0 dark:-rotate-90"
   ></i>
   <i
-    class="bi bi-moon-fill absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 !transition-all dark:scale-100 dark:rotate-0"
+    class="bi bi-moon-fill absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all! dark:scale-100 dark:rotate-0"
   ></i>
   <span class="sr-only">Toggle theme</span>
 </Button>
@@ -129,9 +129,8 @@
           </div>
         {/if}
         {#snippet node()}
-          {#if !(auth !== undefined && auth.showUsername && !auth.showResetCredentials)}
-            <h1 id="kc-page-title">{@render headerNode?.()}</h1>
-          {:else}
+          <h1 id="kc-page-title">{@render headerNode?.()}</h1>
+          {#if auth !== undefined && auth.showUsername && !auth.showResetCredentials}
             <div id="kc-username" class="kcFormGroupClass">
               <!-- svelte-ignore a11y_label_has_associated_control -->
               <label id="kc-attempted-username">{auth.attemptedUsername}</label>
@@ -200,20 +199,13 @@
             >
               <div class="kcFormGroupClass">
                 <input type="hidden" name="tryAnotherWay" value="on" />
-                <!-- svelte-ignore a11y_invalid_attribute -->
-                <a
-                  href="#"
+                <button
                   id="try-another-way"
-                  class="kcButtonClass kcButtonDefaultClass"
-                  onclick={() => {
-                    document.forms[
-                      "kc-select-try-another-way-form" as never
-                    ].requestSubmit();
-                    return false;
-                  }}
+                  type="submit"
+                  class="kcButtonClass kcButtonDefaultClass text-center no-underline!"
                 >
                   {msgStr("doTryAnotherWay")}
-                </a>
+                </button>
               </div>
             </form>
           {/if}
