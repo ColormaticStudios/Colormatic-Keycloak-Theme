@@ -1,6 +1,6 @@
 <script lang="ts">
   import LogoutOtherSessions from "../components/LogoutOtherSessions.svelte";
-  import { useScript } from "@keycloakify/svelte/login/pages/LoginRecoveryAuthnCodeConfig.useScript";
+  import { useScript } from "./LoginRecoveryAuthnCodeConfig.useScript";
   import type { PageProps } from "./PageProps";
   import { clsx } from "keycloakify/tools/clsx";
   import type { I18n } from "../i18n";
@@ -24,9 +24,14 @@
   const msgStr = $derived($i18n.msgStr);
 
   const olRecoveryCodesListId = "kc-recovery-codes-list";
+  const recoveryCodesDownloadFilename = "Colormatic ID Recovery Codes.txt";
   const getI18nForScript = () => i18n;
 
-  useScript({ olRecoveryCodesListId, i18n: getI18nForScript() });
+  useScript({
+    olRecoveryCodesListId,
+    i18n: getI18nForScript(),
+    downloadFilename: recoveryCodesDownloadFilename,
+  });
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes}>
@@ -54,7 +59,10 @@
     </div>
   </div>
 
-  <ol id={olRecoveryCodesListId} class="kcRecoveryCodesList">
+  <ol
+    id={olRecoveryCodesListId}
+    class="kcRecoveryCodesList columns-2 gap-6 [column-fill:balance]"
+  >
     {#each recoveryAuthnCodesConfigBean.generatedRecoveryAuthnCodesList as code, index (index)}
       <li>
         <span>{index + 1}:</span>
@@ -167,6 +175,7 @@
           kcButtonClass
           kcButtonDefaultClass
           kcButtonLargeClass
+          my-3
         "
         id="cancelRecoveryAuthnCodesBtn"
         name="cancel-aia"
