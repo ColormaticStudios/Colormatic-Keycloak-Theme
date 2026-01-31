@@ -18,11 +18,11 @@
     I18n
   > = $props();
 
-    const realm = $derived(kcContext.realm);
+  const realm = $derived(kcContext.realm);
   const url = $derived(kcContext.url);
   const messagesPerField = $derived(kcContext.messagesPerField);
 
-    const msg = $derived($i18n.msg);
+  const msg = $derived($i18n.msg);
   const msgStr = $derived($i18n.msgStr);
 
   const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);

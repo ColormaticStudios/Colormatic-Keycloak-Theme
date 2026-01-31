@@ -10,9 +10,9 @@
   > = $props();
   const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
 
-    const code = $derived(kcContext.code);
+  const code = $derived(kcContext.code);
 
-    const msg = $derived($i18n.msg);
+  const msg = $derived($i18n.msg);
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes}>

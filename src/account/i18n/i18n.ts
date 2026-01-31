@@ -1,0 +1,107 @@
+/* eslint-disable */
+
+// @ts-nocheck
+
+import { LanguageDetectorModule, createInstance } from "i18next";
+import FetchBackend from "i18next-fetch-backend";
+import { initReactI18next } from "react-i18next";
+
+import { environment } from "../environment";
+import { joinPath } from "../utils/joinPath";
+
+const DEFAULT_LOCALE = "en";
+
+type KeyValue = { key: string; value: string };
+
+// This type is aliased to any, so that we can find all the places where we use it.
+// In the future all casts to this type should be removed from the code, so
+// that we can have a proper type-safe translation function.
+export type TFuncKey = any;
+
+export const keycloakLanguageDetector: LanguageDetectorModule = {
+	type: "languageDetector",
+
+	detect() {
+		return environment.locale;
+	},
+};
+
+const devMessages = import.meta.env.DEV
+	? import.meta.glob("./messages_*.properties", {
+			query: "?raw",
+			import: "default",
+			eager: true,
+		})
+	: {};
+
+function parseProperties(contents: string): Record<string, string> {
+	const lines = contents.split(/\r?\n/);
+	const result: Record<string, string> = {};
+
+	for (const line of lines) {
+		const trimmed = line.trim();
+
+		if (!trimmed || trimmed.startsWith("#") || trimmed.startsWith("!")) {
+			continue;
+		}
+
+		const separatorIndex = trimmed.search(/[:=]/);
+		if (separatorIndex === -1) {
+			continue;
+		}
+
+		const key = trimmed.slice(0, separatorIndex).trim();
+		const value = trimmed.slice(separatorIndex + 1).trim();
+		if (key) {
+			result[key] = value;
+		}
+	}
+
+	return result;
+}
+
+const devResources = import.meta.env.DEV
+	? Object.fromEntries(
+			Object.entries(devMessages).map(([filePath, contents]) => {
+				const match = filePath.match(/messages_(.+)\.properties$/);
+				const rawLang = match?.[1] ?? DEFAULT_LOCALE;
+				const languageTag = rawLang.replace(/_/g, "-");
+
+				return [
+					languageTag,
+					{ translation: parseProperties(contents as string) },
+				];
+			}),
+		)
+	: undefined;
+
+export const i18n = createInstance({
+	fallbackLng: DEFAULT_LOCALE,
+	nsSeparator: false,
+	interpolation: {
+		escapeValue: false,
+	},
+	...(import.meta.env.DEV
+		? { resources: devResources, lng: environment.locale }
+		: {
+				backend: {
+					loadPath: joinPath(
+						environment.serverBaseUrl,
+						`resources/${environment.realm}/account/{{lng}}`,
+					),
+					parse(data: string) {
+						const messages: KeyValue[] = JSON.parse(data);
+
+						return Object.fromEntries(
+							messages.map(({ key, value }) => [key, value]),
+						);
+					},
+				},
+			}),
+});
+
+if (!import.meta.env.DEV) {
+	i18n.use(FetchBackend);
+}
+i18n.use(keycloakLanguageDetector);
+i18n.use(initReactI18next);

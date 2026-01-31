@@ -14,10 +14,10 @@
     I18n
   > = $props();
 
-    const msgStr = $derived($i18n.msgStr);
+  const msgStr = $derived($i18n.msgStr);
   const msg = $derived($i18n.msg);
 
-    const url = $derived(kcContext.url);
+  const url = $derived(kcContext.url);
   const credentialLabel = $derived(kcContext.credentialLabel);
 </script>
 

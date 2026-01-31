@@ -11,10 +11,10 @@
     classes,
   }: PageProps<Extract<KcContext, { pageId: "terms.ftl" }>, I18n> = $props();
 
-    const msg = $derived($i18n.msg);
+  const msg = $derived($i18n.msg);
   const msgStr = $derived($i18n.msgStr);
 
-    const url = $derived(kcContext.url);
+  const url = $derived(kcContext.url);
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes} displayMessage={false}>

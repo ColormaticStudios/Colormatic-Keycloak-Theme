@@ -16,7 +16,7 @@
     I18n
   > = $props();
 
-    const url = $derived(kcContext.url);
+  const url = $derived(kcContext.url);
   const isSetRetry = $derived(kcContext.isSetRetry);
   const isAppInitiatedAction = $derived(kcContext.isAppInitiatedAction);
 

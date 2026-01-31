@@ -21,16 +21,18 @@
     I18n
   > = $props();
 
-    const messagesPerField = $derived(kcContext.messagesPerField);
+  const messagesPerField = $derived(kcContext.messagesPerField);
   const login = $derived(kcContext.login);
   const url = $derived(kcContext.url);
   const usernameHidden = $derived(kcContext.usernameHidden);
-  const shouldDisplayAuthenticators = $derived(kcContext.shouldDisplayAuthenticators);
+  const shouldDisplayAuthenticators = $derived(
+    kcContext.shouldDisplayAuthenticators,
+  );
   const authenticators = $derived(kcContext.authenticators);
   const registrationDisabled = $derived(kcContext.registrationDisabled);
   const realm = $derived(kcContext.realm);
 
-    const msg = $derived($i18n.msg);
+  const msg = $derived($i18n.msg);
   const msgStr = $derived($i18n.msgStr);
   const advancedMsg = $derived($i18n.advancedMsg);
 

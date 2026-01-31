@@ -29,3 +29,35 @@ yarn run build-keycloak-theme
 ```
 
 Note that by default Keycloakify generates multiple .jar files for different versions of Keycloak.
+
+# Account theme (React) build
+
+This repo now includes a React-based account console under `src/account` that is built separately from the Svelte login theme.
+
+## Dev
+
+```bash
+bun run dev
+bun run dev:account
+```
+
+`dev` serves the login theme (Svelte). `dev:account` serves the account console (React).
+
+## Build
+
+```bash
+bun run build:login
+bun run build:account
+bun run build:themes
+bun run build-keycloak-theme
+```
+
+`build:themes` builds both themes and merges the manifests so `build-keycloak-theme` produces a single jar with both login and account assets.
+
+# Checks
+
+```bash
+bun run check
+```
+
+Runs Svelte checks, TypeScript checks (TS/TSX/JS, excluding `.svelte`), and a Tailwind compile pass.

@@ -14,7 +14,7 @@
     classes,
   }: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n> = $props();
 
-    const social = $derived(kcContext.social);
+  const social = $derived(kcContext.social);
   const realm = $derived(kcContext.realm);
   const url = $derived(kcContext.url);
   const usernameHidden = $derived(kcContext.usernameHidden);
@@ -23,7 +23,7 @@
   const registrationDisabled = $derived(kcContext.registrationDisabled);
   const messagesPerField = $derived(kcContext.messagesPerField);
 
-    const msg = $derived($i18n.msg);
+  const msg = $derived($i18n.msg);
   const msgStr = $derived($i18n.msgStr);
 
   const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
