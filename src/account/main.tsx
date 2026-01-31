@@ -16,6 +16,7 @@ function ensureDevEnvironment() {
   const environment = {
     serverBaseUrl: origin,
     realm: "master",
+    realmDisplayName: "Colormatic ID",
     clientId: "account",
     resourceUrl: `${origin}/resources`,
     logo: `${origin}/colormatic_logo.svg`,

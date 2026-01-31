@@ -2,7 +2,6 @@
 
 // @ts-nocheck
 
-import logoSvgUrl from "../assets/logo.svg";
 import {
   KeycloakMasthead,
   label,
@@ -13,6 +12,7 @@ import { ExternalLinkSquareAltIcon } from "../../shared/@patternfly/react-icons"
 import { useTranslation } from "react-i18next";
 import { useHref } from "react-router-dom";
 
+import { getKcContext } from "../KcContext";
 import { environment } from "../environment";
 import { joinPath } from "../utils/joinPath";
 
@@ -42,7 +42,35 @@ export const Header = () => {
   const { environment, keycloak } = useEnvironment();
   const { t } = useTranslation();
 
+  const { kcContext } = getKcContext();
+  const resourcesPath =
+    kcContext.url?.resourcesPath ?? kcContext["x-keycloakify"]?.resourcesPath;
+  const normalizedResourcesPath =
+    typeof resourcesPath === "string"
+      ? resourcesPath.replace(/\/dist\/?$/, "")
+      : undefined;
+
+  const stripHtml = (value) =>
+    typeof value === "string" ? value.replace(/<[^>]*>/g, "").trim() : value;
+  const propertiesDisplayName = stripHtml(
+    kcContext.properties?.realmDisplayName ||
+      kcContext.properties?.realmDisplayNameHtml,
+  );
+  const environmentDisplayName = stripHtml(
+    environment.realmDisplayName || environment.realmDisplayNameHtml,
+  );
+  const realmTitle =
+    propertiesDisplayName ||
+    environmentDisplayName ||
+    stripHtml(kcContext.realm?.displayName) ||
+    stripHtml(kcContext.realm?.displayNameHtml) ||
+    environment.realm ||
+    kcContext.realm?.name;
   const logoUrl = environment.logoUrl ? environment.logoUrl : "/";
+  const logoSrc =
+    normalizedResourcesPath != null
+      ? `${normalizedResourcesPath}/dist/colormatic_logo.svg`
+      : environment.logo || "/colormatic_logo.svg";
   const internalLogoHref = useHref(logoUrl);
 
   // User can indicate that he wants an internal URL by starting it with "/"
@@ -53,9 +81,10 @@ export const Header = () => {
       data-testid="page-header"
       keycloak={keycloak}
       features={{ hasManageAccount: false }}
+      title={realmTitle}
       brand={{
         href: indexHref,
-        src: logoSvgUrl,
+        src: logoSrc,
         alt: t("logo"),
         className: style.brand,
       }}

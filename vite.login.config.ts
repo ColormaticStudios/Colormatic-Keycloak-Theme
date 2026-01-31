@@ -11,6 +11,7 @@ export default defineConfig({
 		keycloakify({
 			themeName: "colormatic-keycloak-theme",
 			accountThemeImplementation: "Single-Page",
+			extraThemeProperties: ["realmDisplayName=Colormatic ID"],
 		}),
 	],
 	build: {

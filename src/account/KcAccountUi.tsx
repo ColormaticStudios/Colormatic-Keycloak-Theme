@@ -1,5 +1,6 @@
 import "@patternfly/patternfly/patternfly-addons.css";
 import "@patternfly/react-core/dist/styles/base.css";
+import "./theme.css";
 
 import { useReducer, useEffect } from "react";
 import { startColorSchemeManagement } from "./colorScheme";

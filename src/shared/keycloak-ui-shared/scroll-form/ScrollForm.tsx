@@ -28,6 +28,7 @@ type ScrollFormProps = GridProps & {
   label: string;
   sections: ScrollSection[];
   borders?: boolean;
+  showJumpLinks?: boolean;
 };
 
 const spacesToHyphens = (string: string): string => {
@@ -38,6 +39,7 @@ export const ScrollForm = ({
   label,
   sections,
   borders = false,
+  showJumpLinks = true,
   ...rest
 }: ScrollFormProps) => {
   const shownSections = useMemo(
@@ -47,7 +49,7 @@ export const ScrollForm = ({
 
   return (
     <Grid hasGutter {...rest}>
-      <GridItem md={8} sm={12}>
+      <GridItem md={showJumpLinks ? 8 : 12} sm={12}>
         {shownSections.map(({ title, panel }) => {
           const scrollId = spacesToHyphens(title.toLowerCase());
 
@@ -70,40 +72,42 @@ export const ScrollForm = ({
           );
         })}
       </GridItem>
-      <GridItem md={4} sm={12} order={{ default: "-1", md: "1" }}>
-        <PageSection className={style.sticky}>
-          <JumpLinks
-            isVertical
-            // scrollableSelector has to point to the id of the element whose scrollTop changes
-            // to scroll the entire main section, it has to be the pf-v5-c-page__main
-            scrollableSelector={`#${mainPageContentId}`}
-            label={label}
-            offset={100}
-          >
-            {shownSections.map(({ title }) => {
-              const scrollId = spacesToHyphens(title.toLowerCase());
+      {showJumpLinks && (
+        <GridItem md={4} sm={12} order={{ default: "-1", md: "1" }}>
+          <PageSection className={style.sticky}>
+            <JumpLinks
+              isVertical
+              // scrollableSelector has to point to the id of the element whose scrollTop changes
+              // to scroll the entire main section, it has to be the pf-v5-c-page__main
+              scrollableSelector={`#${mainPageContentId}`}
+              label={label}
+              offset={100}
+            >
+              {shownSections.map(({ title }) => {
+                const scrollId = spacesToHyphens(title.toLowerCase());
 
-              return (
-                <JumpLinksItem
-                  key={title}
-                  onClick={() => {
-                    const element = document.getElementById(scrollId);
-                    if (element) {
-                      element.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      });
-                    }
-                  }}
-                  data-testid={`jump-link-${scrollId}`}
-                >
-                  {title}
-                </JumpLinksItem>
-              );
-            })}
-          </JumpLinks>
-        </PageSection>
-      </GridItem>
+                return (
+                  <JumpLinksItem
+                    key={title}
+                    onClick={() => {
+                      const element = document.getElementById(scrollId);
+                      if (element) {
+                        element.scrollIntoView({
+                          behavior: "smooth",
+                          block: "start",
+                        });
+                      }
+                    }}
+                    data-testid={`jump-link-${scrollId}`}
+                  >
+                    {title}
+                  </JumpLinksItem>
+                );
+              })}
+            </JumpLinks>
+          </PageSection>
+        </GridItem>
+      )}
     </Grid>
   );
 };

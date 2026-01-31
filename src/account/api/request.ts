@@ -133,7 +133,41 @@ function getMockResponse(path: string, opts: RequestOptions = {}): Response {
 	}
 
 	if (cleanPath === "/sessions" || cleanPath === "/sessions/devices") {
-		return createJsonResponse([]);
+		return createJsonResponse([
+			{
+				id: "device-1",
+				ipAddress: "127.0.0.1",
+				os: "macOS",
+				osVersion: "14.2",
+				browser: "Firefox",
+				device: "Desktop",
+				lastAccess: Date.now() - 1000 * 60 * 5,
+				current: true,
+				mobile: false,
+				sessions: [
+					{
+						id: "session-1",
+						ipAddress: "127.0.0.1",
+						started: Date.now() - 1000 * 60 * 60,
+						lastAccess: Date.now() - 1000 * 60 * 5,
+						expires: Date.now() + 1000 * 60 * 30,
+						clients: [],
+						browser: "Firefox",
+						current: true,
+					},
+					{
+						id: "session-2",
+						ipAddress: "127.0.0.1",
+						started: Date.now() - 1000 * 60 * 60 * 24,
+						lastAccess: Date.now() - 1000 * 60 * 60 * 8,
+						expires: Date.now() + 1000 * 60 * 10,
+						clients: [],
+						browser: "Firefox",
+						current: false,
+					},
+				],
+			},
+		]);
 	}
 
 	if (cleanPath === "/applications") {
@@ -141,7 +175,77 @@ function getMockResponse(path: string, opts: RequestOptions = {}): Response {
 	}
 
 	if (cleanPath === "/credentials") {
-		return createJsonResponse([]);
+		return createJsonResponse([
+			{
+				type: "password",
+				category: "basic-authentication",
+				displayName: "password-display-name",
+				helptext: "password-help-text",
+				iconCssClass: "",
+				createAction: "UPDATE_PASSWORD",
+				updateAction: "UPDATE_PASSWORD",
+				removeable: false,
+				userCredentialMetadatas: [
+					{
+						infoMessage: null,
+						infoProperties: [],
+						warningMessageTitle: null,
+						warningMessageDescription: null,
+						credential: {
+							id: "pwd-1",
+							type: "password",
+							userLabel: "password",
+							createdDate: Date.now() - 1000 * 60 * 60 * 24 * 30,
+							secretData: "",
+							credentialData: "",
+							priority: 0,
+							value: "",
+							temporary: false,
+							device: "",
+							hashedSaltedValue: "",
+							salt: "",
+							hashIterations: 0,
+							counter: 0,
+							algorithm: "",
+							digits: 0,
+							period: 0,
+							config: {},
+						},
+					},
+				],
+				metadata: {
+					type: "password",
+					displayName: "password-display-name",
+					helpText: "password-help-text",
+					iconCssClass: "",
+					createAction: "UPDATE_PASSWORD",
+					updateAction: "UPDATE_PASSWORD",
+					removeable: false,
+					category: "basic-authentication",
+				},
+			},
+			{
+				type: "otp",
+				category: "two-factor",
+				displayName: "otp-display-name",
+				helptext: "otp-help-text",
+				iconCssClass: "",
+				createAction: "CONFIGURE_TOTP",
+				updateAction: "",
+				removeable: true,
+				userCredentialMetadatas: [],
+				metadata: {
+					type: "otp",
+					displayName: "otp-display-name",
+					helpText: "otp-help-text",
+					iconCssClass: "",
+					createAction: "CONFIGURE_TOTP",
+					updateAction: "",
+					removeable: true,
+					category: "two-factor",
+				},
+			},
+		]);
 	}
 
 	if (cleanPath === "/linked-accounts") {

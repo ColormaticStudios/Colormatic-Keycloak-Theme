@@ -13,7 +13,7 @@ const baseUrlParts = {
 const defaultKcContext: KcContext = {
 	themeType: "account",
 	themeName: themeNames[0],
-	properties: { ...kcEnvDefaults },
+	properties: { ...kcEnvDefaults, realmDisplayName: "Colormatic ID" },
 	realm: {
 		name: "master",
 		registrationEmailAsUsername: false,

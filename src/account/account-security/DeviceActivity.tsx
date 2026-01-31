@@ -54,15 +54,29 @@ export const DeviceActivity = () => {
   const refresh = () => setKey(key + 1);
 
   const moveCurrentToTop = (devices: DeviceRepresentation[]) => {
+    if (devices.length === 0) {
+      setDevices([]);
+      return;
+    }
+
     let currentDevice = devices[0];
 
     const index = devices.findIndex((d) => d.current);
-    currentDevice = devices.splice(index, 1)[0];
-    devices.unshift(currentDevice);
+    if (index >= 0) {
+      currentDevice = devices.splice(index, 1)[0];
+      devices.unshift(currentDevice);
+    }
 
-    const sessionIndex = currentDevice.sessions.findIndex((s) => s.current);
-    const currentSession = currentDevice.sessions.splice(sessionIndex, 1)[0];
-    currentDevice.sessions.unshift(currentSession);
+    if (currentDevice.sessions?.length) {
+      const sessionIndex = currentDevice.sessions.findIndex((s) => s.current);
+      if (sessionIndex >= 0) {
+        const currentSession = currentDevice.sessions.splice(
+          sessionIndex,
+          1,
+        )[0];
+        currentDevice.sessions.unshift(currentSession);
+      }
+    }
 
     setDevices(devices);
   };

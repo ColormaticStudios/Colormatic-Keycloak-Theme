@@ -3,8 +3,6 @@
 // @ts-nocheck
 
 import {
-  Avatar,
-  AvatarProps,
   DropdownItem,
   Masthead,
   MastheadBrand,
@@ -22,7 +20,6 @@ import { TFunction } from "i18next";
 import type { Keycloak, KeycloakTokenParsed } from "oidc-spa/keycloak-js";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { DefaultAvatar } from "./DefaultAvatar";
 import { KeycloakDropdown } from "./KeycloakDropdown";
 
 function loggedInUserName(
@@ -49,7 +46,7 @@ type BrandLogo = MastheadBrandProps;
 type KeycloakMastheadProps = MastheadMainProps & {
   keycloak: Keycloak;
   brand: BrandLogo;
-  avatar?: AvatarProps;
+  title?: string;
   features?: {
     hasLogout?: boolean;
     hasManageAccount?: boolean;
@@ -64,7 +61,7 @@ type KeycloakMastheadProps = MastheadMainProps & {
 const KeycloakMasthead = ({
   keycloak,
   brand: { src, alt, className, ...brandProps },
-  avatar,
+  title,
   features: {
     hasLogout = true,
     hasManageAccount = true,
@@ -96,7 +93,6 @@ const KeycloakMasthead = ({
     );
   }
 
-  const picture = keycloak.idTokenParsed?.picture;
   return (
     <Masthead {...rest}>
       <MastheadToggle>
@@ -106,6 +102,7 @@ const KeycloakMasthead = ({
       </MastheadToggle>
       <MastheadBrand {...brandProps}>
         <img src={src} alt={alt} className={className} />
+        {title ? <span className="kc-masthead-title">{title}</span> : null}
       </MastheadBrand>
       <MastheadContent>
         {toolbar}
@@ -146,17 +143,6 @@ const KeycloakMasthead = ({
                   extraItems,
                 ]}
               />
-            </ToolbarItem>
-            <ToolbarItem
-              variant="overflow-menu"
-              align={{ default: "alignRight" }}
-              className="pf-v5-u-m-0-on-lg"
-            >
-              {picture || avatar?.src ? (
-                <Avatar {...{ src: picture, alt: t("avatar"), ...avatar }} />
-              ) : (
-                <DefaultAvatar {...avatar} />
-              )}
             </ToolbarItem>
           </ToolbarContent>
         </Toolbar>

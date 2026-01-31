@@ -41,6 +41,9 @@ if (!loginEntry.file || !accountEntry.file) {
   throw new Error("Manifest entry missing file field");
 }
 
+const loginScript = loginEntry.file;
+const accountScript = accountEntry.file;
+
 const html = `<!doctype html>
 <html>
   <head>
@@ -61,12 +64,24 @@ const html = `<!doctype html>
       const resourcesPath =
         window.kcContext?.url?.resourcesPath ??
         window.kcContext?.["x-keycloakify"]?.resourcesPath;
+      const normalizeResourcesPath = (value) =>
+        typeof value === "string" ? value.replace(/\\/dist\\/?$/, "") : value;
+      const normalizedResourcesPath = normalizeResourcesPath(resourcesPath);
       const toResourceUrl = (file, isAccountAsset) => {
+        if (!file) {
+          return "";
+        }
+        if (/^https?:\\/\\//.test(file) || file.startsWith("/")) {
+          return file;
+        }
+        if (file.startsWith("resources/")) {
+          return "/" + file;
+        }
         if (!resourcesPath) {
           return "./" + file;
         }
         const accountPrefix = isAccountAsset ? "/dist/account/" : "/dist/";
-        return resourcesPath + accountPrefix + file;
+        return normalizedResourcesPath + accountPrefix + file;
       };
 
       for (const href of cssFiles) {
@@ -79,8 +94,8 @@ const html = `<!doctype html>
       const script = document.createElement("script");
       script.type = "module";
       script.src = isAccount
-        ? toResourceUrl("${accountScript}", true)
-        : toResourceUrl("${loginScript}", false);
+        ? toResourceUrl(${JSON.stringify(accountScript)}, true)
+        : toResourceUrl(${JSON.stringify(loginScript)}, false);
       document.body.appendChild(script);
     </script>
   </body>

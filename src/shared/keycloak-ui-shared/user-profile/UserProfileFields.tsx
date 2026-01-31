@@ -139,6 +139,7 @@ export const UserProfileFields = ({
   return (
     <ScrollForm
       label={t("jumpToSection")}
+      showJumpLinks={false}
       sections={groupsWithAttributes
         .filter((group) => group.attributes.length > 0)
         .map(({ group, attributes }) => ({
