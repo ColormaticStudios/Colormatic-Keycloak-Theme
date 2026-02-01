@@ -1,28 +1,34 @@
 @import "../main.css";
 
-:root {
-  color-scheme: dark;
-}
-
 body {
-  color: white;
+  @apply text-black dark:text-white;
 }
 
 .pf-v5-c-page {
-  @apply overflow-scroll bg-slate-950!;
+  @apply overflow-scroll bg-slate-100! dark:bg-slate-950!;
 }
 
 /* Masthead */
 .pf-v5-c-masthead {
-  @apply border-b border-slate-800 bg-slate-900! shadow-none;
+  @apply border-b border-slate-200 bg-white!;
+  @apply dark:border-slate-800 dark:bg-slate-900!;
+  @apply shadow-none flex!;
 }
 
 .pf-v5-c-toolbar {
-  @apply bg-transparent!;
+  @apply bg-transparent! w-fit!;
+}
+
+#nav-toggle {
+  @apply text-black dark:text-white;
+}
+
+.pf-v5-c-masthead__content {
+  @apply justify-end;
 }
 
 .kc-masthead-title {
-  @apply ml-3 text-2xl tracking-wide text-slate-100;
+  @apply ml-3 text-2xl tracking-wide text-slate-700 dark:text-slate-100;
 }
 
 /* Sidebar */
@@ -31,20 +37,25 @@ body {
 }
 
 .pf-v5-c-page__sidebar-body {
-  @apply border-r border-slate-800 bg-slate-950;
+  @apply border-r border-slate-300 bg-slate-100;
+  @apply dark:border-slate-800 dark:bg-slate-950;
+}
+
+.pf-v5-c-nav__link {
+  @apply text-black! dark:text-white!;
 }
 
 .pf-v5-c-nav__link:hover {
-  @apply bg-slate-800!;
+  @apply bg-slate-200! dark:bg-slate-800!;
 }
 
 .pf-v5-c-nav__link:focus {
-  @apply bg-slate-800!;
+  @apply bg-slate-200! dark:bg-slate-800!;
 }
 
 .pf-v5-c-nav__link.pf-m-current {
-  @apply bg-slate-700! text-white;
-  font-weight: 600;
+  @apply bg-slate-300!;
+  @apply dark:bg-slate-700! dark:text-white;
 }
 
 .pf-v5-c-nav__link::after {
@@ -52,65 +63,74 @@ body {
 }
 
 .pf-v5-c-nav__link::before {
-  @apply border-b border-slate-800!;
+  @apply border-b border-slate-300! dark:border-slate-800!;
 }
 
 .pf-v5-c-nav__item.pf-m-expandable::before {
-  @apply border-b border-slate-800!;
+  @apply border-b border-slate-300! dark:border-slate-800!;
 }
 
 /* Main layout */
 .pf-v5-c-page__main {
-  @apply mx-auto mt-8 h-fit w-fit rounded-2xl border border-slate-800 bg-slate-900 p-6;
+  @apply mx-auto mt-8 h-fit w-fit rounded-2xl;
+  @apply border border-slate-300 bg-slate-200;
+  @apply dark:border-slate-800 dark:bg-slate-900 p-6;
 }
 
 .pf-v5-c-page__main-section {
-  @apply rounded-none border-0 bg-transparent!;
+  @apply bg-transparent!;
   @apply lg:max-w-4xl;
 }
 
 .pf-v5-c-title {
-  @apply text-slate-100;
+  @apply dark:text-slate-100;
 }
 
 /* Forms */
 .pf-v5-c-form__label-text {
-  @apply text-slate-200;
+  @apply dark:text-slate-200;
 }
 
 .pf-v5-c-form__label-required {
-  @apply text-red-500;
+  @apply text-red-500!;
 }
 
 .pf-v5-c-form-control {
-  @apply rounded-md border border-slate-700 bg-slate-800! text-slate-100;
+  @apply rounded-md border;
+  @apply border-slate-400 bg-slate-300!;
+  @apply  dark:border-slate-700 dark:bg-slate-800! dark:text-slate-100;
   box-shadow: none;
   background-image: none;
 }
 
 .pf-v5-c-form-control:disabled,
 .pf-v5-c-form-control.pf-m-disabled {
-  @apply border-slate-700/40! bg-slate-800/40! text-slate-400;
+  @apply dark:border-slate-400/40! bg-slate-300/40! text-black/40;
+  @apply dark:border-slate-700/40! dark:bg-slate-800/40! dark:text-slate-400;
   opacity: 0.7;
 }
 
+.pf-v5-c-form-control::before,
 .pf-v5-c-form-control::after {
   @apply border-none!;
 }
 
 .pf-v5-c-menu-toggle {
-  @apply rounded-md! border! border-slate-700! bg-slate-800! text-slate-100!;
+  @apply rounded-md! border!;
+  @apply border-slate-400! bg-slate-300! text-black!;
+  @apply dark:border-slate-700! dark:bg-slate-800! dark:text-slate-100!;
   @apply max-w-md! duration-150;
 }
 
 .pf-v5-c-menu-toggle:disabled,
 .pf-v5-c-menu-toggle.pf-m-disabled {
-  @apply border-slate-700/40! bg-slate-800/40! text-slate-400;
-  opacity: 0.7;
+  @apply border-slate-400/40! bg-slate-300/40! text-black/40;
+  @apply dark:border-slate-700/40! dark:bg-slate-800/40! dark:text-slate-400;
 }
 
 .pf-v5-c-menu-toggle:hover {
-  @apply border-slate-600! bg-slate-700!;
+  @apply border-slate-500! bg-slate-400!;
+  @apply dark:border-slate-600! dark:bg-slate-700!;
 }
 
 .pf-v5-c-menu-toggle::after,
@@ -119,20 +139,20 @@ body {
 }
 
 .pf-v5-c-menu {
-  @apply mt-1 rounded-lg bg-slate-800!;
+  @apply mt-1 rounded-lg bg-slate-300!;
+  @apply dark:bg-slate-800!;
   @apply max-h-48 overflow-y-scroll;
 }
 
+.pf-v5-c-menu__item:focus,
 .pf-v5-c-menu__list-item.pf-m-focus {
-  @apply bg-slate-700/40!;
+  @apply bg-slate-400/40!;
+  @apply dark:bg-slate-700/40!;
 }
 
 .pf-v5-c-menu__item:hover {
-  @apply bg-slate-700!;
-}
-
-.pf-v5-c-menu__item:focus {
-  @apply bg-slate-700!;
+  @apply bg-slate-200!;
+  @apply dark:bg-slate-700!;
 }
 
 .pf-v5-c-form__actions {
@@ -149,12 +169,13 @@ body {
 }
 
 .pf-v5-c-button.pf-m-primary {
-  @apply bg-white! text-black!;
+  @apply bg-slate-950! text-white!;
+  @apply hover:bg-slate-900!;
   @apply duration-150;
-  @apply hover:bg-slate-300!;
+  @apply dark:bg-white! dark:text-black!;
+  @apply hover:dark:bg-slate-300!;
 
-  @apply disabled:bg-slate-500! disabled:hover:bg-slate-500!;
-  @apply disabled:hover:cursor-not-allowed!;
+  @apply disabled:dark:bg-slate-500!;
 }
 
 .pf-v5-c-button.pf-m-secondary::after {
@@ -163,7 +184,9 @@ body {
 
 .pf-v5-c-button.pf-m-secondary,
 .pf-v5-c-button.pf-m-link {
-  @apply border! border-white! text-white! no-underline!;
+  @apply border! no-underline!;
+  @apply border-slate-950! text-slate-950!;
+  @apply dark:border-white! dark:text-white!;
 }
 
 .pf-v5-l-split__item {
@@ -172,19 +195,27 @@ body {
 
 /* Alerts */
 .pf-v5-c-alert {
-  @apply rounded-md border border-slate-700! bg-slate-800!;
+  @apply rounded-md border;
+  @apply border-slate-400! bg-slate-300!;
+  @apply dark:border-slate-700! dark:bg-slate-800!;
   @apply max-w-md;
 }
 
 /* Data */
 .pf-v5-c-data-list {
-  @apply border-slate-700!;
+  @apply border-t;
+  @apply border-slate-400!;
+  @apply dark:border-slate-700!;
 }
 
 .pf-v5-c-data-list__item {
-  @apply border-none! bg-slate-900!;
+  @apply border-none!;
+  @apply bg-slate-300!;
+  @apply dark:bg-slate-900!;
 }
 
 .pf-v5-c-data-list__item-row {
-  @apply border-b border-slate-700;
+  @apply border-b;
+  @apply border-slate-400!;
+  @apply dark:border-slate-700!;
 }

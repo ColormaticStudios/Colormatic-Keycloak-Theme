@@ -7,6 +7,7 @@
 import { getKcContext } from "./KcContext";
 
 const DARK_THEME_CLASS = "pf-v5-theme-dark";
+const TAILWIND_DARK_CLASS = "dark";
 
 function setIsDarkModeEnabled(isDarkModeEnabled: boolean) {
 	{
@@ -33,8 +34,10 @@ function setIsDarkModeEnabled(isDarkModeEnabled: boolean) {
 
 		if (isDarkModeEnabled) {
 			classList.add(DARK_THEME_CLASS);
+			classList.add(TAILWIND_DARK_CLASS);
 		} else {
 			classList.remove(DARK_THEME_CLASS);
+			classList.remove(TAILWIND_DARK_CLASS);
 		}
 	}
 }
