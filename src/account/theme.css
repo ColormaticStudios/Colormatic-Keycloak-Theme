@@ -163,6 +163,18 @@ body {
   @apply flex justify-center;
 }
 
+.pf-v5-c-data-list__item-row {
+  @apply p-0!;
+}
+
+.pf-v5-c-data-list__item-row {
+  @apply w-full!;
+}
+
+.pf-v5-u-float-right {
+  @apply justify-self-end ml-auto;
+}
+
 /* Buttons */
 .pf-v5-c-button {
   @apply inline-flex! items-center gap-2 rounded-md!;
