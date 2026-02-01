@@ -17,7 +17,9 @@
     I18n
   > = $props();
 
-    const recoveryAuthnCodesConfigBean = $derived(kcContext.recoveryAuthnCodesConfigBean);
+  const recoveryAuthnCodesConfigBean = $derived(
+    kcContext.recoveryAuthnCodesConfigBean,
+  );
   const isAppInitiatedAction = $derived(kcContext.isAppInitiatedAction);
 
   const msg = $derived($i18n.msg);

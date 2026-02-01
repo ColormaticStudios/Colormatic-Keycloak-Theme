@@ -26,7 +26,7 @@
     doMakeUserConfirmPassword,
   } = props;
 
-    const messageHeader = $derived(kcContext.messageHeader);
+  const messageHeader = $derived(kcContext.messageHeader);
   const url = $derived(kcContext.url);
   const messagesPerField = $derived(kcContext.messagesPerField);
   const recaptchaRequired = $derived(kcContext.recaptchaRequired);
@@ -35,7 +35,7 @@
   const recaptchaAction = $derived(kcContext.recaptchaAction);
   const termsAcceptanceRequired = $derived(kcContext.termsAcceptanceRequired);
 
-    const msg = $derived($i18n.msg);
+  const msg = $derived($i18n.msg);
   const msgStr = $derived($i18n.msgStr);
   const advancedMsg = $derived($i18n.advancedMsg);
 

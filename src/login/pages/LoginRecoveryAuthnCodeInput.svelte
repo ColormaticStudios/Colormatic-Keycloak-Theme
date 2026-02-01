@@ -15,11 +15,13 @@
     I18n
   > = $props();
 
-    const url = $derived(kcContext.url);
+  const url = $derived(kcContext.url);
   const messagesPerField = $derived(kcContext.messagesPerField);
-  const recoveryAuthnCodesInputBean = $derived(kcContext.recoveryAuthnCodesInputBean);
+  const recoveryAuthnCodesInputBean = $derived(
+    kcContext.recoveryAuthnCodesInputBean,
+  );
 
-    const msg = $derived($i18n.msg);
+  const msg = $derived($i18n.msg);
   const msgStr = $derived($i18n.msgStr);
 </script>
 

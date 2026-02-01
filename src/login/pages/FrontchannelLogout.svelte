@@ -15,9 +15,9 @@
     I18n
   > = $props();
 
-    const logout = $derived(kcContext.logout);
+  const logout = $derived(kcContext.logout);
 
-    const msg = $derived($i18n.msg);
+  const msg = $derived($i18n.msg);
   const msgStr = $derived($i18n.msgStr);
 
   onMount(() => {

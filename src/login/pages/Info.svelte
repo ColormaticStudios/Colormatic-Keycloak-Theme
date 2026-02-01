@@ -12,10 +12,10 @@
     classes,
   }: PageProps<Extract<KcContext, { pageId: "info.ftl" }>, I18n> = $props();
 
-    const advancedMsgStr = $derived($i18n.advancedMsgStr);
+  const advancedMsgStr = $derived($i18n.advancedMsgStr);
   const msg = $derived($i18n.msg);
 
-    const messageHeader = $derived(kcContext.messageHeader);
+  const messageHeader = $derived(kcContext.messageHeader);
   const message = $derived(kcContext.message);
   const requiredActions = $derived(kcContext.requiredActions);
   const skipLink = $derived(kcContext.skipLink);

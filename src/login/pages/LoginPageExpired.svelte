@@ -14,9 +14,9 @@
     I18n
   > = $props();
 
-    const url = $derived(kcContext.url);
+  const url = $derived(kcContext.url);
 
-    const msg = $derived($i18n.msg);
+  const msg = $derived($i18n.msg);
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes}>

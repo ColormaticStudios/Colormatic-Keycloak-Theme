@@ -17,13 +17,13 @@
     I18n
   > = $props();
 
-    const url = $derived(kcContext.url);
+  const url = $derived(kcContext.url);
   const isAppInitiatedAction = $derived(kcContext.isAppInitiatedAction);
   const totp = $derived(kcContext.totp);
   const mode = $derived(kcContext.mode);
   const messagesPerField = $derived(kcContext.messagesPerField);
 
-    const msg = $derived($i18n.msg);
+  const msg = $derived($i18n.msg);
   const msgStr = $derived($i18n.msgStr);
   const advancedMsg = $derived($i18n.advancedMsg);
 

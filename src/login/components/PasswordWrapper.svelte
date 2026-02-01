@@ -12,7 +12,7 @@
   } = $props();
   const { i18n, passwordInputId, children } = props;
 
-    const msgStr = $derived($i18n.msgStr);
+  const msgStr = $derived($i18n.msgStr);
 
   const [isPasswordRevealed, toggleIsPasswordRevealed] = useReducer<
     boolean,

@@ -13,10 +13,10 @@
     Extract<KcContext, { pageId: "select-authenticator.ftl" }>,
     I18n
   > = $props();
-    const url = $derived(kcContext.url);
+  const url = $derived(kcContext.url);
   const auth = $derived(kcContext.auth);
 
-    const msg = $derived($i18n.msg);
+  const msg = $derived($i18n.msg);
   const advancedMsg = $derived($i18n.advancedMsg);
 </script>
 

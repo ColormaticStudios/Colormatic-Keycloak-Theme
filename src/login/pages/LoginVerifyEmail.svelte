@@ -14,9 +14,9 @@
     I18n
   > = $props();
 
-    const msg = $derived($i18n.msg);
+  const msg = $derived($i18n.msg);
 
-    const url = $derived(kcContext.url);
+  const url = $derived(kcContext.url);
   const user = $derived(kcContext.user);
 </script>
 
