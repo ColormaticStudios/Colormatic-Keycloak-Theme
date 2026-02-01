@@ -129,7 +129,44 @@ function getMockResponse(path: string, opts: RequestOptions = {}): Response {
 	}
 
 	if (cleanPath === "/supportedLocales") {
-		return createJsonResponse(["en", "fr"]);
+		return createJsonResponse([
+			"ar",
+			"cs",
+			"da",
+			"de",
+			"el",
+			"en",
+			"es",
+			"et",
+			"fi",
+			"fr",
+			"he",
+			"hi",
+			"hr",
+			"hu",
+			"id",
+			"it",
+			"ja",
+			"ko",
+			"lt",
+			"lv",
+			"nl",
+			"no",
+			"pl",
+			"pt",
+			"pt-BR",
+			"ro",
+			"ru",
+			"sk",
+			"sl",
+			"sv",
+			"th",
+			"tr",
+			"uk",
+			"vi",
+			"zh-CN",
+			"zh-TW",
+		]);
 	}
 
 	if (cleanPath === "/sessions" || cleanPath === "/sessions/devices") {

@@ -120,18 +120,27 @@ body {
 
 .pf-v5-c-menu {
   @apply mt-1 rounded-lg bg-slate-800!;
+  @apply max-h-48 overflow-y-scroll;
+}
+
+.pf-v5-c-menu__list-item.pf-m-focus {
+  @apply bg-slate-700/40!;
 }
 
 .pf-v5-c-menu__item:hover {
-  @apply bg-slate-700;
+  @apply bg-slate-700!;
 }
 
 .pf-v5-c-menu__item:focus {
-  @apply bg-slate-700;
+  @apply bg-slate-700!;
 }
 
 .pf-v5-c-form__actions {
   @apply flex justify-end;
+}
+
+.pf-v5-c-expandable-section__content {
+  @apply flex justify-center;
 }
 
 /* Buttons */
@@ -164,6 +173,7 @@ body {
 /* Alerts */
 .pf-v5-c-alert {
   @apply rounded-md border border-slate-700! bg-slate-800!;
+  @apply max-w-md;
 }
 
 /* Data */
