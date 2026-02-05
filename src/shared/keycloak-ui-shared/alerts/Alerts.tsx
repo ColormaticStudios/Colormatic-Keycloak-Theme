@@ -1,9 +1,6 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { AlertVariant } from "../../@patternfly/react-core";
-import { PropsWithChildren, useCallback, useMemo, useState } from "react";
+import type { PropsWithChildren } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { createNamedContext } from "../utils/createNamedContext";

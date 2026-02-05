@@ -1,23 +1,19 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
+import type { TextInputProps } from "../../@patternfly/react-core";
 import {
   FormHelperText,
   HelperText,
   HelperTextItem,
   TextInput,
-  TextInputProps,
   ValidatedOptions,
 } from "../../@patternfly/react-core";
-import { ReactNode } from "react";
-import {
+import type { ReactNode } from "react";
+import type {
   FieldPath,
   FieldValues,
   PathValue,
   UseControllerProps,
-  useController,
 } from "react-hook-form";
+import { useController } from "react-hook-form";
 import { getRuleValue } from "../utils/getRuleValue";
 import { FormLabel } from "./FormLabel";
 

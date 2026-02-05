@@ -1,16 +1,11 @@
-/* eslint-disable */
+import type { KeycloakContext } from "../shared/keycloak-ui-shared";
+import { type BaseEnvironment } from "../shared/keycloak-ui-shared";
 
-// @ts-nocheck
-
-import {
-	KeycloakContext,
-	type BaseEnvironment,
-} from "../shared/keycloak-ui-shared";
-
-import { CallOptions } from "./api/methods";
-import { Links, parseLinks } from "./api/parse-links";
+import type { CallOptions } from "./api/methods";
+import type { Links } from "./api/parse-links";
+import { parseLinks } from "./api/parse-links";
 import { parseResponse } from "./api/parse-response";
-import {
+import type {
 	CredentialsIssuer,
 	Permission,
 	Resource,

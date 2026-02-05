@@ -1,16 +1,8 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 // TODO: Remove code once the following issue has been fixed:
 // https://github.com/patternfly/patternfly-react/issues/10192
 import { TextArea } from "../../../@patternfly/react-core";
-import {
-  ComponentProps,
-  HTMLProps,
-  type ForwardRefExoticComponent,
-  type RefAttributes,
-} from "react";
+import type { ComponentProps, HTMLProps } from "react";
+import { type ForwardRefExoticComponent, type RefAttributes } from "react";
 
 // PatternFly changes the signature of the 'onFocus' and 'onBlur' handlers for textarea elements.
 // This causes issues with React Hook Form as it expects the default signature for a textarea element.

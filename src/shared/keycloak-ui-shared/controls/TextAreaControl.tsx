@@ -1,19 +1,12 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import {
-  TextArea,
-  TextAreaProps,
-  ValidatedOptions,
-} from "../../@patternfly/react-core";
-import {
+import type { TextAreaProps } from "../../@patternfly/react-core";
+import { TextArea, ValidatedOptions } from "../../@patternfly/react-core";
+import type {
   FieldPath,
   FieldValues,
   PathValue,
   UseControllerProps,
-  useController,
 } from "react-hook-form";
+import { useController } from "react-hook-form";
 
 import { FormLabel } from "./FormLabel";
 

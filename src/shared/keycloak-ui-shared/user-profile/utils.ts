@@ -1,11 +1,7 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { UserProfileAttributeMetadata } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
-import { TFunction } from "i18next";
-import { FieldPath } from "react-hook-form";
+import type { UserProfileAttributeMetadata } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
+import type UserRepresentation from "@keycloak/keycloak-admin-client/lib/defs/userRepresentation";
+import type { TFunction } from "i18next";
+import type { FieldPath } from "react-hook-form";
 
 export type KeyValueType = { key: string; value: string };
 
@@ -83,7 +79,11 @@ export function setUserProfileServerError<T>(
 			{},
 			e.params?.map((p) => (isBundleKey(p) ? t(unWrap(p as string)) : p)),
 		);
-		setError(fieldName(e.field) as keyof T, {
+		const field =
+			!e.field || e.field === "root"
+				? ("root" as keyof T)
+				: (fieldName(e.field) as keyof T);
+		setError(field, {
 			message: t(
 				isBundleKey(e.errorMessage) ? unWrap(e.errorMessage) : e.errorMessage,
 				{

@@ -1,11 +1,7 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { useMemo } from "react";
 import { FormProvider } from "react-hook-form";
 import { SelectControl } from "../controls/select-control/SelectControl";
-import { UserProfileFieldProps } from "./UserProfileFields";
+import type { UserProfileFieldProps } from "./UserProfileFields";
 
 const localeToDisplayName = (locale: string) => {
   try {

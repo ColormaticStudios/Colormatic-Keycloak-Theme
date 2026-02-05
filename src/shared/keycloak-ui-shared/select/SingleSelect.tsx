@@ -1,15 +1,8 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import {
-  MenuToggle,
-  Select,
-  SelectList,
-  SelectOptionProps,
-} from "../../@patternfly/react-core";
+import type { SelectOptionProps } from "../../@patternfly/react-core";
+import { MenuToggle, Select, SelectList } from "../../@patternfly/react-core";
 import { Children, useRef, useState } from "react";
-import { KeycloakSelectProps, propertyToString } from "./KeycloakSelect";
+import type { KeycloakSelectProps } from "./KeycloakSelect";
+import { propertyToString } from "./KeycloakSelect";
 
 type SingleSelectProps = Omit<KeycloakSelectProps, "variant">;
 

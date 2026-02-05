@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
   KeycloakMasthead,
   label,
@@ -13,8 +9,8 @@ import { useTranslation } from "react-i18next";
 import { useHref } from "react-router-dom";
 
 import { getKcContext } from "../KcContext";
+import type { Environment } from "../environment";
 import { environment } from "../environment";
-import { joinPath } from "../utils/joinPath";
 
 import style from "./header.module.css";
 
@@ -39,7 +35,7 @@ const ReferrerLink = () => {
 };
 
 export const Header = () => {
-  const { environment, keycloak } = useEnvironment();
+  const { environment, keycloak } = useEnvironment<Environment>();
   const { t } = useTranslation();
 
   const { kcContext } = getKcContext();
@@ -50,7 +46,7 @@ export const Header = () => {
       ? resourcesPath.replace(/\/dist\/?$/, "")
       : undefined;
 
-  const stripHtml = (value) =>
+  const stripHtml = (value: string | undefined | null) =>
     typeof value === "string" ? value.replace(/<[^>]*>/g, "").trim() : value;
   const propertiesDisplayName = stripHtml(
     kcContext.properties?.realmDisplayName ||

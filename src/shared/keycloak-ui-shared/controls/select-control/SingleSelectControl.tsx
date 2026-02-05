@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
   MenuToggle,
   MenuToggleStatus,
@@ -11,20 +7,12 @@ import {
 } from "../../../@patternfly/react-core";
 import { get } from "lodash-es";
 import { useState } from "react";
-import {
-  Controller,
-  FieldPath,
-  FieldValues,
-  useFormContext,
-} from "react-hook-form";
+import type { FieldPath, FieldValues } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { getRuleValue } from "../../utils/getRuleValue";
 import { FormLabel } from "../FormLabel";
-import {
-  SelectControlProps,
-  isSelectBasedOptions,
-  isString,
-  key,
-} from "./SelectControl";
+import type { SelectControlProps } from "./SelectControl";
+import { isSelectBasedOptions, isString, key } from "./SelectControl";
 
 export const SingleSelectControl = <
   T extends FieldValues,
@@ -98,7 +86,10 @@ export const SingleSelectControl = <
               </MenuToggle>
             )}
             onSelect={(_event, v) => {
-              const option = v?.toString()!;
+              const option = v?.toString();
+              if (option === undefined) {
+                return;
+              }
               const convertedValue = Array.isArray(value) ? [option] : option;
               if (onSelect) {
                 onSelect(convertedValue, onChange);

@@ -17,7 +17,20 @@ export type KcContextExtensionPerPage = Record<
 export type KcContext = KcContextLike.Keycloak25AndUp & {
 	themeType: "account";
 	themeName: string;
-	properties: Record<KcEnvName, string>;
+	properties: Record<KcEnvName, string> & {
+		realmDisplayName?: string;
+		realmDisplayNameHtml?: string;
+	};
+	url?: {
+		resourcesPath?: string;
+	};
+	"x-keycloakify"?: {
+		resourcesPath?: string;
+	};
+	realm: KcContextLike.Keycloak25AndUp["realm"] & {
+		displayName?: string;
+		displayNameHtml?: string;
+	};
 };
 
 export const { getKcContext } = createGetKcContext<KcContext>();

@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
   Button,
   ButtonVariant,
@@ -9,9 +5,7 @@ import {
 } from "../../../@patternfly/react-core";
 import { SyncAltIcon } from "../../../@patternfly/react-icons";
 import type { SVGIconProps } from "@patternfly/react-icons/dist/js/createIcon";
-import {
-  ActionsColumn,
-  ExpandableRowContent,
+import type {
   IAction,
   IActions,
   IActionsResolver,
@@ -19,8 +13,12 @@ import {
   IRow,
   IRowCell,
   ITransform,
-  Table,
   TableProps,
+} from "../../../@patternfly/react-table";
+import {
+  ActionsColumn,
+  ExpandableRowContent,
+  Table,
   TableVariant,
   Tbody,
   Td,
@@ -29,9 +27,8 @@ import {
   Tr,
 } from "../../../@patternfly/react-table";
 import { cloneDeep, get, intersectionBy } from "lodash-es";
+import type { ComponentClass, ReactNode } from "react";
 import {
-  ComponentClass,
-  ReactNode,
   isValidElement,
   useEffect,
   useId,
@@ -426,7 +423,7 @@ export function KeycloakDataTable<T>({
       }
       if (col.cellRenderer) {
         const Component = col.cellRenderer;
-        //@ts-ignore
+        // @ts-expect-error -- generic props spread doesn't satisfy Component props
         return { title: <Component {...value} /> };
       }
       return get(value, col.name);

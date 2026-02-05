@@ -1,8 +1,5 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { LanguageDetectorModule, createInstance } from "i18next";
+import type { LanguageDetectorModule } from "i18next";
+import { createInstance } from "i18next";
 import FetchBackend from "i18next-fetch-backend";
 import { initReactI18next } from "react-i18next";
 
@@ -13,10 +10,7 @@ const DEFAULT_LOCALE = "en";
 
 type KeyValue = { key: string; value: string };
 
-// This type is aliased to any, so that we can find all the places where we use it.
-// In the future all casts to this type should be removed from the code, so
-// that we can have a proper type-safe translation function.
-export type TFuncKey = any;
+export type TFuncKey = string;
 
 export const keycloakLanguageDetector: LanguageDetectorModule = {
 	type: "languageDetector",

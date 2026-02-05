@@ -1,13 +1,6 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import {
-  Pagination,
-  PaginationToggleTemplateProps,
-  ToolbarItem,
-} from "../../../@patternfly/react-core";
-import { PropsWithChildren, ReactNode } from "react";
+import type { PaginationToggleTemplateProps } from "../../../@patternfly/react-core";
+import { Pagination, ToolbarItem } from "../../../@patternfly/react-core";
+import type { PropsWithChildren, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 import { TableToolbar } from "./TableToolbar";

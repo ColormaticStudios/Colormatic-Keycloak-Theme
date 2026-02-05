@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
   FormErrorText,
   SelectControl,
@@ -29,7 +25,7 @@ import {
 import { useTranslation } from "react-i18next";
 
 import { updateRequest } from "../api";
-import { Permission, Resource } from "../api/representations";
+import type { Permission, Resource } from "../api/representations";
 import { useAccountAlerts } from "../utils/useAccountAlerts";
 import { SharedWith } from "./SharedWith";
 

@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
 	getInjectedEnvironment,
 	type BaseEnvironment,
@@ -12,6 +8,10 @@ export type Environment = BaseEnvironment & {
 	baseUrl: string;
 	/** The locale of the user */
 	locale: string;
+	/** Display name for the realm (plain text). */
+	realmDisplayName?: string;
+	/** Display name for the realm (HTML). */
+	realmDisplayNameHtml?: string;
 	/** Name of the referrer application in the back link */
 	referrerName?: string;
 	/** UR to the referrer application in the back link */

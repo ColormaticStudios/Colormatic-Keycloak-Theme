@@ -1,12 +1,8 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Spinner } from "../../@patternfly/react-core";
 import { Keycloak } from "oidc-spa/keycloak-js";
+import type { Context, PropsWithChildren } from "react";
 import {
   type ReactNode,
-  PropsWithChildren,
   createContext,
   useContext,
   useEffect,
@@ -17,7 +13,7 @@ import {
 import { AlertProvider } from "../alerts/Alerts";
 import { ErrorPage } from "./ErrorPage";
 import { Help } from "./HelpContext";
-import { BaseEnvironment } from "./environment";
+import type { BaseEnvironment } from "./environment";
 
 export type KeycloakContext<T extends BaseEnvironment = BaseEnvironment> =
   KeycloakContextProps<T> & {
@@ -27,12 +23,14 @@ export type KeycloakContext<T extends BaseEnvironment = BaseEnvironment> =
 const createKeycloakEnvContext = <T extends BaseEnvironment>() =>
   createContext<KeycloakContext<T> | undefined>(undefined);
 
-let KeycloakEnvContext: any;
+let KeycloakEnvContext: Context<KeycloakContext<BaseEnvironment> | undefined>;
 
 export const useEnvironment = <
   T extends BaseEnvironment = BaseEnvironment,
 >() => {
-  const context = useContext<KeycloakContext<T>>(KeycloakEnvContext);
+  const context = useContext(
+    KeycloakEnvContext as Context<KeycloakContext<T> | undefined>,
+  );
   if (!context)
     throw Error(
       "no environment provider in the hierarchy make sure to add the provider",
@@ -50,7 +48,9 @@ export const KeycloakProvider = <T extends BaseEnvironment>({
   loadingFallback,
   children,
 }: PropsWithChildren<KeycloakContextProps<T>>) => {
-  KeycloakEnvContext = createKeycloakEnvContext<T>();
+  KeycloakEnvContext = createKeycloakEnvContext<T>() as Context<
+    KeycloakContext<BaseEnvironment> | undefined
+  >;
   const calledOnce = useRef(false);
   const [init, setInit] = useState(false);
   const [error, setError] = useState<unknown>();

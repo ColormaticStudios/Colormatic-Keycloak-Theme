@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { NetworkError } from "@keycloak/keycloak-admin-client";
 
 const ERROR_FIELDS = ["error", "errorMessage"];

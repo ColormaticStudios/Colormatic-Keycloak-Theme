@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 // https://www.i18next.com/overview/typescript
 import "i18next";
 

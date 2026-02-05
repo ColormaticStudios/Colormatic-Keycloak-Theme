@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
   Button,
   InputGroup,
@@ -10,18 +6,23 @@ import {
   type TextInputProps,
 } from "../../@patternfly/react-core";
 import { EyeIcon, EyeSlashIcon } from "../../@patternfly/react-icons";
-import { MutableRefObject, Ref, forwardRef, useState } from "react";
+import type { Ref, RefObject } from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export type PasswordInputProps = TextInputProps & {
   hasReveal?: boolean;
 };
 
+type PasswordInputBaseProps = PasswordInputProps & {
+  innerRef?: RefObject<HTMLInputElement>;
+};
+
 const PasswordInputBase = ({
   hasReveal = true,
   innerRef,
   ...rest
-}: PasswordInputProps) => {
+}: PasswordInputBaseProps) => {
   const { t } = useTranslation();
   const [hidePassword, setHidePassword] = useState(true);
   return (
@@ -30,7 +31,7 @@ const PasswordInputBase = ({
         <TextInput
           {...rest}
           type={hidePassword ? "password" : "text"}
-          ref={innerRef}
+          innerRef={innerRef}
         />
       </InputGroupItem>
       {hasReveal && (
@@ -47,8 +48,11 @@ const PasswordInputBase = ({
 };
 
 export const PasswordInput = forwardRef(
-  (props: PasswordInputProps, ref: Ref<HTMLInputElement>) => (
-    <PasswordInputBase {...props} innerRef={ref as MutableRefObject<any>} />
-  ),
+  (props: PasswordInputProps, ref: Ref<HTMLInputElement>) => {
+    const innerRef = useRef<HTMLInputElement>(null);
+    useImperativeHandle(ref, () => innerRef.current as HTMLInputElement);
+
+    return <PasswordInputBase {...props} innerRef={innerRef} />;
+  },
 );
 PasswordInput.displayName = "PasswordInput";

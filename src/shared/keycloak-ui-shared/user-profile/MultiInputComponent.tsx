@@ -1,24 +1,24 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
+import type {
+  TextInputProps,
+  TextInputTypes,
+} from "../../@patternfly/react-core";
 import {
   Button,
   ButtonVariant,
   InputGroup,
   TextInput,
-  TextInputProps,
-  TextInputTypes,
   InputGroupItem,
 } from "../../@patternfly/react-core";
 import { MinusCircleIcon, PlusCircleIcon } from "../../@patternfly/react-icons";
 import { type TFunction } from "i18next";
 import { Fragment, useEffect, useMemo } from "react";
-import { FieldPath, UseFormReturn, useWatch } from "react-hook-form";
+import type { FieldPath, UseFormReturn } from "react-hook-form";
+import { useWatch } from "react-hook-form";
 
-import { InputType, UserProfileFieldProps } from "./UserProfileFields";
+import type { InputType, UserProfileFieldProps } from "./UserProfileFields";
 import { UserProfileGroup } from "./UserProfileGroup";
-import { UserFormFields, fieldName, labelAttribute } from "./utils";
+import type { UserFormFields } from "./utils";
+import { fieldName, labelAttribute } from "./utils";
 
 export const MultiInputComponent = ({
   t,

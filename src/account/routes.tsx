@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { lazy } from "react";
 import type { IndexRouteObject, RouteObject } from "react-router-dom";
 import { environment } from "./environment";

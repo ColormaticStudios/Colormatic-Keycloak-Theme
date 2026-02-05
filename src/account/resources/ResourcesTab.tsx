@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
   ContinueCancelModal,
   useEnvironment,
@@ -43,8 +39,8 @@ import { useTranslation } from "react-i18next";
 
 import { fetchPermission, fetchResources, updatePermissions } from "../api";
 import { getPermissionRequests } from "../api/methods";
-import { Links } from "../api/parse-links";
-import { Permission, Resource } from "../api/representations";
+import type { Links } from "../api/parse-links";
+import type { Permission, Resource } from "../api/representations";
 import { useAccountAlerts } from "../utils/useAccountAlerts";
 import { usePromise } from "../utils/usePromise";
 import { EditTheResource } from "./EditTheResource";

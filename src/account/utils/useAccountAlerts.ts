@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { useAlerts } from "../../shared/keycloak-ui-shared";
 import { AlertVariant } from "../../shared/@patternfly/react-core";
 import { useCallback, useMemo } from "react";

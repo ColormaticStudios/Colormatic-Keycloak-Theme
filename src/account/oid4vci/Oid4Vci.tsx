@@ -1,15 +1,11 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
+import type { MenuToggleElement } from "../../shared/@patternfly/react-core";
 import {
   ActionList,
   ActionListItem,
   List,
   ListItem,
   MenuToggle,
-  MenuToggleElement,
   PageSection,
   PageSectionVariants,
   Select,
@@ -19,7 +15,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getIssuer, requestVCOffer } from "../api";
-import { CredentialsIssuer } from "../api/representations";
+import type { CredentialsIssuer } from "../api/representations";
 import { Page } from "../components/page/Page";
 import { usePromise } from "../utils/usePromise";
 

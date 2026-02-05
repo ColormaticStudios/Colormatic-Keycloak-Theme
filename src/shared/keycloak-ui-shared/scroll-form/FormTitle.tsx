@@ -1,8 +1,5 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { Title, TitleProps } from "../../@patternfly/react-core";
+import type { TitleProps } from "../../@patternfly/react-core";
+import { Title } from "../../@patternfly/react-core";
 
 import style from "./form-title.module.css";
 

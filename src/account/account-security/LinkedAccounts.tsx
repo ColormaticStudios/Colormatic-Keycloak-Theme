@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
 import {
   DataList,
@@ -11,8 +7,9 @@ import {
 } from "../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { getLinkedAccounts, LinkedAccountQueryParams } from "../api/methods";
-import { LinkedAccountRepresentation } from "../api/representations";
+import type { LinkedAccountQueryParams } from "../api/methods";
+import { getLinkedAccounts } from "../api/methods";
+import type { LinkedAccountRepresentation } from "../api/representations";
 import { EmptyRow } from "../components/datalist/EmptyRow";
 import { Page } from "../components/page/Page";
 import { usePromise } from "../utils/usePromise";

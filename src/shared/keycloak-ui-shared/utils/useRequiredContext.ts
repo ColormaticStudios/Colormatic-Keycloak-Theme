@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { Context } from "react";
 import { useContext } from "react";
 import { isDefined } from "./isDefined";

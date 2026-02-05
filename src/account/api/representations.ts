@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 // Generated using typescript-generator version 2.37.1128 on 2022-09-16 15:57:05.
 
 export interface AccountLinkUriRepresentation {
@@ -89,8 +85,8 @@ export interface UserProfileAttributeMetadata {
 	displayName: string;
 	required: boolean;
 	readOnly: boolean;
-	annotations?: { [index: string]: any };
-	validators: { [index: string]: { [index: string]: any } };
+	annotations?: Record<string, unknown>;
+	validators: Record<string, Record<string, unknown>>;
 	multivalued: boolean;
 	defaultValue: string;
 }
@@ -99,7 +95,7 @@ export interface UserProfileMetadata {
 	attributes: UserProfileAttributeMetadata[];
 }
 
-export type UserRepresentation = any & {
+export type UserRepresentation = Record<string, unknown> & {
 	userProfileMetadata: UserProfileMetadata;
 };
 

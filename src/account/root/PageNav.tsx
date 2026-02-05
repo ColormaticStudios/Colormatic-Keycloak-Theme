@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
 import {
   Nav,
@@ -12,13 +8,8 @@ import {
   PageSidebarBody,
   Spinner,
 } from "../../shared/@patternfly/react-core";
-import {
-  PropsWithChildren,
-  MouseEvent as ReactMouseEvent,
-  Suspense,
-  useMemo,
-  useState,
-} from "react";
+import type { PropsWithChildren, MouseEvent as ReactMouseEvent } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   matchPath,
@@ -29,7 +20,7 @@ import {
 
 import fetchContentJson from "../content/fetchContent";
 import { environment, type Environment, type Feature } from "../environment";
-import { TFuncKey } from "../i18n";
+import type { TFuncKey } from "../i18n";
 import { usePromise } from "../utils/usePromise";
 
 type RootMenuItem = {

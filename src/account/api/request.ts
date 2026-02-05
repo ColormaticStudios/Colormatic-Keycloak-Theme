@@ -1,11 +1,5 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import {
-	KeycloakContext,
-	type BaseEnvironment,
-} from "../../shared/keycloak-ui-shared";
+import type { KeycloakContext } from "../../shared/keycloak-ui-shared";
+import { type BaseEnvironment } from "../../shared/keycloak-ui-shared";
 import type { Keycloak } from "oidc-spa/keycloak-js";
 
 import { joinPath } from "../utils/joinPath";

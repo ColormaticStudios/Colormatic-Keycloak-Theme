@@ -1,8 +1,5 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { DependencyList, useEffect } from "react";
+import type { DependencyList } from "react";
+import { useEffect } from "react";
 import { useErrorBoundary } from "./ErrorBoundary";
 
 /**

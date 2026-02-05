@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { i18n } from "../i18n";
 
 export const FORMAT_DATE_ONLY: Intl.DateTimeFormatOptions = {

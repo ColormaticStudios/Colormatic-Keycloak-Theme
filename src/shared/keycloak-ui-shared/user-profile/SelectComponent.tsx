@@ -1,18 +1,16 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { SelectOption } from "../../@patternfly/react-core";
 import { useState } from "react";
-import { Controller, ControllerRenderProps } from "react-hook-form";
+import type { ControllerRenderProps } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { KeycloakSelect, SelectVariant } from "../select/KeycloakSelect";
-import {
+import type {
   OptionLabel,
   Options,
   UserProfileFieldProps,
 } from "./UserProfileFields";
 import { UserProfileGroup } from "./UserProfileGroup";
-import { UserFormFields, fieldName, label } from "./utils";
+import type { UserFormFields } from "./utils";
+import { fieldName, label } from "./utils";
 
 export const SelectComponent = (props: UserProfileFieldProps) => {
   const { t, form, inputType, attribute } = props;

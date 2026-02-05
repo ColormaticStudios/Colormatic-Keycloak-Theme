@@ -1,20 +1,14 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import {
-  FileUpload,
-  ValidatedOptions,
-  FileUploadProps,
-} from "../../@patternfly/react-core";
-import { ReactNode, useState } from "react";
-import {
+import type { FileUploadProps } from "../../@patternfly/react-core";
+import { FileUpload, ValidatedOptions } from "../../@patternfly/react-core";
+import type { ReactNode } from "react";
+import { useState } from "react";
+import type {
   FieldPath,
   FieldValues,
   PathValue,
   UseControllerProps,
-  useController,
 } from "react-hook-form";
+import { useController } from "react-hook-form";
 import { getRuleValue } from "../utils/getRuleValue";
 import { FormLabel } from "./FormLabel";
 import { useTranslation } from "react-i18next";

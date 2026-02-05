@@ -1,13 +1,9 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import type { PaginationToggleTemplateProps } from "../../shared/@patternfly/react-core";
 import {
   Pagination,
   SearchInput,
-  PaginationToggleTemplateProps,
   Toolbar,
   ToolbarContent,
   ToolbarItem,

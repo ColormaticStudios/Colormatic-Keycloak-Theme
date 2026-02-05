@@ -1,16 +1,13 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import {
+import type {
   UserProfileAttributeGroupMetadata,
   UserProfileAttributeMetadata,
   UserProfileMetadata,
 } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import { Text } from "../../@patternfly/react-core";
-import { TFunction } from "i18next";
-import { ReactNode, useMemo, type JSX } from "react";
-import { FieldPath, UseFormReturn } from "react-hook-form";
+import type { TFunction } from "i18next";
+import type { ReactNode } from "react";
+import { useMemo, type JSX } from "react";
+import type { FieldPath, UseFormReturn } from "react-hook-form";
 
 import { ScrollForm } from "../scroll-form/ScrollForm";
 import { LocaleSelector } from "./LocaleSelector";
@@ -19,7 +16,8 @@ import { OptionComponent } from "./OptionsComponent";
 import { SelectComponent } from "./SelectComponent";
 import { TextAreaComponent } from "./TextAreaComponent";
 import { TextComponent } from "./TextComponent";
-import { UserFormFields, fieldName, isRootAttribute, label } from "./utils";
+import type { UserFormFields } from "./utils";
+import { fieldName, isRootAttribute, label } from "./utils";
 
 export type UserProfileError = {
   responseData: { errors?: { errorMessage: string }[] };

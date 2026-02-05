@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { Context } from "react";
 import { createContext } from "react";
 

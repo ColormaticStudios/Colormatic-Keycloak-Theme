@@ -1,20 +1,12 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import {
-  NumberInput,
-  NumberInputProps,
-  ValidatedOptions,
-} from "../../@patternfly/react-core";
-import {
-  Controller,
+import type { NumberInputProps } from "../../@patternfly/react-core";
+import { NumberInput, ValidatedOptions } from "../../@patternfly/react-core";
+import type {
   ControllerProps,
   FieldPath,
   FieldValues,
   UseControllerProps,
-  useFormContext,
 } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
 import { getRuleValue } from "../utils/getRuleValue";
 import { FormLabel } from "./FormLabel";

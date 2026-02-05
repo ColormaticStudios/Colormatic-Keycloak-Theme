@@ -1,14 +1,10 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
   PageSection,
   Text,
   TextContent,
   Title,
 } from "../../../shared/@patternfly/react-core";
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 type PageProps = {
   title: string;

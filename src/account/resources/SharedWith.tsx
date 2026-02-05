@@ -1,10 +1,6 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Trans } from "react-i18next";
 
-import { Permission } from "../api/representations";
+import type { Permission } from "../api/representations";
 
 type SharedWithProps = {
   permissions?: Permission[];

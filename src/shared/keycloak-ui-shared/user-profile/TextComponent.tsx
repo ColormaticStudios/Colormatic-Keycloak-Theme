@@ -1,10 +1,7 @@
-/* eslint-disable */
+import type { TextInputTypes } from "../../@patternfly/react-core";
+import { TextInput } from "../../@patternfly/react-core";
 
-// @ts-nocheck
-
-import { TextInput, TextInputTypes } from "../../@patternfly/react-core";
-
-import { UserProfileFieldProps } from "./UserProfileFields";
+import type { UserProfileFieldProps } from "./UserProfileFields";
 import { UserProfileGroup } from "./UserProfileGroup";
 import { fieldName, isRequiredAttribute, label } from "./utils";
 

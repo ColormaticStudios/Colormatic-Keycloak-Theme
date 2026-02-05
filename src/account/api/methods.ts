@@ -1,15 +1,9 @@
-/* eslint-disable */
+import type { BaseEnvironment } from "../../shared/keycloak-ui-shared";
+import { type KeycloakContext } from "../../shared/keycloak-ui-shared";
 
-// @ts-nocheck
-
-import {
-	BaseEnvironment,
-	type KeycloakContext,
-} from "../../shared/keycloak-ui-shared";
-
-import OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
+import type OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
 import { parseResponse } from "./parse-response";
-import {
+import type {
 	ClientRepresentation,
 	CredentialContainer,
 	DeviceRepresentation,

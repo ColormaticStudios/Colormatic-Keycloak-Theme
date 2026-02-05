@@ -1,9 +1,5 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { KeycloakTextArea } from "../controls/keycloak-text-area/KeycloakTextArea";
-import { UserProfileFieldProps } from "./UserProfileFields";
+import type { UserProfileFieldProps } from "./UserProfileFields";
 import { UserProfileGroup } from "./UserProfileGroup";
 import { fieldName, isRequiredAttribute } from "./utils";
 

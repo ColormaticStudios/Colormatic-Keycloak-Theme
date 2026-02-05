@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { useEffect, useRef, useCallback } from "react";
 
 export function useSetTimeout() {

@@ -1,7 +1,4 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
+import type { SelectOptionProps } from "../../@patternfly/react-core";
 import {
   Button,
   Chip,
@@ -11,18 +8,14 @@ import {
   MenuToggleStatus,
   Select,
   SelectList,
-  SelectOptionProps,
   TextInputGroup,
   TextInputGroupMain,
   TextInputGroupUtilities,
 } from "../../@patternfly/react-core";
 import { TimesIcon } from "../../@patternfly/react-icons";
 import { Children, useRef, useState } from "react";
-import {
-  KeycloakSelectProps,
-  SelectVariant,
-  propertyToString,
-} from "./KeycloakSelect";
+import type { KeycloakSelectProps } from "./KeycloakSelect";
+import { SelectVariant, propertyToString } from "./KeycloakSelect";
 
 export const TypeaheadSelect = ({
   toggleId,

@@ -1,10 +1,7 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { FormGroup, FormGroupProps } from "../../@patternfly/react-core";
-import { PropsWithChildren, ReactNode } from "react";
-import { FieldError, FieldValues, Merge } from "react-hook-form";
+import type { FormGroupProps } from "../../@patternfly/react-core";
+import { FormGroup } from "../../@patternfly/react-core";
+import type { PropsWithChildren, ReactNode } from "react";
+import type { FieldError, FieldValues, Merge } from "react-hook-form";
 import { FormErrorText } from "./FormErrorText";
 import { HelpItem } from "./HelpItem";
 

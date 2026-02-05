@@ -1,10 +1,5 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-/* eslint-disable react/jsx-no-useless-fragment */
 // See: https://github.com/i18next/react-i18next/issues/1543
-import { HTMLProps } from "react";
+import type { HTMLProps } from "react";
 import { FormTitle } from "./FormTitle";
 
 type ScrollPanelProps = HTMLProps<HTMLFormElement> & {

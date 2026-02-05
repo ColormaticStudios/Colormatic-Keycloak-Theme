@@ -1,14 +1,12 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
+import type {
+  MastheadBrandProps,
+  MastheadMainProps,
+} from "../../@patternfly/react-core";
 import {
   DropdownItem,
   Masthead,
   MastheadBrand,
-  MastheadBrandProps,
   MastheadContent,
-  MastheadMainProps,
   MastheadToggle,
   PageToggleButton,
   Toolbar,
@@ -16,9 +14,9 @@ import {
   ToolbarItem,
 } from "../../@patternfly/react-core";
 import { BarsIcon } from "../../@patternfly/react-icons";
-import { TFunction } from "i18next";
+import type { TFunction } from "i18next";
 import type { Keycloak, KeycloakTokenParsed } from "oidc-spa/keycloak-js";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { KeycloakDropdown } from "./KeycloakDropdown";
 

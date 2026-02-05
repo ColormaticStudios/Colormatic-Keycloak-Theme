@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
 	getNetworkErrorMessage,
 	getNetworkErrorDescription,

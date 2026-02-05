@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 export type Links = {
 	prev?: Record<string, string>;
 	next?: Record<string, string>;

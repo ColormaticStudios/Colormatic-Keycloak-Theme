@@ -1,15 +1,12 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
+import type { DropdownProps } from "../../@patternfly/react-core";
 import {
   Dropdown,
   DropdownList,
-  DropdownProps,
   MenuToggle,
 } from "../../@patternfly/react-core";
 import { EllipsisVIcon } from "../../@patternfly/react-icons";
-import { ReactNode, useState } from "react";
+import type { ReactNode } from "react";
+import { useState } from "react";
 
 type KeycloakDropdownProps = Omit<DropdownProps, "toggle"> & {
   "data-testid"?: string;

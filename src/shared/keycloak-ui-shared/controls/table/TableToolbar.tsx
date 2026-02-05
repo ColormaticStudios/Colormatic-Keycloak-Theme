@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
   Divider,
   InputGroup,
@@ -10,7 +6,8 @@ import {
   ToolbarContent,
   ToolbarItem,
 } from "../../../@patternfly/react-core";
-import { KeyboardEvent, PropsWithChildren, ReactNode, useState } from "react";
+import type { KeyboardEvent, PropsWithChildren, ReactNode } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 type TableToolbarProps = {

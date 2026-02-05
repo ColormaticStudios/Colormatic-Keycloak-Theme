@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
   Button,
   Chip,
@@ -18,19 +14,20 @@ import {
 import { TimesIcon } from "../../../@patternfly/react-icons";
 import { get } from "lodash-es";
 import { useMemo, useRef, useState } from "react";
-import {
-  Controller,
+import type {
   ControllerRenderProps,
   FieldPath,
   FieldValues,
-  useFormContext,
 } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { getRuleValue } from "../../utils/getRuleValue";
 import { FormLabel } from "../FormLabel";
-import {
+import type {
   OptionType,
   SelectControlOption,
   SelectControlProps,
+} from "./SelectControl";
+import {
   SelectVariant,
   isSelectBasedOptions,
   isString,

@@ -1,14 +1,12 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
   UserProfileFields,
-  beerify,
   debeerify,
+  isUserProfileError,
   setUserProfileServerError,
   useEnvironment,
 } from "../../shared/keycloak-ui-shared";
+import type { UserFormFields } from "../../shared/keycloak-ui-shared";
+import { fieldName } from "../../shared/keycloak-ui-shared/user-profile/utils";
 import {
   ActionGroup,
   Alert,
@@ -19,9 +17,9 @@ import {
   Spinner,
 } from "../../shared/@patternfly/react-core";
 import { ExternalLinkSquareAltIcon } from "../../shared/@patternfly/react-icons";
-import { TFunction } from "i18next";
 import { useState } from "react";
-import { ErrorOption, useForm } from "react-hook-form";
+import type { ErrorOption, FieldPath } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -29,13 +27,13 @@ import {
   getSupportedLocales,
   savePersonalInfo,
 } from "../api/methods";
-import {
+import type {
   UserProfileMetadata,
   UserRepresentation,
 } from "../api/representations";
 import { Page } from "../components/page/Page";
 import type { Environment } from "../environment";
-import { TFuncKey, i18n } from "../i18n";
+import { i18n } from "../i18n";
 import { useAccountAlerts } from "../utils/useAccountAlerts";
 import { usePromise } from "../utils/usePromise";
 
@@ -45,7 +43,7 @@ export const PersonalInfo = () => {
   const [userProfileMetadata, setUserProfileMetadata] =
     useState<UserProfileMetadata>();
   const [supportedLocales, setSupportedLocales] = useState<string[]>([]);
-  const form = useForm<UserRepresentation>({ mode: "onChange" });
+  const form = useForm<UserFormFields>({ mode: "onChange" });
   const { handleSubmit, reset, setValue, setError } = form;
   const { addAlert } = useAccountAlerts();
 
@@ -58,14 +56,17 @@ export const PersonalInfo = () => {
     ([personalInfo, supportedLocales]) => {
       setUserProfileMetadata(personalInfo.userProfileMetadata);
       setSupportedLocales(supportedLocales);
-      reset(personalInfo);
+      const { userProfileMetadata: _userProfileMetadata, ...personalInfoForm } =
+        personalInfo;
+      void _userProfileMetadata;
+      reset(personalInfoForm as UserFormFields);
       Object.entries(personalInfo.attributes || {}).forEach(([k, v]) =>
-        setValue(`attributes[${beerify(k)}]`, v),
+        setValue(fieldName(k), v),
       );
     },
   );
 
-  const onSubmit = async (user: UserRepresentation) => {
+  const onSubmit = async (user: UserFormFields) => {
     try {
       const attributes = Object.fromEntries(
         Object.entries(user.attributes || {}).map(([k, v]) => [
@@ -73,7 +74,12 @@ export const PersonalInfo = () => {
           v,
         ]),
       );
-      await savePersonalInfo(context, { ...user, attributes });
+      const payload: UserRepresentation = {
+        ...(user as Record<string, unknown>),
+        attributes,
+        userProfileMetadata: userProfileMetadata ?? { attributes: [] },
+      };
+      await savePersonalInfo(context, payload);
       const locale = attributes["locale"]?.toString();
       if (locale) {
         await i18n.changeLanguage(locale, (error) => {
@@ -87,11 +93,25 @@ export const PersonalInfo = () => {
     } catch (error) {
       addAlert(t("accountUpdatedError"), AlertVariant.danger);
 
+      const serverError = isUserProfileError(error)
+        ? error
+        : {
+            responseData: {
+              errors: [
+                {
+                  field: "root",
+                  errorMessage:
+                    error instanceof Error ? error.message : "unknownError",
+                },
+              ],
+            },
+          };
+
       setUserProfileServerError(
-        { responseData: { errors: error as any } },
+        serverError,
         (name: string | number, error: unknown) =>
-          setError(name as string, error as ErrorOption),
-        ((key: TFuncKey, param?: object) => t(key, param as any)) as TFunction,
+          setError(name as FieldPath<UserFormFields>, error as ErrorOption),
+        t,
       );
     }
   };
@@ -119,10 +139,7 @@ export const PersonalInfo = () => {
           userProfileMetadata={userProfileMetadata}
           supportedLocales={supportedLocales}
           currentLocale={context.environment.locale}
-          t={
-            ((key: unknown, params) =>
-              t(key as TFuncKey, params as any)) as TFunction
-          }
+          t={t}
           renderer={(attribute) => {
             const annotations = attribute.annotations
               ? attribute.annotations

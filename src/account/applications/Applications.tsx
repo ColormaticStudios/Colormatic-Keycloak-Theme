@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
   ContinueCancelModal,
   label,
@@ -33,9 +29,9 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { deleteConsent, getApplications } from "../api/methods";
-import { ClientRepresentation } from "../api/representations";
+import type { ClientRepresentation } from "../api/representations";
 import { Page } from "../components/page/Page";
-import { TFuncKey } from "../i18n";
+import type { TFuncKey } from "../i18n";
 import { formatDate } from "../utils/formatDate";
 import { useAccountAlerts } from "../utils/useAccountAlerts";
 import { usePromise } from "../utils/usePromise";

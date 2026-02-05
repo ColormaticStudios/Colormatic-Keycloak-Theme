@@ -1,10 +1,6 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Icon, Popover } from "../../@patternfly/react-core";
 import { HelpIcon } from "../../@patternfly/react-icons";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { useHelp } from "../context/HelpContext";
 
 type HelpItemProps = {

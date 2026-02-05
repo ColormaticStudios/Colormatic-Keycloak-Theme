@@ -1,9 +1,8 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { ChipGroupProps, SelectProps } from "../../../@patternfly/react-core";
-import {
+import type {
+  ChipGroupProps,
+  SelectProps,
+} from "../../../@patternfly/react-core";
+import type {
   ControllerProps,
   FieldPath,
   FieldValues,

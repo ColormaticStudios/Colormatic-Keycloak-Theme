@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import type { MenuItem } from "../root/PageNav";
 
 export const content: MenuItem[] = [

@@ -1,10 +1,7 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { Button, ButtonProps } from "../../@patternfly/react-core";
-import { PropsWithChildren } from "react";
-import { FieldValues, FormState } from "react-hook-form";
+import type { ButtonProps } from "../../@patternfly/react-core";
+import { Button } from "../../@patternfly/react-core";
+import type { PropsWithChildren } from "react";
+import type { FieldValues, FormState } from "react-hook-form";
 
 export type FormSubmitButtonProps = Omit<ButtonProps, "isDisabled"> & {
   formState: FormState<FieldValues>;

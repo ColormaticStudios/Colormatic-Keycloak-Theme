@@ -1,14 +1,7 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { ReactNode, useState } from "react";
-import {
-  Button,
-  ButtonProps,
-  Modal,
-  ModalProps,
-} from "../../@patternfly/react-core";
+import type { ReactNode } from "react";
+import { useState } from "react";
+import type { ButtonProps, ModalProps } from "../../@patternfly/react-core";
+import { Button, Modal } from "../../@patternfly/react-core";
 
 export type ContinueCancelModalProps = Omit<ModalProps, "ref" | "children"> & {
   modalTitle: string;
@@ -19,7 +12,7 @@ export type ContinueCancelModalProps = Omit<ModalProps, "ref" | "children"> & {
   buttonTestRole?: string;
   isDisabled?: boolean;
   onContinue: () => void;
-  component?: React.ElementType<any> | React.ComponentType<any>;
+  component?: React.ElementType;
   children?: ReactNode;
 };
 

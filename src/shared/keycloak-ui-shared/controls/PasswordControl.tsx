@@ -1,23 +1,20 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
   FormHelperText,
   HelperText,
   HelperTextItem,
   ValidatedOptions,
 } from "../../@patternfly/react-core";
-import {
+import type {
   FieldPath,
   FieldValues,
   PathValue,
   UseControllerProps,
-  useController,
 } from "react-hook-form";
+import { useController } from "react-hook-form";
 import { getRuleValue } from "../utils/getRuleValue";
 import { FormLabel } from "./FormLabel";
-import { PasswordInput, PasswordInputProps } from "./PasswordInput";
+import type { PasswordInputProps } from "./PasswordInput";
+import { PasswordInput } from "./PasswordInput";
 
 export type PasswordControlProps<
   T extends FieldValues,

@@ -1,16 +1,12 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import {
-  Controller,
+import type {
   FieldValues,
   FieldPath,
   UseControllerProps,
   PathValue,
-  useFormContext,
 } from "react-hook-form";
-import { SwitchProps, Switch } from "../../@patternfly/react-core";
+import { Controller, useFormContext } from "react-hook-form";
+import type { SwitchProps } from "../../@patternfly/react-core";
+import { Switch } from "../../@patternfly/react-core";
 import { FormLabel } from "./FormLabel";
 import { debeerify } from "../user-profile/utils";
 
@@ -18,7 +14,7 @@ export type SwitchControlProps<
   T extends FieldValues,
   P extends FieldPath<T> = FieldPath<T>,
 > = Omit<SwitchProps, "name" | "defaultValue" | "ref"> &
-  UseControllerProps<any, P> & {
+  UseControllerProps<T, P> & {
     name: string;
     label?: string;
     labelIcon?: string;
@@ -39,7 +35,7 @@ export const SwitchControl = <
 }: SwitchControlProps<T, P>) => {
   const fallbackValue = stringify ? "false" : false;
   const defValue = defaultValue ?? (fallbackValue as PathValue<T, P>);
-  const { control } = useFormContext();
+  const { control } = useFormContext<T>();
   return (
     <FormLabel
       hasNoPaddingTop

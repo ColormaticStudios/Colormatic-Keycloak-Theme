@@ -1,23 +1,15 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { UserProfileAttributeMetadata } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
+import type { UserProfileAttributeMetadata } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
 import { FormGroup, InputGroup } from "../../@patternfly/react-core";
-import { TFunction } from "i18next";
+import type { TFunction } from "i18next";
 import { get } from "lodash-es";
-import { PropsWithChildren, ReactNode } from "react";
-import { UseFormReturn, type FieldError } from "react-hook-form";
+import type { PropsWithChildren, ReactNode } from "react";
+import type { UseFormReturn } from "react-hook-form";
+import { type FieldError } from "react-hook-form";
 
 import { FormErrorText } from "../controls/FormErrorText";
 import { HelpItem } from "../controls/HelpItem";
-import {
-  UserFormFields,
-  fieldName,
-  isRequiredAttribute,
-  label,
-  labelAttribute,
-} from "./utils";
+import type { UserFormFields } from "./utils";
+import { fieldName, isRequiredAttribute, label, labelAttribute } from "./utils";
 
 export type UserProfileGroupProps = {
   t: TFunction;

@@ -12,11 +12,11 @@ body {
 .pf-v5-c-masthead {
   @apply border-b border-slate-200 bg-white!;
   @apply dark:border-slate-800 dark:bg-slate-900!;
-  @apply shadow-none flex!;
+  @apply flex! shadow-none;
 }
 
 .pf-v5-c-toolbar {
-  @apply bg-transparent! w-fit!;
+  @apply w-fit! bg-transparent!;
 }
 
 #nav-toggle {
@@ -74,7 +74,7 @@ body {
 .pf-v5-c-page__main {
   @apply mx-auto mt-8 h-fit w-fit rounded-2xl;
   @apply border border-slate-300 bg-slate-200;
-  @apply dark:border-slate-800 dark:bg-slate-900 p-6;
+  @apply p-6 dark:border-slate-800 dark:bg-slate-900;
 }
 
 .pf-v5-c-page__main-section {
@@ -98,14 +98,14 @@ body {
 .pf-v5-c-form-control {
   @apply rounded-md border;
   @apply border-slate-400 bg-slate-300!;
-  @apply  dark:border-slate-700 dark:bg-slate-800! dark:text-slate-100;
+  @apply dark:border-slate-700 dark:bg-slate-800! dark:text-slate-100;
   box-shadow: none;
   background-image: none;
 }
 
 .pf-v5-c-form-control:disabled,
 .pf-v5-c-form-control.pf-m-disabled {
-  @apply dark:border-slate-400/40! bg-slate-300/40! text-black/40;
+  @apply bg-slate-300/40! text-black/40 dark:border-slate-400/40!;
   @apply dark:border-slate-700/40! dark:bg-slate-800/40! dark:text-slate-400;
   opacity: 0.7;
 }
@@ -172,7 +172,7 @@ body {
 }
 
 .pf-v5-u-float-right {
-  @apply justify-self-end ml-auto;
+  @apply ml-auto justify-self-end;
 }
 
 /* Buttons */

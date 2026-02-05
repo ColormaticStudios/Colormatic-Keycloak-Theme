@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Icon } from "../../@patternfly/react-core";
 import {
   BitbucketIcon,

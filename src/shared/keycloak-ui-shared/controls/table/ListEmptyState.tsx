@@ -1,8 +1,4 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import {
+import type {
   ComponentClass,
   MouseEventHandler,
   PropsWithChildren,

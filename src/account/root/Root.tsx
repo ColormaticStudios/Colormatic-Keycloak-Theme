@@ -1,25 +1,16 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import {
-  ErrorPage,
-  useEnvironment,
-  KeycloakContext,
-} from "../../shared/keycloak-ui-shared";
+import type { KeycloakContext } from "../../shared/keycloak-ui-shared";
+import { ErrorPage, useEnvironment } from "../../shared/keycloak-ui-shared";
 import { Page, Spinner } from "../../shared/@patternfly/react-core";
 import { Suspense, useState } from "react";
-import {
-  createBrowserRouter,
-  Outlet,
-  RouteObject,
-  RouterProvider,
-} from "react-router-dom";
+import type { RouteObject } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import fetchContentJson from "../content/fetchContent";
-import { Environment, environment } from "../environment";
+import type { Environment } from "../environment";
+import { environment } from "../environment";
 import { usePromise } from "../utils/usePromise";
 import { Header } from "./Header";
-import { MenuItem, PageNav } from "./PageNav";
+import type { MenuItem } from "./PageNav";
+import { PageNav } from "./PageNav";
 import { routes } from "../routes";
 
 function mapRoutes(

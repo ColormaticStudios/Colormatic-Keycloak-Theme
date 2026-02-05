@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Bullseye, Spinner } from "../../@patternfly/react-core";
 import { useTranslation } from "react-i18next";
 

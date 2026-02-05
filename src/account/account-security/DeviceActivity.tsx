@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
   ContinueCancelModal,
   useEnvironment,
@@ -34,7 +30,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { deleteSession, getDevices } from "../api/methods";
-import {
+import type {
   ClientRepresentation,
   DeviceRepresentation,
   SessionRepresentation,

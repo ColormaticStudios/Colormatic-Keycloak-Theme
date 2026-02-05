@@ -1,14 +1,11 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
   Card,
   CardBody,
   CardHeader,
   CardTitle,
 } from "../../@patternfly/react-core";
-import { PropsWithChildren, useId } from "react";
+import type { PropsWithChildren } from "react";
+import { useId } from "react";
 import { FormTitle } from "./FormTitle";
 
 type FormPanelProps = {

@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
 import {
   Badge,
@@ -25,7 +21,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { fetchPermission, updateRequest } from "../api";
-import { Permission, Resource } from "../api/representations";
+import type { Permission, Resource } from "../api/representations";
 import { useAccountAlerts } from "../utils/useAccountAlerts";
 
 type PermissionRequestProps = {

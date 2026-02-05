@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 const PATH_SEPARATOR = "/";
 
 export function joinPath(...paths: string[]) {

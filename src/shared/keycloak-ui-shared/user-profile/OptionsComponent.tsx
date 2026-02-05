@@ -1,10 +1,6 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Checkbox, Radio } from "../../@patternfly/react-core";
 import { Controller } from "react-hook-form";
-import {
+import type {
   OptionLabel,
   Options,
   UserProfileFieldProps,

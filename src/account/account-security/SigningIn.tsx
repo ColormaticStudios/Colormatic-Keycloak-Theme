@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import {
   Button,
   DataList,
@@ -28,17 +24,18 @@ import {
   ExclamationTriangleIcon,
   InfoAltIcon,
 } from "../../shared/@patternfly/react-icons";
-import { CSSProperties, Fragment, useState } from "react";
+import type { CSSProperties } from "react";
+import { Fragment, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
 import { getCredentials } from "../api/methods";
-import {
+import type {
   CredentialContainer,
   CredentialMetadataRepresentation,
 } from "../api/representations";
 import { EmptyRow } from "../components/datalist/EmptyRow";
 import { Page } from "../components/page/Page";
-import { TFuncKey } from "../i18n";
+import type { TFuncKey } from "../i18n";
 import { formatDate } from "../utils/formatDate";
 import { usePromise } from "../utils/usePromise";
 

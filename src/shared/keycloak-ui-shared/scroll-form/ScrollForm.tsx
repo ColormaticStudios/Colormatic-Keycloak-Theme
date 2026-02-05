@@ -1,16 +1,13 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
+import type { GridProps } from "../../@patternfly/react-core";
 import {
   Grid,
   GridItem,
-  GridProps,
   JumpLinks,
   JumpLinksItem,
   PageSection,
 } from "../../@patternfly/react-core";
-import { Fragment, ReactNode, useMemo } from "react";
+import type { ReactNode } from "react";
+import { Fragment, useMemo } from "react";
 import { FormPanel } from "./FormPanel";
 import { ScrollPanel } from "./ScrollPanel";
 

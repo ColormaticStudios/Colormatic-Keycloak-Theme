@@ -1,8 +1,4 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { ChipGroupProps, SelectProps } from "../../@patternfly/react-core";
+import type { ChipGroupProps, SelectProps } from "../../@patternfly/react-core";
 import { SingleSelect } from "./SingleSelect";
 import { TypeaheadSelect } from "./TypeaheadSelect";
 

@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { IconMapper, useEnvironment } from "../../shared/keycloak-ui-shared";
 import {
   Button,
@@ -19,7 +15,7 @@ import { LinkIcon, UnlinkIcon } from "../../shared/@patternfly/react-icons";
 import { useTranslation } from "react-i18next";
 
 import { unLinkAccount } from "../api/methods";
-import { LinkedAccountRepresentation } from "../api/representations";
+import type { LinkedAccountRepresentation } from "../api/representations";
 import { useAccountAlerts } from "../utils/useAccountAlerts";
 
 type AccountRowProps = {

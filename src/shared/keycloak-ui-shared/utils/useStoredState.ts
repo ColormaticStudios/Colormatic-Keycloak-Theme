@@ -1,8 +1,5 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
-import { Dispatch, useCallback, useMemo } from "react";
+import type { Dispatch } from "react";
+import { useCallback, useMemo } from "react";
 import { useStorageItem } from "./useStorageItem";
 
 /**

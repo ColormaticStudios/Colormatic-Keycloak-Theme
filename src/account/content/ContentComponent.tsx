@@ -1,13 +1,9 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 import { Spinner } from "../../shared/@patternfly/react-core";
 import { Suspense, lazy, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
-import { MenuItem } from "../root/PageNav";
-import { ContentComponentParams } from "../routes";
+import type { MenuItem } from "../root/PageNav";
+import type { ContentComponentParams } from "../routes";
 import { joinPath } from "../utils/joinPath";
 import { usePromise } from "../utils/usePromise";
 import fetchContentJson from "./fetchContent";

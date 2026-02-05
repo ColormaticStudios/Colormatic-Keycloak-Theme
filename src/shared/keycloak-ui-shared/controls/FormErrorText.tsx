@@ -1,10 +1,6 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
+import type { FormHelperTextProps } from "../../@patternfly/react-core";
 import {
   FormHelperText,
-  FormHelperTextProps,
   HelperText,
   HelperTextItem,
 } from "../../@patternfly/react-core";

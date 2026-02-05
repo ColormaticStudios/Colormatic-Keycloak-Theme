@@ -1,7 +1,3 @@
-/* eslint-disable */
-
-// @ts-nocheck
-
 /** The base environment variables that are shared between the Admin and Account Consoles. */
 export type BaseEnvironment = {
 	/**
