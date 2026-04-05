@@ -3,6 +3,7 @@
   import { useScript } from "./LoginRecoveryAuthnCodeConfig.useScript";
   import type { PageProps } from "./PageProps";
   import { clsx } from "keycloakify/tools/clsx";
+  import { untrack } from "svelte";
   import type { I18n } from "../i18n";
   import type { KcContext } from "../KcContext";
 
@@ -27,11 +28,10 @@
 
   const olRecoveryCodesListId = "kc-recovery-codes-list";
   const recoveryCodesDownloadFilename = "Colormatic ID Recovery Codes.txt";
-  const getI18nForScript = () => i18n;
 
   useScript({
     olRecoveryCodesListId,
-    i18n: getI18nForScript(),
+    i18n: untrack(() => i18n),
     downloadFilename: recoveryCodesDownloadFilename,
   });
 </script>

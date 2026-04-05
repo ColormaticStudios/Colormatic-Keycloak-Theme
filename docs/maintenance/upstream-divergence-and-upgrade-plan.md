@@ -1,0 +1,258 @@
+# Upstream Divergence And Upgrade Guide
+
+This document explains where this repository diverges from upstream and how to upgrade it safely in the future.
+
+## Purpose
+
+Use this document when upgrading:
+
+- `keycloakify`
+- `@keycloakify/svelte`
+- `vite`
+- `svelte`
+- React dependencies used by the vendored account console
+- the local forked account console under `src/account`
+
+This is intentionally an upgrade and maintenance guide. It avoids recording one-off implementation history.
+
+## Upstream Sources
+
+This repository has two separate upstream lineages.
+
+### Login Theme
+
+The login theme started from `keycloakify-starter-svelte`, but the practical runtime upstream for login pages is `@keycloakify/svelte`.
+
+Important distinction:
+
+- `keycloakify-starter-svelte` is only the starter structure
+- the default login pages are provided by `@keycloakify/svelte`
+- local login pages in `src/login/pages/*` are a maintained fork of the package defaults, not a thin wrapper around the starter
+
+For login upgrades, compare local code primarily against:
+
+- `node_modules/@keycloakify/svelte/src/login/pages/*`
+- `node_modules/@keycloakify/svelte/src/login/components/*`
+- `node_modules/@keycloakify/svelte/src/login/Template.svelte`
+- `node_modules/@keycloakify/svelte/src/login/lib/useUserProfileForm.ts`
+
+The starter repo is still useful for checking project structure, tooling conventions, and `KcPage.svelte` / `KcContext` evolution, but it is not the main source of page behavior anymore.
+
+### Account Console
+
+The account console is a vendored fork of Keycloak's React account console and shared UI code, adapted to run inside this repository.
+
+Local account code lives in:
+
+- `src/account`
+- `src/shared/keycloak-ui-shared`
+- `src/shared/@patternfly`
+
+The most useful historical anchor for future diffs is the original import baseline:
+
+- original local import commit: `ac973f7c25d0c23d8c3ff677b570a7fb6edf8dbe`
+- imported account package line: Keycloak `26.5.2`
+- imported package family:
+  - `@keycloakify/keycloak-account-ui`
+  - `@keycloakify/keycloak-ui-shared`
+
+For account upgrades, compare local code against:
+
+- the original imported baseline, to understand what was locally customized
+- current upstream Keycloak account UI code
+- current upstream shared UI code used by the account console
+
+## Local Divergence
+
+### Login Theme
+
+The login theme is a full local fork of the package-provided login UI.
+
+Key characteristics:
+
+- local `src/login/KcPage.svelte` maps nearly all supported `pageId` values to local implementations
+- local `src/login/Template.svelte` is a substantial fork
+- local `src/login/components/*` are forked components, not simple wrappers
+- local `src/login/lib/useUserProfileForm.ts` is a maintained fork of the package helper
+- local pages are paired with Storybook stories
+- project-specific UX exists for register, OTP, TOTP, passkeys, WebAuthn, recovery codes, and account-action flows
+
+Upgrade implication:
+
+- do not fast-forward login pages wholesale from upstream
+- treat login upgrades as selective cherry-picks of behavior, accessibility, security, and compatibility changes
+- preserve local layout, styling, and product-specific flow changes unless upstream fixes clearly need to override them
+
+### Account Console
+
+The account console is a vendored fork with local integration code around it.
+
+Key characteristics:
+
+- upstream package structure was flattened into `src/account` and `src/shared/keycloak-ui-shared`
+- local bridge files connect the account UI to this repository's runtime and theme system
+- translations are checked in locally under `src/account/i18n`
+- local theme assets, loading behavior, and color-scheme handling differ from upstream
+- some PatternFly-adjacent code is also vendored locally
+
+Upgrade implication:
+
+- account upgrades are manual merges, not package swaps
+- behavior changes may land in both `src/account` and `src/shared/keycloak-ui-shared`
+- translation and locale drift should be treated as a recurring maintenance item
+
+## What To Compare On Every Upgrade
+
+### Login
+
+Always review these local files against `@keycloakify/svelte`:
+
+- `src/login/KcContext.ts`
+- `src/login/KcPage.svelte`
+- `src/login/i18n.ts`
+- `src/login/Template.svelte`
+- `src/login/pages/*`
+- `src/login/components/*`
+- `src/login/lib/useUserProfileForm.ts`
+
+Pay special attention to upstream changes in these areas:
+
+- register flow and reCAPTCHA integration
+- password and username form behavior
+- WebAuthn and passkey helper scripts
+- recovery-code helper scripts
+- OTP and TOTP form behavior
+- user-profile form validation and i18n reactivity
+- `KcContext` shape changes
+
+### Account
+
+Always review these local files against upstream Keycloak:
+
+- `src/account/api.ts`
+- `src/account/main.tsx`
+- `src/account/environment.ts`
+- `src/account/root/*`
+- `src/account/personal-info/*`
+- `src/account/account-security/*`
+- `src/account/i18n/*`
+- `src/shared/keycloak-ui-shared/context/*`
+- `src/shared/keycloak-ui-shared/main.ts`
+- `src/shared/keycloak-ui-shared/user-profile/*`
+
+Pay special attention to upstream changes in these areas:
+
+- account API endpoint changes
+- locale and environment reactivity
+- linked account rendering and label localization
+- document `lang` / `dir` handling and RTL support
+- translation bundle changes and new locales
+- dependency and security updates in account-related packages
+
+## Dependency Policy
+
+### Login Stack
+
+When upgrading the login stack:
+
+- move `keycloakify`, `@keycloakify/svelte`, `vite`, and `svelte` to current stable compatible versions
+- expect small compatibility fixes in Svelte component syntax and Vite config
+- validate Storybook, linting, and theme builds after each upgrade
+
+### Account Stack
+
+When upgrading the account stack:
+
+- keep React aligned with the peer requirements of the vendored account-console package family
+- do not move to a newer major React version unless the account-console dependency line supports it or the vendored integration is intentionally refactored
+- review account-specific dependency security updates even if UI code changes are small
+
+## Recommended Upgrade Workflow
+
+1. Update this document only if the upgrade changes the long-term maintenance picture.
+2. Upgrade dependencies and regenerate the lockfile.
+3. Compare local login files against the current `@keycloakify/svelte` runtime sources.
+4. Cherry-pick only the upstream login changes that affect behavior, security, accessibility, or compatibility.
+5. Compare local account files against upstream Keycloak account UI and shared UI code.
+6. Port account changes intentionally into the vendored fork instead of replacing files wholesale.
+7. Refresh checked-in translations if upstream locale content changed materially.
+8. Run verification and smoke tests before considering the upgrade complete.
+
+## Merge Strategy
+
+### Login
+
+Default strategy:
+
+- preserve local page layout and styling
+- cherry-pick upstream behavioral fixes
+- prefer upstream helper logic over duplicating browser-flow logic locally
+
+Good candidates for upstream cherry-picks:
+
+- fixes in `useUserProfileForm.ts`
+- changes in package `useScript` helpers
+- accessibility fixes
+- validation fixes
+- browser API / WebAuthn / passkey fixes
+- reCAPTCHA behavior fixes
+
+### Account
+
+Default strategy:
+
+- preserve local integration points and theme hooks
+- port upstream runtime fixes into the vendored fork
+- re-check both `src/account` and `src/shared/keycloak-ui-shared` for related changes
+
+Good candidates for upstream cherry-picks:
+
+- endpoint changes
+- locale and document-state fixes
+- rendering fixes for identity providers and linked accounts
+- dependency security updates
+- translation and locale improvements
+
+## Regression Checklist
+
+After any upgrade, test at minimum:
+
+- standard login
+- register flow
+- invisible or visible reCAPTCHA behavior, if enabled
+- forgot password flow
+- OTP and TOTP flows
+- WebAuthn registration and authentication
+- passkey login
+- recovery-code flows
+- locale switching
+- linked accounts
+- personal info editing
+- account resources and application views
+
+## Files Worth Tracking In Git Diffs
+
+These files are high-signal when reviewing future upgrade PRs:
+
+- `package.json`
+- `vite.config.ts`
+- `vite.login.config.ts`
+- `vite.account.config.ts`
+- `eslint.config.js`
+- `tsconfig.json`
+- `src/login/KcPage.svelte`
+- `src/login/Template.svelte`
+- `src/login/lib/useUserProfileForm.ts`
+- `src/account/api.ts`
+- `src/account/i18n/*`
+- `src/account/root/*`
+- `src/shared/keycloak-ui-shared/context/*`
+
+## Maintenance Rule
+
+When syncing upstream code:
+
+- compare against the real runtime upstream, not only the original starter
+- make behavioral changes explicit and intentional
+- avoid wholesale overwrites of locally customized page and integration files
+- document only durable maintenance knowledge, not one-off upgrade actions

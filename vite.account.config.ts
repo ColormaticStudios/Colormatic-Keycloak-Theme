@@ -9,14 +9,6 @@ export default defineConfig({
 	publicDir: path.resolve("public"),
 	base: "./",
 	plugins: [react(), tailwindcss()],
-	esbuild: {
-		// The account console sources rely on non-type-only imports. Disable verbatimModuleSyntax for this build.
-		tsconfigRaw: {
-			compilerOptions: {
-				verbatimModuleSyntax: false,
-			},
-		},
-	},
 	build: {
 		outDir: path.resolve("dist/account"),
 		emptyOutDir: true,

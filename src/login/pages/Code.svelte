@@ -4,11 +4,13 @@
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
-  const props: PageProps<
-    Extract<KcContext, { pageId: "code.ftl" }>,
-    I18n
-  > = $props();
-  const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
+  let {
+    kcContext,
+    i18n,
+    doUseDefaultCss,
+    Template,
+    classes,
+  }: PageProps<Extract<KcContext, { pageId: "code.ftl" }>, I18n> = $props();
 
   const code = $derived(kcContext.code);
 

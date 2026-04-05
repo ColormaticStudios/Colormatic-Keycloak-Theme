@@ -7,10 +7,21 @@ import { environment } from "../environment";
 import { joinPath } from "../utils/joinPath";
 
 const DEFAULT_LOCALE = "en";
+const RTL_LANGUAGE_CODES = new Set(["ar", "fa", "he", "ur"]);
 
 type KeyValue = { key: string; value: string };
 
 export type TFuncKey = string;
+
+function getLocaleDirection(locale: string): "ltr" | "rtl" {
+	const languageCode = locale.toLowerCase().split(/[-_]/)[0] ?? locale;
+	return RTL_LANGUAGE_CODES.has(languageCode) ? "rtl" : "ltr";
+}
+
+function applyDocumentLocale(locale: string) {
+	document.documentElement.lang = locale;
+	document.documentElement.dir = getLocaleDirection(locale);
+}
 
 export const keycloakLanguageDetector: LanguageDetectorModule = {
 	type: "languageDetector",
@@ -19,6 +30,22 @@ export const keycloakLanguageDetector: LanguageDetectorModule = {
 		return environment.locale;
 	},
 };
+
+applyDocumentLocale(environment.locale);
+
+window.addEventListener("languageChanged", (event: Event) => {
+	const customEvent = event as CustomEvent<{ language: string }>;
+	const language = customEvent.detail.language;
+
+	environment.locale = language;
+	applyDocumentLocale(language);
+
+	void i18n.changeLanguage(language, (error) => {
+		if (error) {
+			console.warn("Error(s) loading locale", language, error);
+		}
+	});
+});
 
 const devMessages = import.meta.env.DEV
 	? import.meta.glob("./messages_*.properties", {

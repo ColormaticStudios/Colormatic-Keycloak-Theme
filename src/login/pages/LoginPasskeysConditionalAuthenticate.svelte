@@ -4,6 +4,7 @@
   import type { ClassKey } from "keycloakify/login/lib/kcClsx";
   import { clsx } from "keycloakify/tools/clsx";
   import type { CxArg } from "keycloakify/tools/clsx_withTransform";
+  import { untrack } from "svelte";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
 
@@ -37,13 +38,11 @@
   const advancedMsg = $derived($i18n.advancedMsg);
 
   const authButtonId = "authenticateWebAuthnButton";
-  const getKcContextForScript = () => kcContext;
-  const getI18nForScript = () => i18n;
 
   useScript({
     authButtonId,
-    kcContext: getKcContextForScript(),
-    i18n: getI18nForScript(),
+    kcContext: untrack(() => kcContext),
+    i18n: untrack(() => i18n),
   });
 </script>
 

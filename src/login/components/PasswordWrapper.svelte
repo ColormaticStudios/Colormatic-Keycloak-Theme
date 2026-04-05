@@ -5,12 +5,15 @@
   import type { I18n } from "../i18n";
   import type { Readable } from "svelte/store";
 
-  const props: {
+  let {
+    i18n,
+    passwordInputId,
+    children,
+  }: {
     i18n: Readable<I18n>;
     passwordInputId: string;
     children: Snippet;
   } = $props();
-  const { i18n, passwordInputId, children } = props;
 
   const msgStr = $derived($i18n.msgStr);
 

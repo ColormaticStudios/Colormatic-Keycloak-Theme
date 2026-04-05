@@ -7,31 +7,40 @@
   import TextareaTag from "./TextareaTag.svelte";
   import type { I18n } from "../i18n";
 
-  let { displayableErrors, ...props }: InputFieldByTypeProps<I18n> = $props();
-  const { attribute, valueOrValues } = props;
-  const inputType = attribute.annotations.inputType ?? "";
+  let {
+    attribute,
+    valueOrValues,
+    displayableErrors,
+    ...props
+  }: InputFieldByTypeProps<I18n> = $props();
+  const inputType = $derived(attribute.annotations.inputType ?? "");
+  const sharedProps = $derived({
+    attribute,
+    valueOrValues,
+    ...props,
+  } satisfies Omit<InputFieldByTypeProps<I18n>, "displayableErrors">);
 </script>
 
 {#if inputType === "hidden"}
   <input type="hidden" name={attribute.name} value={valueOrValues} />
 {:else if inputType === "textarea"}
-  <TextareaTag {...props} {displayableErrors} />
+  <TextareaTag {...sharedProps} {displayableErrors} />
 {:else if ["select", "multiselect"].includes(inputType)}
-  <SelectTag {...props} {displayableErrors} />
+  <SelectTag {...sharedProps} {displayableErrors} />
 {:else if ["select-radiobuttons", "multiselect-checkboxes"].includes(inputType)}
-  <InputTagSelects {...props} {displayableErrors} />
+  <InputTagSelects {...sharedProps} {displayableErrors} />
 {:else}
   <!-- default -->
   {#if valueOrValues instanceof Array}
     {#each valueOrValues as _, i (i)}
-      <InputTag {...props} bind:displayableErrors fieldIndex={i} />
+      <InputTag {...sharedProps} bind:displayableErrors fieldIndex={i} />
     {/each}
   {:else}
     {#snippet inputNode()}
-      <InputTag {...props} bind:displayableErrors />
+      <InputTag {...sharedProps} bind:displayableErrors />
     {/snippet}
     {#if ["password", "password-confirm"].includes(attribute.name)}
-      <PasswordWrapper i18n={props.i18n} passwordInputId={attribute.name}>
+      <PasswordWrapper i18n={sharedProps.i18n} passwordInputId={attribute.name}>
         {@render inputNode()}
       </PasswordWrapper>
     {:else}

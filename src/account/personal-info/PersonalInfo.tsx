@@ -33,7 +33,6 @@ import type {
 } from "../api/representations";
 import { Page } from "../components/page/Page";
 import type { Environment } from "../environment";
-import { i18n } from "../i18n";
 import { useAccountAlerts } from "../utils/useAccountAlerts";
 import { usePromise } from "../utils/usePromise";
 
@@ -82,11 +81,9 @@ export const PersonalInfo = () => {
       await savePersonalInfo(context, payload);
       const locale = attributes["locale"]?.toString();
       if (locale) {
-        await i18n.changeLanguage(locale, (error) => {
-          if (error) {
-            console.warn("Error(s) loading locale", locale, error);
-          }
-        });
+        window.dispatchEvent(
+          new CustomEvent("languageChanged", { detail: { language: locale } }),
+        );
       }
       await context.keycloak.updateToken();
       addAlert(t("accountUpdatedMessage"));

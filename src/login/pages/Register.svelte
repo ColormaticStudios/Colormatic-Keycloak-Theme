@@ -3,7 +3,7 @@
   import type { PageProps } from "./PageProps";
   import { useState } from "@keycloakify/svelte/tools/useState";
   import { clsx } from "keycloakify/tools/clsx";
-  import type { Component } from "svelte";
+  import { untrack, type Component } from "svelte";
   import TermsAcceptance from "../components/TermsAcceptance.svelte";
   import type { I18n } from "../i18n";
   import type { KcContext } from "../KcContext";
@@ -15,8 +15,7 @@
     UserProfileFormFields: Component<UserProfileFormFieldsProps>;
     doMakeUserConfirmPassword: boolean;
   };
-  const props: RegisterProps = $props();
-  const {
+  let {
     kcContext,
     i18n,
     doUseDefaultCss,
@@ -24,7 +23,7 @@
     classes,
     UserProfileFormFields,
     doMakeUserConfirmPassword,
-  } = props;
+  }: RegisterProps = $props();
 
   const messageHeader = $derived(kcContext.messageHeader);
   const url = $derived(kcContext.url);
@@ -41,6 +40,23 @@
 
   const [isFormSubmittable, setIsFormSubmittable] = useState(false);
   const [areTermsAccepted, setAreTermsAccepted] = useState(false);
+  let htmlFormElement: HTMLFormElement | null = $state(null);
+
+  $effect(() => {
+    if (htmlFormElement === null) {
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (window as any).onSubmitRecaptcha = () => {
+      htmlFormElement?.requestSubmit();
+    };
+
+    return () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      delete (window as any).onSubmitRecaptcha;
+    };
+  });
 </script>
 
 <Template
@@ -63,6 +79,7 @@
     class="kcFormClass"
     action={url.registrationAction}
     method="post"
+    bind:this={htmlFormElement}
   >
     <UserProfileFormFields
       {kcContext}
@@ -102,11 +119,7 @@
               "g-recaptcha",
             )}
             data-sitekey={recaptchaSiteKey}
-            data-callback={() => {
-              (
-                document.getElementById("kc-register-form") as HTMLFormElement
-              ).requestSubmit();
-            }}
+            data-callback={untrack(() => "onSubmitRecaptcha")}
             data-action={recaptchaAction}
             type="submit"
           >

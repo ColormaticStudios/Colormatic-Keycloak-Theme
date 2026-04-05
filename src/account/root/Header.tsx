@@ -10,11 +10,11 @@ import { useHref } from "react-router-dom";
 
 import { getKcContext } from "../KcContext";
 import type { Environment } from "../environment";
-import { environment } from "../environment";
 
 import style from "./header.module.css";
 
 const ReferrerLink = () => {
+  const { environment } = useEnvironment<Environment>();
   const { t } = useTranslation();
 
   return environment.referrerUrl ? (

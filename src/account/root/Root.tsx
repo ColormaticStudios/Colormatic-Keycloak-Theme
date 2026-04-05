@@ -6,7 +6,6 @@ import type { RouteObject } from "react-router-dom";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import fetchContentJson from "../content/fetchContent";
 import type { Environment } from "../environment";
-import { environment } from "../environment";
 import { usePromise } from "../utils/usePromise";
 import { Header } from "./Header";
 import type { MenuItem } from "./PageNav";
@@ -49,7 +48,9 @@ export const Root = () => {
     (content) => {
       setContent([
         {
-          path: decodeURIComponent(new URL(environment.baseUrl).pathname),
+          path: decodeURIComponent(
+            new URL(context.environment.baseUrl).pathname,
+          ),
           element: (
             <Page header={<Header />} sidebar={<PageNav />} isManagedSidebar>
               <Suspense fallback={<Spinner />}>
