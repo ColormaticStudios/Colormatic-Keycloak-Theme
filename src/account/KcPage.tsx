@@ -3,7 +3,6 @@ import { KcAccountUiLoader } from "@keycloakify/keycloak-account-ui";
 import type { KcContext } from "./KcContext";
 import { oidcEarlyInit } from "oidc-spa/entrypoint";
 import { browserRuntimeFreeze } from "oidc-spa/browser-runtime-freeze";
-import { DPoP } from "oidc-spa/DPoP";
 import { Spinner } from "./Spinner";
 
 const KcAccountUi = lazy(() => import("./KcAccountUi"));
@@ -18,7 +17,6 @@ export default function KcPage(props: { kcContext: KcContext }) {
       : "auto",
     securityDefenses: {
       ...browserRuntimeFreeze({ excludes: ["fetch"] }),
-      ...DPoP({ mode: "auto" }),
     },
   });
 
