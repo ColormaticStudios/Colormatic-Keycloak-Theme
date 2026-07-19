@@ -54,13 +54,12 @@
                 value={otpCredential.id}
               />
 
-              <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
               <label
                 for={`kc-otp-credential-${index}`}
-                tabindex={index + 1}
                 class="block cursor-pointer rounded-lg border border-slate-300
                   bg-white p-2 shadow-sm transition peer-checked:border-indigo-500
-                  peer-checked:ring-2 peer-checked:ring-indigo-400 hover:shadow-md
+                  peer-checked:ring-2 peer-checked:ring-indigo-400 peer-focus-visible:ring-2
+                  peer-focus-visible:ring-indigo-400 hover:shadow-md
                   dark:border-slate-700 dark:bg-slate-800"
               >
                 <div class="flex items-center gap-3">

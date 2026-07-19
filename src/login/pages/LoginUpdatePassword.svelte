@@ -84,13 +84,11 @@
       </div>
       <div class="kcInputWrapperClass">
         <PasswordWrapper {i18n} passwordInputId="password-confirm">
-          <!-- svelte-ignore a11y_autofocus -->
           <input
             type="password"
             id="password-confirm"
             name="password-confirm"
             class="kcInputClass"
-            autofocus
             autocomplete="new-password"
             aria-invalid={messagesPerField.existsError(
               "password",

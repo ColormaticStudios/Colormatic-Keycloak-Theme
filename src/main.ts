@@ -2,33 +2,44 @@ import { mount } from "svelte";
 import KcPage from "./kc.gen.svelte";
 import Spinner from "./login/Spinner.svelte";
 
-// The following block can be uncommented to test a specific page with `yarn dev`
-// Don't forget to comment back or your bundle size will increase
-/*
-import { getKcContextMock } from './login/KcPageStory';
+async function getKcContextForCurrentEnvironment() {
+	if (
+		import.meta.env.DEV &&
+		import.meta.env.MODE === "login" &&
+		!window.kcContext
+	) {
+		const { getKcContextMock } = await import("./login/KcPageStory");
+		window.kcContext = getKcContextMock({
+			pageId: "login.ftl",
+			overrides: {},
+		});
+	}
 
-if (import.meta.env.DEV) {
-  window.kcContext = getKcContextMock({
-    pageId: 'login.ftl',
-    overrides: {},
-  });
+	if (
+		import.meta.env.DEV &&
+		import.meta.env.MODE === "account" &&
+		!window.kcContext
+	) {
+		const { getKcContextMock } = await import("./account/kcContextMock");
+		window.kcContext = getKcContextMock();
+	}
+
+	return window.kcContext;
 }
-*/
 
-let app;
-if (window.kcContext) {
-	app = mount(KcPage, {
+async function start() {
+	const kcContext = await getKcContextForCurrentEnvironment();
+
+	if (!kcContext) {
+		return undefined;
+	}
+
+	return mount(KcPage, {
 		target: document.getElementById("kc-root")!,
-		props: { kcContext: window.kcContext, Fallback: Spinner },
+		props: { kcContext, Fallback: Spinner },
 	});
 }
-export default app;
 
-// To test the loading spinner, comment the above code block and uncomment the below code block.
-/*
-const app = mount(Spinner, {
-	target: document.getElementById("kc-root")!,
-});
+const app = start();
 
 export default app;
-*/

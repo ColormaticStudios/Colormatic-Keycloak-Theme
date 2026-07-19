@@ -11,8 +11,6 @@ const RTL_LANGUAGE_CODES = new Set(["ar", "fa", "he", "ur"]);
 
 type KeyValue = { key: string; value: string };
 
-export type TFuncKey = string;
-
 function getLocaleDirection(locale: string): "ltr" | "rtl" {
 	const languageCode = locale.toLowerCase().split(/[-_]/)[0] ?? locale;
 	return RTL_LANGUAGE_CODES.has(languageCode) ? "rtl" : "ltr";

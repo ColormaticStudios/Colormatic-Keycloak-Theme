@@ -49,6 +49,8 @@
         return import("./pages/LoginUpdateProfile.svelte");
       case "login-update-password.ftl":
         return import("./pages/LoginUpdatePassword.svelte");
+      case "link-idp-action.ftl":
+        return import("./pages/LinkIdpAction.svelte");
       case "login-idp-link-confirm.ftl":
         return import("./pages/LoginIdpLinkConfirm.svelte");
       case "login-idp-link-email.ftl":
@@ -89,6 +91,8 @@
         return import("./pages/LoginPasskeysConditionalAuthenticate.svelte");
       case "login-idp-link-confirm-override.ftl":
         return import("./pages/LoginIdpLinkConfirmOverride.svelte");
+      case "select-organization.ftl":
+        return import("./pages/SelectOrganization.svelte");
       default:
         return import("@keycloakify/svelte/login/DefaultPage.svelte");
     }

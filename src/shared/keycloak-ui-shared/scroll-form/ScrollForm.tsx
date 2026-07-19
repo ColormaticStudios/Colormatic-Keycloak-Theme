@@ -7,7 +7,7 @@ import {
   PageSection,
 } from "../../@patternfly/react-core";
 import type { ReactNode } from "react";
-import { Fragment, useMemo } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { FormPanel } from "./FormPanel";
 import { ScrollPanel } from "./ScrollPanel";
 
@@ -44,6 +44,33 @@ export const ScrollForm = ({
     [sections],
   );
 
+  const [activeSection, setActiveSection] = useState(0);
+
+  useEffect(() => {
+    const scroller = document.getElementById(mainPageContentId);
+    if (!scroller) return;
+
+    const offset = 100;
+    const updateActive = () => {
+      const scrollTop = scroller.scrollTop + offset;
+      let active = 0;
+
+      shownSections.forEach(({ title }, index) => {
+        const id = spacesToHyphens(title.toLowerCase());
+        const element = document.getElementById(id);
+        if (element && scrollTop >= element.offsetTop) {
+          active = index;
+        }
+      });
+
+      setActiveSection(active);
+    };
+
+    updateActive();
+    scroller.addEventListener("scroll", updateActive);
+    return () => scroller.removeEventListener("scroll", updateActive);
+  }, [shownSections]);
+
   return (
     <Grid hasGutter {...rest}>
       <GridItem md={showJumpLinks ? 8 : 12} sm={12}>
@@ -72,20 +99,14 @@ export const ScrollForm = ({
       {showJumpLinks && (
         <GridItem md={4} sm={12} order={{ default: "-1", md: "1" }}>
           <PageSection className={style.sticky}>
-            <JumpLinks
-              isVertical
-              // scrollableSelector has to point to the id of the element whose scrollTop changes
-              // to scroll the entire main section, it has to be the pf-v5-c-page__main
-              scrollableSelector={`#${mainPageContentId}`}
-              label={label}
-              offset={100}
-            >
-              {shownSections.map(({ title }) => {
+            <JumpLinks isVertical label={label}>
+              {shownSections.map(({ title }, index) => {
                 const scrollId = spacesToHyphens(title.toLowerCase());
 
                 return (
                   <JumpLinksItem
                     key={title}
+                    isActive={activeSection === index}
                     onClick={() => {
                       const element = document.getElementById(scrollId);
                       if (element) {

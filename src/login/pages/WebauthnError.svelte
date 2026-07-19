@@ -16,6 +16,7 @@
 
   const url = $derived(kcContext.url);
   const isAppInitiatedAction = $derived(kcContext.isAppInitiatedAction);
+  const execution = $derived(kcContext.execution);
 
   const msg = $derived($i18n.msg);
   const msgStr = $derived($i18n.msgStr);
@@ -31,20 +32,17 @@
     action={url.loginAction}
     method="post"
   >
-    <input type="hidden" id="executionValue" name="authenticationExecution" />
-    <input type="hidden" id="isSetRetry" name="isSetRetry" />
+    <input
+      type="hidden"
+      id="executionValue"
+      name="authenticationExecution"
+      value={execution}
+    />
+    <input type="hidden" id="isSetRetry" name="isSetRetry" value="retry" />
   </form>
   <input
-    tabindex={4}
-    onclick={() => {
-      // @ts-expect-error: Trusted Keycloak's code
-      document.getElementById("isSetRetry").value = "retry";
-      // @ts-expect-error: Trusted Keycloak's code
-      document.getElementById("executionValue").value = "${execution}";
-      // @ts-expect-error: Trusted Keycloak's code
-      document.getElementById("kc-error-credential-form").requestSubmit();
-    }}
-    type="button"
+    form="kc-error-credential-form"
+    type="submit"
     class="
       kcButtonClass
       kcButtonPrimaryClass

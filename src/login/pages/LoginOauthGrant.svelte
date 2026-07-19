@@ -27,7 +27,10 @@
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes} bodyClassName="oauth">
   {#snippet headerNode()}
     {#if client.attributes.logoUri}
-      <img src={client.attributes.logoUri} alt="logo" />
+      <img
+        src={client.attributes.logoUri}
+        alt={client.name ? advancedMsgStr(client.name) : client.clientId}
+      />
     {/if}
     <p>
       {@render (client.name
@@ -57,13 +60,21 @@
           : msg("oauthGrantInformation", client.clientId))()}
         {#if client.attributes.tosUri}
           {@render msg("oauthGrantReview")()}
-          <a href={client.attributes.tosUri} target="_blank">
+          <a
+            href={client.attributes.tosUri}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {@render msg("oauthGrantTos")()}
           </a>
         {/if}
         {#if client.attributes.policyUri}
           {@render msg("oauthGrantReview")()}
-          <a href={client.attributes.policyUri} target="_blank">
+          <a
+            href={client.attributes.policyUri}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {@render msg("oauthGrantPolicy")()}
           </a>
         {/if}

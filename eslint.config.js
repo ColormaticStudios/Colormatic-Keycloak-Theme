@@ -51,6 +51,12 @@ export default ts.config(
 		},
 	},
 	{
-		ignores: ["build/", ".svelte-kit/", "dist/", "public/"],
+		ignores: [
+			"build/",
+			".svelte-kit/",
+			"dist/",
+			"public/",
+			"storybook-static/",
+		],
 	},
 );

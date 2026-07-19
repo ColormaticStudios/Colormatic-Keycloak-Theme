@@ -1,63 +1,81 @@
 # Colormatic Keycloak Theme
 
-This project was built from the [Keycloakify Svelte Starter](https://github.com/keycloakify/keycloakify-starter-svelte)
+Colormatic's Keycloak theme combines two intentionally different front ends in
+one Keycloakify build:
 
-Some things that need to be done:
+- a Svelte login theme under `src/login`;
+- a React fork of Keycloak's Single-Page account console under `src/account`
+  and `src/shared`.
 
-- [x] Unify the architecture of all the forms
-- [x] Fix the random spacing around the place
-- [ ] Build a proper unified design language
-- [ ] Customize the colors to thematically align with Colormatic
-- [x] Integrate proper components (like [Shadcn/Svelte](https://www.shadcn-svelte.com/))
-- [ ] User feedback
+Svelte owns the generated Keycloak entry point. On account pages,
+`src/account/KcPage.svelte` mounts the React console. Vite code-splits that
+bridge, so login pages do not eagerly load the account console and no manifest
+merge step is required.
 
-# Testing the theme locally
+## Compatibility
 
-[Documentation](https://docs.keycloakify.dev/testing-your-theme)
+The maintained account-console baseline is Keycloak 26.7 or newer. Older
+Keycloak artifacts are deliberately not generated. Review upstream account UI
+changes before each Keycloak major upgrade, especially API endpoints, injected
+feature flags, translations, and PatternFly versions.
 
-# Building the theme
+## Requirements
 
-You need to have [Maven](https://maven.apache.org/) installed to build the theme (Maven >= 3.1.1, Java >= 7).  
-The `mvn` command must be in the $PATH.
+- [Bun](https://bun.sh/)
+- Java and Maven for the Keycloak JAR build
 
-- On macOS: `brew install maven`
-- On Debian/Ubuntu: `sudo apt-get install maven`
-- On Windows: `choco install openjdk` and `choco install maven` (Or download from [here](https://maven.apache.org/download.cgi))
+Install dependencies with:
 
 ```bash
-yarn run build-keycloak-theme
+bun install
 ```
 
-Note that by default Keycloakify generates multiple .jar files for different versions of Keycloak.
+The lockfile is committed and should be updated together with `package.json`.
 
-# Account theme (React) build
-
-This repo now includes a React-based account console under `src/account` that is built separately from the Svelte login theme.
-
-## Dev
+## Development
 
 ```bash
-bun run dev
+bun run dev:login
 bun run dev:account
+bun run storybook
 ```
 
-`dev` serves the login theme (Svelte). `dev:account` serves the account console (React).
+The two Vite commands use local Keycloak-context mocks. Storybook contains the
+login page catalog and is the preferred way to inspect individual login flows.
 
 ## Build
 
+Build the shared Vite output only:
+
 ```bash
-bun run build:login
-bun run build:account
-bun run build:themes
-bun run build-keycloak-theme
+bun run build:theme
 ```
 
-`build:themes` builds both themes and merges the manifests so `build-keycloak-theme` produces a single jar with both login and account assets.
+Build the deployable Keycloak theme JAR:
 
-# Checks
+```bash
+bun run build
+```
+
+The JAR is written to `dist_keycloak/` as
+`colormatic-keycloak-theme-kc-26.7-and-newer.jar`.
+
+## Verification
 
 ```bash
 bun run check
+bun run build-storybook
+bun audit
 ```
 
-Runs Svelte checks, TypeScript checks (TS/TSX/JS, excluding `.svelte`), and a Tailwind compile pass.
+`check` runs Svelte diagnostics, TypeScript, exhaustive login-page coverage,
+Tailwind compilation, and ESLint.
+
+## Maintenance
+
+- [Upstream divergence and upgrade guide](docs/maintenance/upstream-divergence-and-upgrade-plan.md)
+- [CSS customization strategy](docs/maintenance/css-customization.md)
+
+The account console is a maintained fork. Port upstream behavior, security,
+accessibility, API, and translation changes intentionally rather than replacing
+the local integration and Colormatic styling wholesale.

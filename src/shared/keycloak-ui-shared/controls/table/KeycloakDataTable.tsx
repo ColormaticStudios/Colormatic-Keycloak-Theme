@@ -323,11 +323,16 @@ export type LoaderFunction<T> = (
   search?: string,
 ) => Promise<T[]>;
 
+export type SignaledLoader<T> = {
+  readonly signal: unknown;
+  loader: LoaderFunction<T>;
+};
+
 export type DataListProps<T> = Omit<
   TableProps,
   "rows" | "cells" | "onSelect"
 > & {
-  loader: T[] | LoaderFunction<T>;
+  loader: T[] | LoaderFunction<T> | SignaledLoader<T>;
   onSelect?: (value: T[]) => void;
   canSelectAll?: boolean;
   detailColumns?: DetailField<T>[];
@@ -503,11 +508,13 @@ export function KeycloakDataTable<T>({
         setFirst(0);
       }
       prevSearch.current = search;
-      return typeof loader === "function"
-        ? key === prevKey.current && unPaginatedData
-          ? unPaginatedData
-          : await loader(newSearch ? 0 : first, max + 1, search)
-        : loader;
+      const loaderFn =
+        typeof loader === "function"
+          ? loader
+          : "loader" in loader
+            ? loader.loader
+            : async () => loader;
+      return await loaderFn(newSearch ? 0 : first, max + 1, search);
     },
     (data) => {
       prevKey.current = key;
@@ -529,7 +536,11 @@ export function KeycloakDataTable<T>({
       first,
       max,
       search,
-      typeof loader !== "function" ? loader : undefined,
+      typeof loader !== "function"
+        ? "signal" in loader
+          ? loader.signal
+          : loader
+        : undefined,
     ],
   );
 

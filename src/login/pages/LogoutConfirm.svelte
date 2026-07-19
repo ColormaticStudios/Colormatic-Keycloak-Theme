@@ -33,7 +33,6 @@
       <input type="hidden" name="session_code" value={logoutConfirm.code} />
       <div id="kc-form-buttons" class="kcFormGroupClass">
         <input
-          tabindex={4}
           class="
               kcButtonClass
               kcButtonPrimaryClass

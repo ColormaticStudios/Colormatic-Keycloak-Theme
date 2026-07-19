@@ -28,6 +28,7 @@ export type Feature = {
 	deleteAccountAllowed: boolean;
 	updateEmailFeatureEnabled: boolean;
 	updateEmailActionEnabled: boolean;
+	isViewApplicationsEnabled: boolean;
 	isViewGroupsEnabled: boolean;
 	isViewOrganizationsEnabled: boolean;
 	isOid4VciEnabled: boolean;

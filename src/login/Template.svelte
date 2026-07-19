@@ -8,6 +8,7 @@
   import type { KcContext } from "./KcContext";
   import { ModeWatcher, toggleMode } from "mode-watcher";
   import { Button } from "../lib/components/ui/button/index.js";
+  import { tick } from "svelte";
   import "./main.css";
 
   const {
@@ -38,6 +39,93 @@
   const url = $derived(kcContext.url);
   const message = $derived(kcContext.message);
   const isAppInitiatedAction = $derived(kcContext.isAppInitiatedAction);
+
+  let isLocaleMenuOpen = $state(false);
+  let localeDropdown = $state<HTMLDivElement>();
+  let localeMenuButton = $state<HTMLButtonElement>();
+  let localeMenu = $state<HTMLUListElement>();
+
+  function getLocaleMenuItems() {
+    return Array.from(
+      localeMenu?.querySelectorAll<HTMLAnchorElement>('[role="menuitem"]') ??
+        [],
+    );
+  }
+
+  async function openLocaleMenu(focus: "first" | "last" = "first") {
+    isLocaleMenuOpen = true;
+    await tick();
+
+    const items = getLocaleMenuItems();
+    items[focus === "first" ? 0 : items.length - 1]?.focus();
+  }
+
+  function closeLocaleMenu({ returnFocus = false } = {}) {
+    isLocaleMenuOpen = false;
+    if (returnFocus) {
+      localeMenuButton?.focus();
+    }
+  }
+
+  function handleLocaleButtonKeydown(event: KeyboardEvent) {
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {
+      return;
+    }
+
+    event.preventDefault();
+    void openLocaleMenu(event.key === "ArrowDown" ? "first" : "last");
+  }
+
+  function handleLocaleMenuKeydown(event: KeyboardEvent) {
+    const items = getLocaleMenuItems();
+    const currentIndex = items.indexOf(
+      document.activeElement as HTMLAnchorElement,
+    );
+
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeLocaleMenu({ returnFocus: true });
+      return;
+    }
+
+    if (event.key === "Tab") {
+      closeLocaleMenu();
+      return;
+    }
+
+    const nextIndex = (() => {
+      switch (event.key) {
+        case "ArrowDown":
+          return (currentIndex + 1) % items.length;
+        case "ArrowUp":
+          return (currentIndex - 1 + items.length) % items.length;
+        case "Home":
+          return 0;
+        case "End":
+          return items.length - 1;
+        default:
+          return undefined;
+      }
+    })();
+
+    if (nextIndex === undefined || items.length === 0) {
+      return;
+    }
+
+    event.preventDefault();
+    items[nextIndex]?.focus();
+  }
+
+  function handleDocumentClick(event: MouseEvent) {
+    if (
+      isLocaleMenuOpen &&
+      event.target instanceof Node &&
+      !localeDropdown?.contains(event.target)
+    ) {
+      closeLocaleMenu();
+    }
+  }
+
   $effect(() => {
     document.title = documentTitle ?? msgStr("loginTitle", realm.displayName);
   });
@@ -57,6 +145,7 @@
 </script>
 
 <ModeWatcher />
+<svelte:document onclick={handleDocumentClick} />
 
 <Button
   onclick={toggleMode}
@@ -87,39 +176,51 @@
           <div class="kcLocaleMainClass float-right" id="kc-locale">
             <div id="kc-locale-wrapper" class="kcLocaleWrapperClass">
               <div
+                bind:this={localeDropdown}
                 id="kc-locale-dropdown"
                 class={clsx("menu-button-links", "kcLocaleDropDownClass")}
               >
                 <button
-                  tabindex={1}
+                  bind:this={localeMenuButton}
+                  type="button"
                   id="kc-current-locale-link"
                   aria-label={msgStr("languages")}
-                  aria-haspopup="true"
-                  aria-expanded="false"
+                  aria-haspopup="menu"
+                  aria-expanded={isLocaleMenuOpen}
                   aria-controls="language-switch1"
+                  onclick={() =>
+                    isLocaleMenuOpen
+                      ? closeLocaleMenu({ returnFocus: true })
+                      : openLocaleMenu()}
+                  onkeydown={handleLocaleButtonKeydown}
                 >
-                  <i class="bi bi-globe2"></i>
+                  <i class="bi bi-globe2" aria-hidden="true"></i>
                   {currentLanguage.label}
                 </button>
-                <!-- svelte-ignore a11y_incorrect_aria_attribute_type -->
                 <ul
+                  bind:this={localeMenu}
                   role="menu"
-                  tabindex={-1}
                   aria-labelledby="kc-current-locale-link"
-                  aria-activedescendant=""
                   id="language-switch1"
                   class="kcLocaleListClass"
+                  style:display={isLocaleMenuOpen ? "block" : "none"}
+                  onkeydown={handleLocaleMenuKeydown}
                 >
                   {#each enabledLanguages as enabledLanguage, i (enabledLanguage.languageTag)}
                     {@const { href } = enabledLanguage}
                     <li class="kcLocaleListItemClass" role="none">
                       <a
                         role="menuitem"
+                        tabindex={-1}
                         id={`language-${i + 1}`}
                         class="kcLocaleItemClass"
                         {href}
+                        aria-current={enabledLanguage.languageTag ===
+                        currentLanguage.languageTag
+                          ? "true"
+                          : undefined}
                       >
-                        {kcContext.locale?.supported[i].label}
+                        {enabledLanguage.label}
                       </a>
                     </li>
                   {/each}
@@ -173,16 +274,23 @@
                 "kcAlertClass",
                 `pf-m-${message?.type === "error" ? "danger" : message.type}`,
               )}
+              role={message.type === "error" || message.type === "warning"
+                ? "alert"
+                : "status"}
+              aria-live={message.type === "error" || message.type === "warning"
+                ? "assertive"
+                : "polite"}
+              aria-atomic="true"
             >
               <div class="pf-c-alert__icon">
                 {#if message.type === "success"}
-                  <span class="kcFeedbackSuccessIcon"></span>
+                  <span class="kcFeedbackSuccessIcon" aria-hidden="true"></span>
                 {:else if message.type === "warning"}
-                  <span class="kcFeedbackWarningIcon"></span>
+                  <span class="kcFeedbackWarningIcon" aria-hidden="true"></span>
                 {:else if message.type === "error"}
-                  <span class="kcFeedbackErrorIcon"></span>
+                  <span class="kcFeedbackErrorIcon" aria-hidden="true"></span>
                 {:else if message.type === "info"}
-                  <span class="kcFeedbackInfoIcon"></span>
+                  <span class="kcFeedbackInfoIcon" aria-hidden="true"></span>
                 {/if}
               </div>
               <span class="kcAlertTitleClass">

@@ -1,7 +1,7 @@
 import {
 	getNetworkErrorMessage,
 	getNetworkErrorDescription,
-} from "../../shared/keycloak-ui-shared";
+} from "../../shared/keycloak-ui-shared/utils/errors";
 import { CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON } from "./constants";
 
 export class ApiError extends Error {

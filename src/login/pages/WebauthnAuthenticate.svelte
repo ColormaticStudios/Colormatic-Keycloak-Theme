@@ -52,7 +52,7 @@
     <div id="kc-registration">
       <span>
         {@render msg("noAccount")()}
-        <a tabindex={6} href={url.registrationUrl}>
+        <a href={url.registrationUrl}>
           {@render msg("doRegister")()}
         </a>
       </span>

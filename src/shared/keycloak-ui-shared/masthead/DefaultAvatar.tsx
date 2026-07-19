@@ -16,7 +16,8 @@ export const DefaultAvatar = ({
     className={css(
       styles.avatar,
       styles.modifiers[size],
-      border && styles.modifiers.bordered,
+      border === "light" && styles.modifiers.light,
+      border === "dark" && styles.modifiers.dark,
       className,
     )}
     enableBackground="new 0 0 36 36"

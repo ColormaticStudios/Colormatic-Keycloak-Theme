@@ -36,6 +36,7 @@ const defaultKcContext: KcContext = {
 	clientId: "account",
 	authServerUrl: "http://localhost:8080",
 	isOid4VciEnabled: false,
+	isViewApplicationsEnabled: true,
 	isViewGroupsEnabled: false,
 };
 

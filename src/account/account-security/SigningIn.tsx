@@ -28,6 +28,7 @@ import type { CSSProperties } from "react";
 import { Fragment, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
+import type { Environment } from "../environment";
 import { getCredentials } from "../api/methods";
 import type {
   CredentialContainer,
@@ -35,9 +36,16 @@ import type {
 } from "../api/representations";
 import { EmptyRow } from "../components/datalist/EmptyRow";
 import { Page } from "../components/page/Page";
-import type { TFuncKey } from "../i18n";
+import faviconUrl from "../assets/favicon.svg?url";
+import type { TFuncKey } from "../i18n-type";
 import { formatDate } from "../utils/formatDate";
 import { usePromise } from "../utils/usePromise";
+
+const passkeyIconUrls = import.meta.glob<string>("../assets/passkeys/*", {
+  eager: true,
+  import: "default",
+  query: "?url",
+});
 
 type MobileLinkProps = {
   title: string;
@@ -85,10 +93,14 @@ const MobileLink = ({ title, onClick, testid }: MobileLinkProps) => {
 
 export const SigningIn = () => {
   const { t } = useTranslation();
-  const context = useEnvironment();
+  const context = useEnvironment<Environment>();
   const { login } = context.keycloak;
 
   const [credentials, setCredentials] = useState<CredentialContainer[]>();
+
+  const getPasskeyIconUrl = (fileName: string) => {
+    return passkeyIconUrls[`../assets/passkeys/${fileName}`];
+  };
 
   usePromise(
     (signal) => getCredentials({ signal, context }),
@@ -98,19 +110,60 @@ export const SigningIn = () => {
 
   const credentialRowCells = (
     credMetadata: CredentialMetadataRepresentation,
+    showIcon: boolean,
   ) => {
     const credential = credMetadata.credential;
     const maxWidth = {
       "--pf-v5-u-max-width--MaxWidth": "300px",
     } as CSSProperties;
+    const icon = credMetadata.iconLight || credMetadata.iconDark;
+    const authenticatorProvider = credMetadata.infoProperties?.find(
+      (property) => property.key === "webauthn-authenticator-provider",
+    )?.parameters?.[0];
+    const iconSrc = (icon && getPasskeyIconUrl(icon)) || faviconUrl;
+    const iconDarkSrc = credMetadata.iconDark
+      ? getPasskeyIconUrl(credMetadata.iconDark)
+      : undefined;
     const items = [
+      ...(showIcon
+        ? [
+            <DataListCell
+              key="icon"
+              data-testrole="icon"
+              className="pf-v5-c-data-list__cell pf-m-icon pf-v5-u-display-flex pf-v5-u-align-items-center pf-v5-u-pt-0"
+            >
+              <div className="pf-v5-c-icon pf-m-xl">
+                <picture>
+                  {iconDarkSrc && (
+                    <source
+                      srcSet={iconDarkSrc}
+                      media="(prefers-color-scheme: dark)"
+                    />
+                  )}
+                  <img
+                    src={iconSrc}
+                    alt=""
+                    width="40"
+                    height="40"
+                    style={{ maxWidth: "none" }}
+                  />
+                </picture>
+              </div>
+            </DataListCell>,
+          ]
+        : []),
       <DataListCell
         key="title"
         data-testrole="label"
-        className="pf-v5-u-max-width"
+        className="pf-v5-u-max-width pf-v5-u-pt-0"
         style={maxWidth}
       >
-        {t(credential.userLabel) || t(credential.type as TFuncKey)}
+        <div>{t(credential.userLabel) || t(credential.type as TFuncKey)}</div>
+        {authenticatorProvider && (
+          <div className="pf-v5-u-color-200 pf-v5-u-font-size-sm">
+            {authenticatorProvider}
+          </div>
+        )}
       </DataListCell>,
     ];
 
@@ -119,10 +172,18 @@ export const SigningIn = () => {
         <DataListCell
           key={"created" + credential.id}
           data-testrole="created-at"
+          className="pf-v5-u-pt-0"
         >
-          <Trans i18nKey="credentialCreatedAt">
+          <Trans
+            i18nKey="credentialCreatedAt"
+            values={{
+              date: formatDate(
+                new Date(credential.createdDate),
+                context.environment.locale,
+              ),
+            }}
+          >
             <strong className="pf-v5-u-mr-md"></strong>
-            {{ date: formatDate(new Date(credential.createdDate)) }}
           </Trans>
         </DataListCell>,
       );
@@ -163,14 +224,21 @@ export const SigningIn = () => {
                       "2xl": "15ch",
                     }}
                   >
-                    {credMetadata.infoProperties.map((prop) => (
-                      <DescriptionListGroup key={prop.key}>
-                        <DescriptionListTerm>{t(prop.key)}</DescriptionListTerm>
-                        <DescriptionListDescription>
-                          {prop.parameters ? prop.parameters[0] : ""}
-                        </DescriptionListDescription>
-                      </DescriptionListGroup>
-                    ))}
+                    {credMetadata.infoProperties
+                      .filter(
+                        (property) =>
+                          property.key !== "webauthn-authenticator-provider",
+                      )
+                      .map((property) => (
+                        <DescriptionListGroup key={property.key}>
+                          <DescriptionListTerm>
+                            {t(property.key)}
+                          </DescriptionListTerm>
+                          <DescriptionListDescription>
+                            {property.parameters?.[0] ?? ""}
+                          </DescriptionListDescription>
+                        </DescriptionListGroup>
+                      ))}
                   </DescriptionList>
                 </SplitItem>
               </Split>
@@ -283,9 +351,12 @@ export const SigningIn = () => {
                     <DataListItem key={meta.credential.id}>
                       <DataListItemRow id={`cred-${meta.credential.id}`}>
                         <DataListItemCells
-                          className="pf-v5-u-py-0"
+                          className="pf-v5-u-py-0 pf-v5-u-align-items-center"
                           dataListCells={[
-                            ...credentialRowCells(meta),
+                            ...credentialRowCells(
+                              meta,
+                              container.type.startsWith("webauthn"),
+                            ),
                             <DataListAction
                               key="action"
                               id={`action-${meta.credential.id}`}

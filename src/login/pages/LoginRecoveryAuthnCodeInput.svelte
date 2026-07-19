@@ -53,7 +53,6 @@
       <div class="kcInputWrapperClass">
         <!-- svelte-ignore a11y_autofocus -->
         <input
-          tabindex={1}
           id="recoveryCodeInput"
           name="recoveryCodeInput"
           aria-invalid={messagesPerField.existsError("recoveryCodeInput")}

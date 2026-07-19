@@ -1,9 +1,9 @@
-/*/
+/*
  * To work on this file, I recommend having the storybook open.
  * Select the element you want to style (or check the style for)
  * and find its kc* class in here. If it's not present, create it
  * in the order it appears in the layout.
-/*/
+ */
 
 @import "../main";
 @import "./button";
@@ -60,11 +60,11 @@
 .kcLocaleListClass {
   @apply hidden; /* When you click the *show* button, an overriding display: block will be applied. */
   @apply max-h-[335px] w-fit overflow-scroll;
-  /*/
+  /*
    * The max height is a specific number (335px) so that at the default text size,
    * the bottom language name will be cut off in the middle to communicate to the
    * user that this list is scrollable.
-  /*/
+   */
   @apply rounded-lg border border-slate-300 p-2 dark:border-slate-700;
   @apply absolute z-1;
   @apply bg-white dark:bg-slate-800;

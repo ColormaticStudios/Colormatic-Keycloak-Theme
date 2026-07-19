@@ -58,13 +58,12 @@
           <PasswordWrapper {i18n} passwordInputId="password">
             <!-- svelte-ignore a11y_autofocus -->
             <input
-              tabindex={2}
               id="password"
               class="kcInputClass"
               name="password"
               type="password"
               autofocus
-              autocomplete="on"
+              autocomplete="current-password"
               aria-invalid={messagesPerField.existsError(
                 "username",
                 "password",
@@ -87,7 +86,7 @@
           <div class="kcFormOptionsWrapperClass">
             {#if realm.resetPasswordAllowed}
               <span>
-                <a tabindex={5} href={url.loginResetCredentialsUrl}>
+                <a href={url.loginResetCredentialsUrl}>
                   {@render msg("doForgotPassword")()}
                 </a>
               </span>
@@ -96,7 +95,6 @@
         </div>
         <div id="kc-form-buttons" class="kcFormGroupClass">
           <input
-            tabindex={4}
             class="
               kcButtonClass
               kcButtonPrimaryClass

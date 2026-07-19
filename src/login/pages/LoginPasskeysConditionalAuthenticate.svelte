@@ -55,7 +55,7 @@
       <div id="kc-registration">
         <span>
           {@render msg("noAccount")()}
-          <a tabindex={6} href={url.registrationUrl}>
+          <a href={url.registrationUrl}>
             {@render msg("doRegister")()}
           </a>
         </span>
@@ -166,7 +166,6 @@
                 </label>
                 <!-- svelte-ignore a11y_autofocus -->
                 <input
-                  tabindex={1}
                   id="username"
                   aria-invalid={messagesPerField.existsError("username")}
                   class="kcInputClass"
@@ -194,11 +193,9 @@
           class="kcFormButtonsClass"
           style:display="none"
         >
-          <!-- svelte-ignore a11y_autofocus -->
           <input
             id={authButtonId}
             type="button"
-            autofocus
             value={msgStr("passkey-doAuthenticate")}
             class="
               kcButtonClass

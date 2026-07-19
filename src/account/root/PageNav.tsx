@@ -20,7 +20,7 @@ import {
 
 import fetchContentJson from "../content/fetchContent";
 import type { Environment, Feature } from "../environment";
-import type { TFuncKey } from "../i18n";
+import type { TFuncKey } from "../i18n-type";
 import { usePromise } from "../utils/usePromise";
 
 type RootMenuItem = {

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useEnvironment } from "./keycloak-ui-shared";
 
 let documentTitleStatus:
-  | { isOverridden: false }
-  | { isOverridden: true; actualTitle: string } = {
+  { isOverridden: false } | { isOverridden: true; actualTitle: string } = {
   isOverridden: false,
 };
 
@@ -13,6 +13,7 @@ export function SessionExpirationWarningOverlay(props: {
   const { warnUserSecondsBeforeAutoLogout } = props;
 
   const { keycloak } = useEnvironment();
+  const { t } = useTranslation();
 
   const [secondsLeft, setSecondsLeft] = useState<number | undefined>(undefined);
 
@@ -44,7 +45,7 @@ export function SessionExpirationWarningOverlay(props: {
     return () => {
       unsubscribeFromAutoLogoutCountdown();
     };
-  }, []);
+  }, [keycloak, warnUserSecondsBeforeAutoLogout]);
 
   useEffect(() => {
     if (secondsLeft === undefined) {
@@ -62,8 +63,21 @@ export function SessionExpirationWarningOverlay(props: {
       };
     }
 
-    document.title = `${secondsLeft} seconds left`;
-  }, [secondsLeft]);
+    document.title = t("sessionSecondsLeftTitle", {
+      seconds: secondsLeft,
+      defaultValue: "{{seconds}} seconds left",
+    });
+  }, [secondsLeft, t]);
+
+  useEffect(
+    () => () => {
+      if (documentTitleStatus.isOverridden) {
+        document.title = documentTitleStatus.actualTitle;
+        documentTitleStatus = { isOverridden: false };
+      }
+    },
+    [],
+  );
 
   if (secondsLeft === undefined) {
     return null;
@@ -71,6 +85,7 @@ export function SessionExpirationWarningOverlay(props: {
 
   return (
     <div
+      role="presentation"
       // Full screen overlay, blurred background
       style={{
         position: "fixed",
@@ -87,6 +102,10 @@ export function SessionExpirationWarningOverlay(props: {
       }}
     >
       <div
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="session-expiring-title"
+        aria-describedby="session-expiring-description session-expiring-instructions"
         style={{
           backgroundColor: "#fff",
           color: "#111",
@@ -99,15 +118,32 @@ export function SessionExpirationWarningOverlay(props: {
           lineHeight: 1.4,
         }}
       >
-        <p style={{ margin: 0, fontSize: 18, fontWeight: 600 }}>
-          Session expiring soon
+        <p
+          id="session-expiring-title"
+          style={{ margin: 0, fontSize: 18, fontWeight: 600 }}
+        >
+          {t("sessionExpiringTitle", {
+            defaultValue: "Session expiring soon",
+          })}
         </p>
-        <p style={{ margin: "12px 0 0" }}>
-          You will be signed out in <strong>{secondsLeft}</strong> seconds due
-          to inactivity.
+        <p
+          id="session-expiring-description"
+          aria-live="assertive"
+          style={{ margin: "12px 0 0" }}
+        >
+          {t("sessionExpiringMessage", {
+            seconds: secondsLeft,
+            defaultValue:
+              "You will be signed out in {{seconds}} seconds due to inactivity.",
+          })}
         </p>
-        <p style={{ margin: "12px 0 0", fontSize: 13, opacity: 0.8 }}>
-          Move your mouse or press any key to stay signed in.
+        <p
+          id="session-expiring-instructions"
+          style={{ margin: "12px 0 0", fontSize: 13, opacity: 0.8 }}
+        >
+          {t("sessionExpiringInstructions", {
+            defaultValue: "Move your mouse or press any key to stay signed in.",
+          })}
         </p>
       </div>
     </div>

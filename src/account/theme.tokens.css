@@ -1,0 +1,14 @@
+/*
+ * Colormatic semantic tokens for the account console. Keep these named by
+ * purpose; PatternFly component variables in theme.css consume them.
+ */
+
+:root {
+  --cm-account-canvas: var(--color-slate-100);
+  --cm-account-chrome: var(--color-white);
+}
+
+.pf-v5-theme-dark {
+  --cm-account-canvas: var(--color-slate-950);
+  --cm-account-chrome: var(--color-slate-900);
+}

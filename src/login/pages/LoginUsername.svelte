@@ -23,6 +23,9 @@
   const login = $derived(kcContext.login);
   const registrationDisabled = $derived(kcContext.registrationDisabled);
   const messagesPerField = $derived(kcContext.messagesPerField);
+  const enableWebAuthnConditionalUI = $derived(
+    kcContext.enableWebAuthnConditionalUI,
+  );
 
   const msg = $derived($i18n.msg);
   const msgStr = $derived($i18n.msgStr);
@@ -47,7 +50,7 @@
     <div id="kc-registration">
       <span>
         {@render msg("noAccount")()}
-        <a tabindex={6} href={url.registrationUrl}>
+        <a href={url.registrationUrl}>
           {@render msg("doRegister")()}
         </a>
       </span>
@@ -122,14 +125,15 @@
               </label>
               <!-- svelte-ignore a11y_autofocus -->
               <input
-                tabindex={2}
                 id="username"
                 class="kcInputClass"
                 name="username"
                 value={login.username ?? ""}
                 type="text"
                 autofocus
-                autocomplete="off"
+                autocomplete={enableWebAuthnConditionalUI
+                  ? "username webauthn"
+                  : "username"}
                 aria-invalid={messagesPerField.existsError("username")}
               />
               {#if messagesPerField.existsError("username")}
@@ -150,7 +154,6 @@
                 <div class="checkbox">
                   <label>
                     <input
-                      tabindex={3}
                       id="rememberMe"
                       name="rememberMe"
                       type="checkbox"
@@ -165,7 +168,6 @@
 
           <div id="kc-form-buttons" class="kcFormGroupClass">
             <input
-              tabindex={4}
               disabled={$isLoginButtonDisabled}
               class="
                 kcButtonClass

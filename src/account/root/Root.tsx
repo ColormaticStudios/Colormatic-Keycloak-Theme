@@ -1,9 +1,23 @@
 import type { KeycloakContext } from "../../shared/keycloak-ui-shared";
-import { ErrorPage, useEnvironment } from "../../shared/keycloak-ui-shared";
-import { Page, Spinner } from "../../shared/@patternfly/react-core";
-import { Suspense, useState } from "react";
+import {
+  ErrorPage,
+  useAlerts,
+  useEnvironment,
+} from "../../shared/keycloak-ui-shared";
+import {
+  AlertVariant,
+  Page,
+  Spinner,
+} from "../../shared/@patternfly/react-core";
+import { Suspense, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { RouteObject } from "react-router-dom";
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  RouterProvider,
+} from "react-router-dom";
 import fetchContentJson from "../content/fetchContent";
 import type { Environment } from "../environment";
 import { usePromise } from "../utils/usePromise";
@@ -39,6 +53,17 @@ function mapRoutes(
     .flat();
 }
 
+function CatchAllRedirect() {
+  const { t } = useTranslation();
+  const { addAlert } = useAlerts();
+
+  useEffect(() => {
+    addAlert(t("pageNotFound"), AlertVariant.warning);
+  }, [addAlert, t]);
+
+  return <Navigate to="." replace />;
+}
+
 export const Root = () => {
   const context = useEnvironment<Environment>();
   const [content, setContent] = useState<RouteObject[]>();
@@ -59,7 +84,10 @@ export const Root = () => {
             </Page>
           ),
           errorElement: <ErrorPage />,
-          children: mapRoutes(context, content),
+          children: [
+            ...mapRoutes(context, content),
+            { path: "*", element: <CatchAllRedirect /> },
+          ],
         },
       ]);
     },
@@ -68,5 +96,10 @@ export const Root = () => {
   if (!content) {
     return <Spinner />;
   }
-  return <RouterProvider router={createBrowserRouter(content)} />;
+  return (
+    <RouterProvider
+      router={createBrowserRouter(content)}
+      future={{ v7_startTransition: true }}
+    />
+  );
 };
