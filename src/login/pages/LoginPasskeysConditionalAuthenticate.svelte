@@ -7,6 +7,9 @@
   import { untrack } from "svelte";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import { Button } from "../../lib/components/ui/button";
+  import * as Card from "../../lib/components/ui/card";
+  import { Input } from "../../lib/components/ui/input";
 
   const {
     Template,
@@ -34,7 +37,6 @@
   const realm = $derived(kcContext.realm);
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
   const advancedMsg = $derived($i18n.advancedMsg);
 
   const authButtonId = "authenticateWebAuthnButton";
@@ -95,53 +97,51 @@
         {/if}
         <div class="kcFormClass cm-login-form">
           {#each authenticators.authenticators as authenticator, i (i)}
-            <div
-              id={`kc-webauthn-authenticator-item-${i}`}
-              class="kcSelectAuthListItemClass"
-            >
-              <i
-                class={clsx(
-                  (() => {
-                    const klass = authenticator.transports
-                      .iconClass as CxArg<ClassKey>;
-                    if (klass === authenticator.transports.iconClass) {
-                      return "kcWebAuthnDefaultIcon";
-                    }
-                    return klass;
-                  })(),
-                  "kcSelectAuthListItemIconPropertyClass",
-                )}
-              ></i>
-              <div class="kcSelectAuthListItemBodyClass">
-                <div
-                  id={`kc-webauthn-authenticator-label-${i}`}
-                  class="kcSelectAuthListItemHeadingClass"
-                >
-                  {advancedMsg(authenticator.label)}
-                </div>
-                {#if authenticator.transports !== undefined && authenticator.transports.displayNameProperties !== undefined && authenticator.transports.displayNameProperties.length !== 0}
+            <Card.Root id={`kc-webauthn-authenticator-item-${i}`} size="sm">
+              <Card.Content class="flex items-start gap-3">
+                <i
+                  class={clsx(
+                    (() => {
+                      const klass = authenticator.transports
+                        .iconClass as CxArg<ClassKey>;
+                      if (klass === authenticator.transports.iconClass) {
+                        return "kcWebAuthnDefaultIcon";
+                      }
+                      return klass;
+                    })(),
+                    "mt-1",
+                  )}
+                ></i>
+                <div class="grid gap-1">
                   <div
-                    id={`kc-webauthn-authenticator-transport-${i}`}
-                    class="kcSelectAuthListItemDescriptionClass"
+                    id={`kc-webauthn-authenticator-label-${i}`}
+                    class="font-medium"
                   >
-                    {#each authenticator.transports.displayNameProperties as nameProperty, i (i)}
-                      <span>{advancedMsg(nameProperty)}</span>
-                      {#if i !== authenticator.transports.displayNameProperties.length - 1}
-                        <span>,</span>{/if}
-                    {/each}
+                    {advancedMsg(authenticator.label)}
                   </div>
-                {/if}
-                <div class="kcSelectAuthListItemDescriptionClass">
-                  <span id={`kc-webauthn-authenticator-createdlabel-${i}`}>
-                    {msg("passkey-createdAt-label")}
-                  </span>
-                  <span id={`kc-webauthn-authenticator-created-${i}`}>
-                    {authenticator.createdAt}
-                  </span>
+                  {#if authenticator.transports !== undefined && authenticator.transports.displayNameProperties !== undefined && authenticator.transports.displayNameProperties.length !== 0}
+                    <div
+                      id={`kc-webauthn-authenticator-transport-${i}`}
+                      class="text-muted-foreground text-sm"
+                    >
+                      {#each authenticator.transports.displayNameProperties as nameProperty, i (i)}
+                        <span>{advancedMsg(nameProperty)}</span>
+                        {#if i !== authenticator.transports.displayNameProperties.length - 1}
+                          <span>,</span>{/if}
+                      {/each}
+                    </div>
+                  {/if}
+                  <div class="text-muted-foreground text-sm">
+                    <span id={`kc-webauthn-authenticator-createdlabel-${i}`}>
+                      {msg("passkey-createdAt-label")}
+                    </span>
+                    <span id={`kc-webauthn-authenticator-created-${i}`}>
+                      {authenticator.createdAt}
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <div class="kcSelectAuthListItemFillClass"></div>
-            </div>
+              </Card.Content>
+            </Card.Root>
           {/each}
         </div>
       {/if}
@@ -170,11 +170,9 @@
                 <label for="username" class="kcLabelClass cm-login-label">
                   {msg("passkey-autofill-select")}
                 </label>
-                <!-- svelte-ignore a11y_autofocus -->
-                <input
+                <Input
                   id="username"
                   aria-invalid={messagesPerField.existsError("username")}
-                  class="kcInputClass cm-login-input"
                   name="username"
                   value={login.username ?? ""}
                   autocomplete="username webauthn"
@@ -199,17 +197,9 @@
           class="kcFormButtonsClass cm-login-actions"
           style:display="none"
         >
-          <input
-            id={authButtonId}
-            type="button"
-            value={msgStr("passkey-doAuthenticate")}
-            class="
-              kcButtonClass
-              kcButtonPrimaryClass
-              kcButtonBlockClass
-              kcButtonLargeClass
-            "
-          />
+          <Button id={authButtonId} type="button" class="w-full">
+            {@render msg("passkey-doAuthenticate")()}
+          </Button>
         </div>
       </div>
     </div>

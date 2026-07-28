@@ -2,6 +2,9 @@
   import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import TriangleAlert from "@lucide/svelte/icons/triangle-alert";
+  import * as Alert from "../../lib/components/ui/alert";
+  import { Button } from "../../lib/components/ui/button";
 
   const {
     kcContext,
@@ -18,7 +21,6 @@
   const triggered_from_aia = $derived(kcContext.triggered_from_aia);
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes}>
@@ -31,10 +33,12 @@
     class="form-vertical cm-login-form"
     method="post"
   >
-    <div class="alert alert-warning pb-2">
-      <i class="bi bi-exclamation-triangle-fill"></i>
-      {@render msg("irreversibleAction")()}
-    </div>
+    <Alert.Root>
+      <TriangleAlert aria-hidden="true" />
+      <Alert.Description>
+        {@render msg("irreversibleAction")()}
+      </Alert.Description>
+    </Alert.Root>
     <p>{@render msg("deletingImplies")()}</p>
     <ul class="cm-login-muted">
       <li>{@render msg("loggingOutImmediately")()}</li>
@@ -47,28 +51,19 @@
       id="kc-form-buttons"
       class="kcFormButtonsWrapperClass cm-login-actions"
     >
-      <input
-        class="
-          kcButtonClass
-          kcButtonLargeClass
-          kcButtonRedClass
-		  "
-        type="submit"
-        value={msgStr("doConfirmDelete")}
-      />
+      <Button type="submit" variant="destructive" size="lg">
+        {@render msg("doConfirmDelete")()}
+      </Button>
       {#if triggered_from_aia}
-        <button
-          class="
-            kcButtonClass
-            kcButtonDefaultClass
-            kcButtonLargeClass
-          "
+        <Button
           type="submit"
+          variant="outline"
+          size="lg"
           name="cancel-aia"
           value="true"
         >
-          {msgStr("doCancel")}
-        </button>
+          {@render msg("doCancel")()}
+        </Button>
       {/if}
     </div>
   </form>

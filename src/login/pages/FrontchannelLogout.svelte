@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import { Button } from "../../lib/components/ui/button";
 
   const {
     Template,
@@ -50,8 +51,8 @@
       </li>{/each}
   </ul>
   {#if logout.logoutRedirectUri}
-    <a id="continue" class="btn btn-primary" href={logout.logoutRedirectUri}>
+    <Button id="continue" href={logout.logoutRedirectUri}>
       {@render msg("doContinue")()}
-    </a>
+    </Button>
   {/if}
 </Template>

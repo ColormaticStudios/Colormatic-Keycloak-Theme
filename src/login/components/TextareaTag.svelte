@@ -2,6 +2,7 @@
   import type { InputFieldByTypeProps } from "./InputFieldByTypeProps";
   import { assert } from "keycloakify/tools/assert";
   import type { I18n } from "../i18n";
+  import { Textarea } from "../../lib/components/ui/textarea";
 
   const {
     attribute,
@@ -15,11 +16,9 @@
   assert(typeof value === "string");
 </script>
 
-<textarea
+<Textarea
   id={attribute.name}
   name={attribute.name}
-  class="kcInputClass cm-login-input"
-  data-slot="textarea"
   aria-invalid={displayableErrors.length !== 0}
   disabled={attribute.readOnly}
   cols={attribute.annotations.inputTypeCols === undefined
@@ -44,4 +43,4 @@
       name: attribute.name,
       fieldIndex: undefined,
     })}
-></textarea>
+/>

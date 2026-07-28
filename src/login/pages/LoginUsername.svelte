@@ -7,7 +7,10 @@
   import FormActions from "../components/FormActions.svelte";
   import FormField from "../components/FormField.svelte";
   import { Button } from "../../lib/components/ui/button";
+  import { Checkbox } from "../../lib/components/ui/checkbox";
   import { Input } from "../../lib/components/ui/input";
+  import { Label } from "../../lib/components/ui/label";
+  import { Separator } from "../../lib/components/ui/separator";
 
   const {
     Template,
@@ -61,7 +64,7 @@
   {#snippet socialProvidersNode()}
     {#if realm.password && social?.providers !== undefined && social.providers.length !== 0}
       <div id="kc-social-providers" class="kcFormSocialAccountSectionClass">
-        <hr />
+        <Separator />
         <h2>{@render msg("identity-provider-login-label")()}</h2>
         <ul
           class="
@@ -71,13 +74,10 @@
         >
           {#each social.providers as p, i (i)}
             <li>
-              <a
+              <Button
                 id={`social-${p.alias}`}
-                class="
-                  kcFormSocialAccountListButtonClass
-						{social.providers.length > 3 ? 'kcFormSocialAccountGridItem' : ''}
-                "
-                type="button"
+                class="h-auto w-full"
+                variant="outline"
                 href={p.loginUrl}
               >
                 {#if p.iconClasses}
@@ -94,7 +94,7 @@
                 >
                   {p.displayName}
                 </span>
-              </a>
+              </Button>
             </li>
           {/each}
         </ul>
@@ -132,7 +132,6 @@
               {#snippet control()}
                 <Input
                   id="username"
-                  class="kcInputClass cm-login-input"
                   name="username"
                   value={login.username ?? ""}
                   type="text"
@@ -156,16 +155,15 @@
           <div class="kcFormGroupClass kcFormSettingClass">
             <div id="kc-form-options">
               {#if realm.rememberMe && !usernameHidden}
-                <div class="checkbox">
-                  <label>
-                    <input
-                      id="rememberMe"
-                      name="rememberMe"
-                      type="checkbox"
-                      checked={!!login.rememberMe}
-                    />
+                <div class="flex items-center gap-2">
+                  <Checkbox
+                    id="rememberMe"
+                    name="rememberMe"
+                    checked={!!login.rememberMe}
+                  />
+                  <Label for="rememberMe">
                     {@render msg("rememberMe")()}
-                  </label>
+                  </Label>
                 </div>
               {/if}
             </div>

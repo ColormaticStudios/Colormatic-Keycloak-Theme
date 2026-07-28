@@ -1,6 +1,10 @@
 <script lang="ts">
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
-  import { clsx } from "keycloakify/tools/clsx";
+  import CircleCheck from "@lucide/svelte/icons/circle-check";
+  import CircleX from "@lucide/svelte/icons/circle-x";
+  import Info from "@lucide/svelte/icons/info";
+  import TriangleAlert from "@lucide/svelte/icons/triangle-alert";
+  import * as Alert from "../../lib/components/ui/alert";
 
   let {
     type,
@@ -10,32 +14,25 @@
     summary: string;
   } = $props();
 
-  const icon = $derived(
+  const Icon = $derived(
     type === "success"
-      ? "bi-check-circle"
+      ? CircleCheck
       : type === "warning"
-        ? "bi-exclamation-triangle"
+        ? TriangleAlert
         : type === "error"
-          ? "bi-x-circle"
-          : "bi-info-circle",
+          ? CircleX
+          : Info,
   );
 </script>
 
-<div
-  data-slot="alert"
-  class={clsx(
-    "cm-login-alert",
-    `cm-login-alert--${type}`,
-    `alert-${type}`,
-    "kcAlertClass",
-    `pf-m-${type === "error" ? "danger" : type}`,
-  )}
+<Alert.Root
+  variant={type === "error" ? "destructive" : "default"}
   role={type === "error" || type === "warning" ? "alert" : "status"}
   aria-live={type === "error" || type === "warning" ? "assertive" : "polite"}
   aria-atomic="true"
 >
-  <i class={`bi ${icon} cm-login-alert__icon`} aria-hidden="true"></i>
-  <div class="kcAlertTitleClass cm-login-alert__content">
+  <Icon aria-hidden="true" />
+  <Alert.Description>
     {@html kcSanitize(summary)}
-  </div>
-</div>
+  </Alert.Description>
+</Alert.Root>

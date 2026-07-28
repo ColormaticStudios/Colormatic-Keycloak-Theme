@@ -6,6 +6,7 @@
   import type { KcContext } from "./KcContext";
   import ThemeSwitcher from "../shared/theme/ThemeSwitcher.svelte";
   import { Button } from "../lib/components/ui/button";
+  import * as Card from "../lib/components/ui/card";
   import LocaleMenu from "./components/LocaleMenu.svelte";
   import LoginAlert from "./components/LoginAlert.svelte";
   import "./main.css";
@@ -71,27 +72,38 @@
     </header>
 
     <article
-      class="kcFormCardClass cm-login-card"
+      class="relative w-[min(100%,34rem)] self-start"
       aria-labelledby="kc-page-title"
     >
-      <header class="kcFormHeaderClass cm-login-card__header">
-        {#if (kcContext.locale?.supported.length ?? 0) > 1}
-          <LocaleMenu
-            {currentLanguage}
-            {enabledLanguages}
-            label={msgStr("languages")}
-          />
-        {/if}
-        {#snippet node()}
-          <h1 id="kc-page-title" class="cm-login-card__title">
-            {@render headerNode?.()}
-          </h1>
+      <Card.Root class="border-border w-full border ring-0">
+        <Card.Header>
+          <div class="flex min-w-0 items-start gap-3">
+            <Card.Title class="min-w-0 flex-1 text-xl leading-snug">
+              <h1 id="kc-page-title" class="break-words">
+                {@render headerNode?.()}
+              </h1>
+            </Card.Title>
+            {#if (kcContext.locale?.supported.length ?? 0) > 1}
+              <LocaleMenu
+                {currentLanguage}
+                {enabledLanguages}
+                label={msgStr("languages")}
+              />
+            {/if}
+          </div>
+          {#if displayRequiredFields}
+            <p class="cm-login-required-note">
+              <span class="required" aria-hidden="true">*</span>
+              {msgStr("requiredFields")}
+            </p>
+          {/if}
           {#if auth !== undefined && auth.showUsername && !auth.showResetCredentials}
             <div id="kc-username" class="cm-login-attempted-user">
               <span id="kc-attempted-username">{auth.attemptedUsername}</span>
-              <a
+              <Button
                 id="reset-login"
-                class="cm-login-icon-link"
+                variant="ghost"
+                size="icon"
                 href={url.loginRestartFlowUrl}
                 aria-label={msgStr("restartLoginTooltip")}
               >
@@ -104,62 +116,51 @@
                     {msgStr("restartLoginTooltip")}
                   </span>
                 </span>
-              </a>
+              </Button>
             </div>
           {/if}
-        {/snippet}
-        {#if displayRequiredFields}
-          <p class="cm-login-required-note">
-            <span class="required" aria-hidden="true">*</span>
-            {msgStr("requiredFields")}
-          </p>
-          {@render node()}
-        {:else}
-          {@render node()}
-        {/if}
-      </header>
-      <section
-        id="kc-content"
-        class="cm-login-card__content"
-        aria-labelledby="kc-page-title"
-      >
-        <div id="kc-content-wrapper" class="cm-login-content">
-          <!-- App-initiated actions should not see warning messages about the need to complete the action during login. -->
-          {#if displayMessage && message !== undefined && (message.type !== "warning" || !isAppInitiatedAction)}
-            <LoginAlert type={message.type} summary={message.summary} />
-          {/if}
-          {@render children?.()}
-          {#if auth !== undefined && auth.showTryAnotherWayLink}
-            <form
-              id="kc-select-try-another-way-form"
-              class="cm-login-form"
-              action={url.loginAction}
-              method="post"
+        </Card.Header>
+        <Card.Content>
+          <section id="kc-content" aria-labelledby="kc-page-title">
+            <div id="kc-content-wrapper" class="cm-login-content grid gap-5">
+              <!-- App-initiated actions should not see warning messages about the need to complete the action during login. -->
+              {#if displayMessage && message !== undefined && (message.type !== "warning" || !isAppInitiatedAction)}
+                <LoginAlert type={message.type} summary={message.summary} />
+              {/if}
+              {@render children?.()}
+              {#if auth !== undefined && auth.showTryAnotherWayLink}
+                <form
+                  id="kc-select-try-another-way-form"
+                  class="cm-login-form"
+                  action={url.loginAction}
+                  method="post"
+                >
+                  <input type="hidden" name="tryAnotherWay" value="on" />
+                  <Button
+                    id="try-another-way"
+                    type="submit"
+                    variant="outline"
+                    class="cm-login-action cm-login-action--block"
+                  >
+                    {msgStr("doTryAnotherWay")}
+                  </Button>
+                </form>
+              {/if}
+              {@render socialProvidersNode?.()}
+            </div>
+          </section>
+        </Card.Content>
+        {#if displayInfo}
+          <Card.Footer id="kc-info" class="kcSignUpClass">
+            <div
+              id="kc-info-wrapper"
+              class="kcInfoAreaWrapperClass cm-login-info w-full"
             >
-              <input type="hidden" name="tryAnotherWay" value="on" />
-              <Button
-                id="try-another-way"
-                type="submit"
-                variant="outline"
-                class="cm-login-action cm-login-action--block"
-              >
-                {msgStr("doTryAnotherWay")}
-              </Button>
-            </form>
-          {/if}
-          {@render socialProvidersNode?.()}
-          {#if displayInfo}
-            <footer id="kc-info" class="kcSignUpClass cm-login-card__footer">
-              <div
-                id="kc-info-wrapper"
-                class="kcInfoAreaWrapperClass cm-login-info"
-              >
-                {@render infoNode?.()}
-              </div>
-            </footer>
-          {/if}
-        </div>
-      </section>
+              {@render infoNode?.()}
+            </div>
+          </Card.Footer>
+        {/if}
+      </Card.Root>
     </article>
   </main>
 {/if}

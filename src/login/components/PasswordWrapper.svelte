@@ -4,6 +4,7 @@
   import { onMount, type Snippet } from "svelte";
   import type { I18n } from "../i18n";
   import type { Readable } from "svelte/store";
+  import * as InputGroup from "../../lib/components/ui/input-group";
 
   let {
     i18n,
@@ -34,12 +35,11 @@
   });
 </script>
 
-<div class="kcInputGroup cm-login-input-group" data-slot="password-field">
+<InputGroup.Root data-slot="password-field">
   {@render children?.()}
-  <button
+  <InputGroup.Button
     type="button"
-    class="kcFormPasswordVisibilityButtonClass"
-    data-slot="password-toggle"
+    size="icon-sm"
     aria-label={msgStr($isPasswordRevealed ? "hidePassword" : "showPassword")}
     aria-controls={passwordInputId}
     onclick={() => toggleIsPasswordRevealed($isPasswordRevealed)}
@@ -49,5 +49,5 @@
     {:else}
       <i class="bi bi-eye-fill" aria-hidden="true"></i>
     {/if}
-  </button>
-</div>
+  </InputGroup.Button>
+</InputGroup.Root>

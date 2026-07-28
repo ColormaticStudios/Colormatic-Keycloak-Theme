@@ -1,9 +1,13 @@
 <script lang="ts">
   import LogoutOtherSessions from "../components/LogoutOtherSessions.svelte";
   import type { PageProps } from "./PageProps";
-  import { clsx } from "keycloakify/tools/clsx";
+  import TriangleAlert from "@lucide/svelte/icons/triangle-alert";
   import type { I18n } from "../i18n";
   import type { KcContext } from "../KcContext";
+  import * as Alert from "../../lib/components/ui/alert";
+  import { Button } from "../../lib/components/ui/button";
+  import { Checkbox } from "../../lib/components/ui/checkbox";
+  import { Label } from "../../lib/components/ui/label";
 
   const {
     Template,
@@ -153,25 +157,15 @@
   {#snippet headerNode()}
     {@render msg("recovery-code-config-header")()}
   {/snippet}
-  <div
-    class={clsx(
-      "pf-c-alert",
-      "pf-m-warning",
-      "pf-m-inline",
-      "kcRecoveryCodesWarning",
-    )}
-    role="alert"
-  >
-    <div class="pf-c-alert__icon">
-      <i class="pficon-warning-triangle-o" aria-hidden="true"></i>
-    </div>
-    <h4 class="pf-c-alert__title">
+  <Alert.Root>
+    <TriangleAlert aria-hidden="true" />
+    <Alert.Title>
       {@render msg("recovery-code-config-warning-title")()}
-    </h4>
-    <div class="pf-c-alert__description">
+    </Alert.Title>
+    <Alert.Description>
       <p>{@render msg("recovery-code-config-warning-message")()}</p>
-    </div>
-  </div>
+    </Alert.Description>
+  </Alert.Root>
 
   <ol
     id={olRecoveryCodesListId}
@@ -187,65 +181,45 @@
 
   <!-- actions -->
   <div class="kcRecoveryCodesActions flex justify-around py-3">
-    <button
+    <Button
       id="printRecoveryCodes"
-      class={clsx(
-        "pf-c-button",
-        "pf-m-link",
-        "kcButtonClass",
-        "kcButtonDefaultClass",
-      )}
+      variant="outline"
       type="button"
       onclick={printRecoveryCodes}
     >
       <i class="bi bi-printer-fill" aria-hidden="true"></i>
       {@render msg("recovery-codes-print")()}
-    </button>
-    <button
+    </Button>
+    <Button
       id="downloadRecoveryCodes"
-      class={clsx(
-        "pf-c-button",
-        "pf-m-link",
-        "kcButtonClass",
-        "kcButtonDefaultClass",
-      )}
+      variant="outline"
       type="button"
       onclick={downloadRecoveryCodes}
     >
       <i class="bi bi-download" aria-hidden="true"></i>
       {@render msg("recovery-codes-download")()}
-    </button>
-    <button
+    </Button>
+    <Button
       id="copyRecoveryCodes"
-      class={clsx(
-        "pf-c-button",
-        "pf-m-link",
-        "kcButtonClass",
-        "kcButtonDefaultClass",
-      )}
+      variant="outline"
       type="button"
       onclick={copyRecoveryCodes}
     >
       <i class="bi bi-copy" aria-hidden="true"></i>
       {@render msg("recovery-codes-copy")()}
-    </button>
+    </Button>
   </div>
 
   <!-- confirmation checkbox -->
-  <div class="kcFormOptionsClass cm-login-check">
-    <input
-      class="kcCheckInputClass"
-      type="checkbox"
+  <div class="kcFormOptionsClass flex items-center gap-2">
+    <Checkbox
       id="kcRecoveryCodesConfirmationCheck"
       name="kcRecoveryCodesConfirmationCheck"
       bind:checked={hasConfirmedRecoveryCodes}
     />
-    <label
-      for="kcRecoveryCodesConfirmationCheck"
-      class="cm-login-label font-bold"
-    >
+    <Label for="kcRecoveryCodesConfirmationCheck" class="font-bold">
       {@render msg("recovery-codes-confirmation-message")()}
-    </label>
+    </Label>
   </div>
 
   <form
@@ -275,44 +249,34 @@
 
     <div class="cm-login-actions">
       {#if isAppInitiatedAction}
-        <input
+        <Button
           type="submit"
-          class="
-          kcButtonClass
-          kcButtonPrimaryClass
-          kcButtonLargeClass
-        "
+          size="lg"
           id="saveRecoveryAuthnCodesBtn"
-          value={msgStr("recovery-codes-action-complete")}
           disabled={!hasConfirmedRecoveryCodes}
-        />
-        <button
+        >
+          {@render msg("recovery-codes-action-complete")()}
+        </Button>
+        <Button
           type="submit"
-          class="
-          kcButtonClass
-          kcButtonDefaultClass
-          kcButtonLargeClass
-          my-3
-        "
+          variant="outline"
+          size="lg"
           id="cancelRecoveryAuthnCodesBtn"
           name="cancel-aia"
           value="true"
         >
           {@render msg("recovery-codes-action-cancel")()}
-        </button>
+        </Button>
       {:else}
-        <input
+        <Button
           type="submit"
-          class="
-          kcButtonClass
-          kcButtonPrimaryClass
-          kcButtonBlockClass
-          kcButtonLargeClass
-        "
+          class="w-full"
+          size="lg"
           id="saveRecoveryAuthnCodesBtn"
-          value={msgStr("recovery-codes-action-complete")}
           disabled={!hasConfirmedRecoveryCodes}
-        />
+        >
+          {@render msg("recovery-codes-action-complete")()}
+        </Button>
       {/if}
     </div>
   </form>

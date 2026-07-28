@@ -2,6 +2,7 @@
   import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import { Button } from "../../lib/components/ui/button";
 
   const {
     Template,
@@ -14,7 +15,6 @@
     I18n
   > = $props();
 
-  const msgStr = $derived($i18n.msgStr);
   const msg = $derived($i18n.msg);
 
   const url = $derived(kcContext.url);
@@ -38,28 +38,24 @@
       id="kc-form-buttons"
       class="kcFormButtonsWrapperClass cm-login-actions"
     >
-      <input
-        class="
-          kcButtonClass
-          kcButtonRedClass
-          kcButtonLargeClass
-        "
+      <Button
+        variant="destructive"
+        size="lg"
         name="accept"
         id="kc-accept"
         type="submit"
-        value={msgStr("doConfirmDelete")}
-      />
-      <input
-        class="
-          kcButtonClass
-          kcButtonDefaultClass
-          kcButtonLargeClass
-        "
+      >
+        {@render msg("doConfirmDelete")()}
+      </Button>
+      <Button
+        variant="outline"
+        size="lg"
         name="cancel-aia"
-        value={msgStr("doCancel")}
         id="kc-decline"
         type="submit"
-      />
+      >
+        {@render msg("doCancel")()}
+      </Button>
     </div>
   </form>
 </Template>

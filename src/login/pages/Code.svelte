@@ -4,7 +4,7 @@
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
   import FormField from "../components/FormField.svelte";
-  import { Input } from "../../lib/components/ui/input";
+  import { Textarea } from "../../lib/components/ui/textarea";
 
   let {
     kcContext,
@@ -32,12 +32,7 @@
       <FormField inputId="code">
         {#snippet label()}{@render msg("copyCodeInstruction")()}{/snippet}
         {#snippet control()}
-          <Input
-            id="code"
-            class="kcTextareaClass cm-login-input"
-            value={code.code}
-            readonly
-          />
+          <Textarea id="code" value={code.code} readonly />
         {/snippet}
       </FormField>
     {:else if code.error}

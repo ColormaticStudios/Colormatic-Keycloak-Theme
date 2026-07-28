@@ -43,7 +43,6 @@
           name="device_user_code"
           autocomplete="off"
           type="text"
-          class="kcInputClass cm-login-input"
           autofocus
         />
       {/snippet}

@@ -3,6 +3,8 @@
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
   import CredentialChoice from "../components/CredentialChoice.svelte";
+  import { Button } from "../../lib/components/ui/button";
+  import * as RadioGroup from "../../lib/components/ui/radio-group";
 
   const {
     Template,
@@ -20,7 +22,7 @@
   const configuredOtpCredentials = $derived(kcContext.configuredOtpCredentials);
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
+  let selectedCredentialId = $state("");
 </script>
 
 <Template
@@ -44,11 +46,14 @@
         <p id="kc-otp-reset-form-description">
           {@render msg("otp-reset-description")()}
         </p>
-        <div class="cm-login-choice-grid">
+        <RadioGroup.Root
+          class="cm-login-choice-grid"
+          name="selectedCredentialId"
+          bind:value={selectedCredentialId}
+        >
           {#each configuredOtpCredentials.userOtpCredentials as otpCredential, index (index)}
             <CredentialChoice
               id={`kc-otp-credential-${index}`}
-              name="selectedCredentialId"
               value={otpCredential.id}
             >
               {#snippet title()}
@@ -56,21 +61,13 @@
               {/snippet}
             </CredentialChoice>
           {/each}
-        </div>
+        </RadioGroup.Root>
 
         <div class="kcFormGroupClass cm-login-field">
           <div id="kc-form-buttons" class="kcFormButtonsClass cm-login-actions">
-            <input
-              id="kc-otp-reset-form-submit"
-              class="
-                kcButtonClass
-                kcButtonPrimaryClass
-                kcButtonBlockClass
-                kcButtonLargeClass
-              "
-              type="submit"
-              value={msgStr("doSubmit")}
-            />
+            <Button id="kc-otp-reset-form-submit" class="w-full" type="submit">
+              {@render msg("doSubmit")()}
+            </Button>
           </div>
         </div>
       </div>

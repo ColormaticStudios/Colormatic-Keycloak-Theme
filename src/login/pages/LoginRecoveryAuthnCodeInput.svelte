@@ -61,7 +61,6 @@
           aria-invalid={messagesPerField.existsError("recoveryCodeInput")}
           autocomplete="off"
           type="text"
-          class="kcInputClass cm-login-input"
           autofocus
         />
       {/snippet}

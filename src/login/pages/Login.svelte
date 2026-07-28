@@ -3,7 +3,11 @@
   import FormActions from "../components/FormActions.svelte";
   import FormField from "../components/FormField.svelte";
   import { Button } from "../../lib/components/ui/button";
+  import { Checkbox } from "../../lib/components/ui/checkbox";
   import { Input } from "../../lib/components/ui/input";
+  import * as InputGroup from "../../lib/components/ui/input-group";
+  import { Label } from "../../lib/components/ui/label";
+  import { Separator } from "../../lib/components/ui/separator";
   import type { PageProps } from "./PageProps";
   import { useState } from "@keycloakify/svelte/tools/useState";
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
@@ -49,7 +53,7 @@
   {/snippet}
 
   {#snippet infoNode()}
-    <div id="kc-registration-container">
+    <div id="kc-registration-container" class="w-full text-right">
       <div id="kc-registration">
         <span>
           {@render msg("noAccount")()}&nbsp;
@@ -64,7 +68,7 @@
     {@const providers = social?.providers}
     {#if realm.password && !!providers && !!providers.length}
       <div id="kc-social-providers" class="kcFormSocialAccountSectionClass">
-        <hr />
+        <Separator />
         <h2>{@render msg("identity-provider-login-label")()}</h2>
         <ul
           class="kcFormSocialAccountListClass {providers.length > 3
@@ -73,12 +77,10 @@
         >
           {#each providers as p (p.alias)}
             <li>
-              <a
+              <Button
                 id={`social-${p.alias}`}
-                class="kcFormSocialAccountListButtonClass {providers.length > 3
-                  ? 'kcFormSocialAccountGridItem'
-                  : ''}"
-                type="button"
+                class="h-auto w-full"
+                variant="outline"
                 href={p.loginUrl}
               >
                 {#if p.iconClasses}
@@ -95,7 +97,7 @@
                 >
                   {@html kcSanitize(p.displayName)}
                 </span>
-              </a>
+              </Button>
             </li>
           {/each}
         </ul>
@@ -130,7 +132,6 @@
               {#snippet control()}
                 <Input
                   id="username"
-                  class="kcInputClass cm-login-input"
                   name="username"
                   value={login.username ?? ""}
                   type="text"
@@ -166,9 +167,8 @@
             {/snippet}
             {#snippet control()}
               <PasswordWrapper {i18n} passwordInputId="password">
-                <Input
+                <InputGroup.Input
                   id="password"
-                  class="kcInputClass cm-login-input"
                   name="password"
                   type="password"
                   autocomplete="current-password"
@@ -193,17 +193,15 @@
           <div class="kcFormGroupClass kcFormSettingClass">
             <div id="kc-form-options">
               {#if realm.rememberMe && !usernameHidden}
-                <div class="checkbox">
-                  <label>
-                    <input
-                      id="rememberMe"
-                      name="rememberMe"
-                      type="checkbox"
-                      checked={!!login.rememberMe}
-                    />
-                    &nbsp;
+                <div class="flex items-center gap-2">
+                  <Checkbox
+                    id="rememberMe"
+                    name="rememberMe"
+                    checked={!!login.rememberMe}
+                  />
+                  <Label for="rememberMe">
                     {@render msg("rememberMe")()}
-                  </label>
+                  </Label>
                 </div>
               {/if}
             </div>
@@ -227,7 +225,7 @@
             />
             <Button
               disabled={$isLoginButtonDisabled}
-              class="cm-login-action--block"
+              class="cm-login-action--block h-11 text-base"
               name="login"
               id="kc-login"
               type="submit"

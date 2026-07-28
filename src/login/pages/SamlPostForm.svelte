@@ -2,6 +2,7 @@
   import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import { Button } from "../../lib/components/ui/button";
 
   const {
     Template,
@@ -14,7 +15,6 @@
     I18n
   > = $props();
 
-  const msgStr = $derived($i18n.msgStr);
   const msg = $derived($i18n.msg);
 
   const samlPost = $derived(kcContext.samlPost);
@@ -59,7 +59,7 @@
     {/if}
     <noscript>
       <p>{@render msg("saml.post-form.js-disabled")()}</p>
-      <input type="submit" value={msgStr("doContinue")} />
+      <Button type="submit">{@render msg("doContinue")()}</Button>
     </noscript>
   </form>
 </Template>

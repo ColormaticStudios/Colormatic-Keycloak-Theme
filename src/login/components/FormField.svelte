@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import * as Field from "../../lib/components/ui/field";
 
   let {
     inputId,
@@ -30,44 +31,35 @@
   } = $props();
 </script>
 
-<div
-  data-slot="form-field"
+<Field.Field
+  data-invalid={hasError}
   class={["kcFormGroupClass", "cm-login-field", className]
     .filter(Boolean)
     .join(" ")}
-  style:display={hidden ? "none" : undefined}
+  style={hidden ? "display: none" : undefined}
 >
-  <div class="kcLabelWrapperClass cm-login-field__label">
-    <label
-      id={`${inputId}-label`}
-      for={inputId}
-      class="kcLabelClass cm-login-label"
-    >
-      {@render label()}
-      {#if required}
-        <span class="required cm-login-required" aria-hidden="true">*</span>
-      {/if}
-    </label>
-  </div>
+  <Field.Label id={`${inputId}-label`} for={inputId}>
+    {@render label()}
+    {#if required}
+      <span class="text-destructive" aria-hidden="true">*</span>
+    {/if}
+  </Field.Label>
   {#if helpBefore && hasHelpBefore}
-    <div class="cm-login-field__help">
+    <Field.Description>
       {@render helpBefore()}
-    </div>
+    </Field.Description>
   {/if}
   <div class="kcInputWrapperClass cm-login-field__control">
     {@render control()}
   </div>
   {#if error && hasError}
-    <div
-      class="kcInputErrorMessageClass cm-login-field__error"
-      aria-live="polite"
-    >
+    <Field.Error aria-live="polite">
       {@render error()}
-    </div>
+    </Field.Error>
   {/if}
   {#if helpAfter && hasHelpAfter}
-    <div class="cm-login-field__help">
+    <Field.Description>
       {@render helpAfter()}
-    </div>
+    </Field.Description>
   {/if}
-</div>
+</Field.Field>

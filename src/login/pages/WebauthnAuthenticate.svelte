@@ -6,6 +6,7 @@
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
   import AuthChoice from "../components/AuthChoice.svelte";
+  import { Button } from "../../lib/components/ui/button";
 
   const {
     Template,
@@ -27,7 +28,6 @@
   );
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
   const advancedMsg = $derived($i18n.advancedMsg);
 
   const authButtonId = "authenticateWebAuthnButton";
@@ -131,19 +131,9 @@
         {/if}
       {/if}
       <div id="kc-form-buttons" class="kcFormButtonsClass cm-login-actions">
-        <!-- svelte-ignore a11y_autofocus -->
-        <input
-          id={authButtonId}
-          type="button"
-          autofocus
-          value={msgStr("webauthn-doAuthenticate")}
-          class="
-            kcButtonClass
-            kcButtonPrimaryClass
-            kcButtonBlockClass
-            kcButtonLargeClass
-          "
-        />
+        <Button id={authButtonId} type="button" autofocus class="w-full">
+          {@render msg("webauthn-doAuthenticate")()}
+        </Button>
       </div>
     </div>
   </div>

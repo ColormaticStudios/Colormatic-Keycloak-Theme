@@ -3,7 +3,7 @@
   import FormActions from "../components/FormActions.svelte";
   import FormField from "../components/FormField.svelte";
   import { Button } from "../../lib/components/ui/button";
-  import { Input } from "../../lib/components/ui/input";
+  import * as InputGroup from "../../lib/components/ui/input-group";
   import type { PageProps } from "./PageProps";
   import { useState } from "@keycloakify/svelte/tools/useState";
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
@@ -62,9 +62,8 @@
           {/snippet}
           {#snippet control()}
             <PasswordWrapper {i18n} passwordInputId="password">
-              <Input
+              <InputGroup.Input
                 id="password"
-                class="kcInputClass cm-login-input"
                 name="password"
                 type="password"
                 autofocus

@@ -30,28 +30,26 @@
   {value}
   {onclick}
   variant="outline"
-  class="kcSelectAuthListItemClass cm-login-auth-choice"
+  class="h-auto min-h-16 w-full justify-start gap-3 p-3 text-left"
 >
   <span
-    class="kcSelectAuthListItemIconClass cm-login-auth-choice__icon"
+    class="bg-muted text-muted-foreground inline-grid size-10 shrink-0 place-items-center rounded-full"
     aria-hidden="true"
   >
     <i class={`bi ${icon}`}></i>
   </span>
-  <span class="kcSelectAuthListItemBodyClass cm-login-auth-choice__body">
-    <span class="kcSelectAuthListItemHeadingClass cm-login-auth-choice__title">
+  <span class="grid min-w-0 flex-1 gap-1">
+    <span class="font-medium">
       {@render title()}
     </span>
     {#if description}
-      <span
-        class="kcSelectAuthListItemDescriptionClass cm-login-auth-choice__description"
-      >
+      <span class="text-muted-foreground text-sm whitespace-normal">
         {@render description()}
       </span>
     {/if}
   </span>
   <i
-    class="bi bi-chevron-right kcSelectAuthListItemArrowClass cm-login-auth-choice__arrow"
+    class="bi bi-chevron-right text-muted-foreground shrink-0"
     aria-hidden="true"
   ></i>
 </Button>

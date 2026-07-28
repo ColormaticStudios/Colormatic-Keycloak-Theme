@@ -2,6 +2,7 @@
   import type { I18n } from "../i18n";
   import type { KcContext } from "../KcContext";
   import type { PageProps } from "./PageProps";
+  import { Button } from "../../lib/components/ui/button";
 
   const {
     Template,
@@ -18,7 +19,6 @@
   const url = $derived(kcContext.url);
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes} displayMessage={false}>
@@ -36,20 +36,18 @@
   >
     <div class="kcFormGroupClass cm-login-field">
       <div id="kc-form-buttons" class="kcFormButtonsClass cm-login-actions">
-        <input
-          class="kcButtonClass kcButtonPrimaryClass kcButtonLargeClass"
-          name="continue"
-          id="kc-continue"
-          type="submit"
-          value={msgStr("doContinue")}
-        />
-        <input
-          class="kcButtonClass kcButtonDefaultClass kcButtonLargeClass"
+        <Button size="lg" name="continue" id="kc-continue" type="submit">
+          {@render msg("doContinue")()}
+        </Button>
+        <Button
+          variant="outline"
+          size="lg"
           name="cancel-aia"
           id="kc-cancel"
           type="submit"
-          value={msgStr("doCancel")}
-        />
+        >
+          {@render msg("doCancel")()}
+        </Button>
       </div>
     </div>
   </form>

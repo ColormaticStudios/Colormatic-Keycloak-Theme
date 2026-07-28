@@ -4,14 +4,20 @@
   import type { InputFieldByTypeProps } from "./InputFieldByTypeProps";
   import { assert } from "keycloakify/tools/assert";
   import type { I18n } from "../i18n";
+  import { Input } from "../../lib/components/ui/input";
+  import * as InputGroup from "../../lib/components/ui/input-group";
 
-  type InputTagProps = InputFieldByTypeProps<I18n> & { fieldIndex?: number };
+  type InputTagProps = InputFieldByTypeProps<I18n> & {
+    fieldIndex?: number;
+    withinInputGroup?: boolean;
+  };
   let {
     attribute,
     fieldIndex,
     dispatchFormAction,
     valueOrValues,
     i18n,
+    withinInputGroup = false,
     displayableErrors = $bindable([]),
   }: InputTagProps = $props();
 
@@ -37,17 +43,16 @@
       ),
     ),
   };
+  const InputComponent = $derived(withinInputGroup ? InputGroup.Input : Input);
 </script>
 
-<input
+<InputComponent
   type={inputType?.startsWith("html5-")
     ? inputType.slice(6)
     : (inputType ?? "text")}
   id={attribute.name}
   name={attribute.name}
   bind:value
-  class="kcInputClass cm-login-input"
-  data-slot="input"
   aria-invalid={displayableErrors.find(
     (error) => error.fieldIndex === fieldIndex,
   ) !== undefined}

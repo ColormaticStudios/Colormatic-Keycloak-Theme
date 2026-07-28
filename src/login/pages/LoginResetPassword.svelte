@@ -69,7 +69,6 @@
           type="text"
           id="username"
           name="username"
-          class="kcInputClass cm-login-input"
           autofocus
           value={auth.attemptedUsername ?? ""}
           aria-invalid={messagesPerField.existsError("username")}

@@ -2,12 +2,18 @@ import react from "@vitejs/plugin-react";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import tailwindcss from "@tailwindcss/vite";
 import { keycloakify } from "keycloakify/vite-plugin";
+import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
 
 // Svelte owns the Keycloak entry point and login theme. The React account
 // console is mounted by src/account/KcPage.svelte and remains code-split, so
 // both themes can share one Vite module graph and one Keycloakify build.
 export default defineConfig({
+	resolve: {
+		alias: {
+			$lib: fileURLToPath(new URL("./src/lib", import.meta.url)),
+		},
+	},
 	plugins: [
 		svelte(),
 		react(),

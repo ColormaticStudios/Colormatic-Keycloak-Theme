@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { I18n } from "../i18n";
   import type { Readable } from "svelte/store";
+  import { Checkbox } from "../../lib/components/ui/checkbox";
+  import { Label } from "../../lib/components/ui/label";
 
   const { i18n }: { i18n: Readable<I18n> } = $props();
 
@@ -10,16 +12,15 @@
 <div id="kc-form-options" class="kcFormOptionsClass">
   <div class="kcFormOptionsWrapperClass">
     <div class="checkbox cm-login-check">
-      <input
-        type="checkbox"
+      <Checkbox
         id="logout-sessions"
         name="logout-sessions"
         value="on"
         checked={true}
       />
-      <label for="logout-sessions" class="cm-login-label">
+      <Label for="logout-sessions">
         {@render msg("logoutOtherSessions")()}
-      </label>
+      </Label>
     </div>
   </div>
 </div>

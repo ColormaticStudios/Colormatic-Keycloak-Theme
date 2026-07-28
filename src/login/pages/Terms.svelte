@@ -2,6 +2,7 @@
   import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import { Button } from "../../lib/components/ui/button";
 
   const {
     Template,
@@ -12,7 +13,6 @@
   }: PageProps<Extract<KcContext, { pageId: "terms.ftl" }>, I18n> = $props();
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
 
   const url = $derived(kcContext.url);
 </script>
@@ -31,28 +31,18 @@
       id="kc-form-buttons"
       class="kcFormButtonsWrapperClass cm-login-actions"
     >
-      <input
-        class="
-          kcButtonClass
-          kcButtonPrimaryClass
-          kcButtonLargeClass
-        "
-        name="accept"
-        id="kc-accept"
-        type="submit"
-        value={msgStr("doAccept")}
-      />
-      <input
-        class="
-          kcButtonClass
-          kcButtonDefaultClass
-          kcButtonLargeClass
-        "
+      <Button size="lg" name="accept" id="kc-accept" type="submit">
+        {@render msg("doAccept")()}
+      </Button>
+      <Button
+        variant="outline"
+        size="lg"
         name="cancel"
         id="kc-decline"
         type="submit"
-        value={msgStr("doDecline")}
-      />
+      >
+        {@render msg("doDecline")()}
+      </Button>
     </div>
   </form>
   <div class="clearfix"></div>

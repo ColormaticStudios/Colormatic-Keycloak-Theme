@@ -13,6 +13,29 @@
 
 <Story name="Default" />
 
+<!--
+  Keycloak shows this state when the current password execution has an
+  alternative authenticator, such as a passkey, available to the user.
+-->
+<Story
+  name="WithPasskeyAlternative"
+  args={{
+    ...args,
+    kcContext: {
+      auth: {
+        attemptedUsername: "user@colormatic.org",
+        showUsername: true,
+        showResetCredentials: false,
+        showTryAnotherWayLink: true,
+      },
+      url: {
+        loginAction: "/mock-login",
+        loginRestartFlowUrl: "/mock-restart-login",
+      },
+    },
+  }}
+/>
+
 <!-- /**
  * WithPasswordError:
  * - Purpose: Tests the behavior when an error occurs in the password field (e.g., incorrect password).

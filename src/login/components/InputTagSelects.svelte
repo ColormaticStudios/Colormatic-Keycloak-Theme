@@ -1,8 +1,10 @@
 <script lang="ts">
   import type { InputFieldByTypeProps } from "./InputFieldByTypeProps";
   import { inputLabel } from "./inputLabel";
-  import { assert } from "keycloakify/tools/assert";
   import type { I18n } from "../i18n";
+  import { Checkbox } from "../../lib/components/ui/checkbox";
+  import { Label } from "../../lib/components/ui/label";
+  import * as RadioGroup from "../../lib/components/ui/radio-group";
 
   const {
     attribute,
@@ -12,38 +14,9 @@
     displayableErrors,
   }: InputFieldByTypeProps<I18n> = $props();
 
-  const { classDiv, classInput, classLabel, inputType } = (() => {
-    const { inputType } = attribute.annotations;
-
-    assert(
-      inputType === "select-radiobuttons" ||
-        inputType === "multiselect-checkboxes",
-    );
-
-    switch (inputType) {
-      case "select-radiobuttons":
-        return {
-          inputType: "radio",
-          classDiv: "kcInputClassRadio",
-          classInput: "kcInputClassRadioInput",
-          classLabel: "kcInputClassRadioLabel",
-        };
-      case "multiselect-checkboxes":
-        return {
-          inputType: "checkbox",
-          classDiv: "kcInputClassCheckbox",
-          classInput: "kcInputClassCheckboxInput",
-          classLabel: "kcInputClassCheckboxLabel",
-        };
-      default:
-        return {
-          inputType: "",
-          classDiv: "",
-          classInput: "",
-          classLabel: "",
-        };
-    }
-  })();
+  const isRadio = $derived(
+    attribute.annotations.inputType === "select-radiobuttons",
+  );
 
   const options = (() => {
     walk: {
@@ -70,55 +43,77 @@
 
     return attribute.validators.options?.options ?? [];
   })();
+
+  function updateValue(nextValue: string | string[]) {
+    dispatchFormAction("formAction", {
+      action: "update",
+      name: attribute.name,
+      valueOrValues: nextValue,
+    });
+  }
+
+  function handleFocusLost() {
+    dispatchFormAction("formAction", {
+      action: "focus lost",
+      name: attribute.name,
+      fieldIndex: undefined,
+    });
+  }
 </script>
 
-{#each options as option, i (i)}
-  <div class={`${classDiv} cm-login-check`}>
-    <input
-      type={inputType}
-      id={`${attribute.name}-${option}`}
-      name={attribute.name}
-      value={option}
-      class={`${classInput} cm-login-check__input`}
-      aria-invalid={displayableErrors.length !== 0}
-      disabled={attribute.readOnly}
-      checked={valueOrValues instanceof Array
-        ? valueOrValues.includes(option)
-        : valueOrValues === option}
-      onchange={(event) =>
-        dispatchFormAction("formAction", {
-          action: "update",
-          name: attribute.name,
-          valueOrValues: (() => {
-            const isChecked = event.currentTarget.checked;
+{#if isRadio}
+  <RadioGroup.Root
+    name={attribute.name}
+    value={typeof valueOrValues === "string" ? valueOrValues : ""}
+    disabled={attribute.readOnly}
+    aria-invalid={displayableErrors.length !== 0}
+    onValueChange={updateValue}
+    onfocusout={handleFocusLost}
+  >
+    {#each options as option, i (i)}
+      <div class="flex items-center gap-2">
+        <RadioGroup.Item
+          id={`${attribute.name}-${option}`}
+          value={option}
+          aria-invalid={displayableErrors.length !== 0}
+        />
+        <Label for={`${attribute.name}-${option}`}>
+          {@render inputLabel($i18n, attribute, option)()}
+        </Label>
+      </div>
+    {/each}
+  </RadioGroup.Root>
+{:else}
+  {#each options as option, i (i)}
+    <div class="flex items-center gap-2">
+      <Checkbox
+        id={`${attribute.name}-${option}`}
+        name={attribute.name}
+        value={option}
+        aria-invalid={displayableErrors.length !== 0}
+        disabled={attribute.readOnly}
+        checked={valueOrValues instanceof Array &&
+          valueOrValues.includes(option)}
+        onCheckedChange={(isChecked) => {
+          const newValues =
+            valueOrValues instanceof Array ? [...valueOrValues] : [];
 
-            if (valueOrValues instanceof Array) {
-              const newValues = [...valueOrValues];
-
-              if (isChecked) {
-                newValues.push(option);
-              } else {
-                newValues.splice(newValues.indexOf(option), 1);
-              }
-
-              return newValues;
+          if (isChecked && !newValues.includes(option)) {
+            newValues.push(option);
+          } else if (!isChecked) {
+            const optionIndex = newValues.indexOf(option);
+            if (optionIndex !== -1) {
+              newValues.splice(optionIndex, 1);
             }
+          }
 
-            return event.currentTarget.checked ? option : "";
-          })(),
-        })}
-      onblur={() =>
-        dispatchFormAction("formAction", {
-          action: "focus lost",
-          name: attribute.name,
-          fieldIndex: undefined,
-        })}
-    />
-    <label
-      for={`${attribute.name}-${option}`}
-      class={`${classLabel} cm-login-label${attribute.readOnly ? " kcInputClassRadioCheckboxLabelDisabled" : ""}`}
-    >
-      {@render inputLabel($i18n, attribute, option)()}
-    </label>
-  </div>
-{/each}
+          updateValue(newValues);
+        }}
+        onblur={handleFocusLost}
+      />
+      <Label for={`${attribute.name}-${option}`}>
+        {@render inputLabel($i18n, attribute, option)()}
+      </Label>
+    </div>
+  {/each}
+{/if}

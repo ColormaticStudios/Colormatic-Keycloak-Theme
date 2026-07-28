@@ -2,12 +2,14 @@
   import type { PageProps } from "./PageProps";
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
   import type { KcContext } from "../KcContext";
+  import { untrack } from "svelte";
   import type { I18n } from "../i18n";
   import * as InputOTP from "../../lib/components/ui/input-otp/index.js";
   import CredentialChoice from "../components/CredentialChoice.svelte";
   import FormActions from "../components/FormActions.svelte";
   import FormField from "../components/FormField.svelte";
   import { Button } from "../../lib/components/ui/button";
+  import * as RadioGroup from "../../lib/components/ui/radio-group";
 
   const {
     Template,
@@ -26,6 +28,9 @@
 
   const msg = $derived($i18n.msg);
   let OTPValue = $state("");
+  let selectedCredentialId = $state(
+    untrack(() => otpLogin.selectedCredentialId ?? ""),
+  );
 </script>
 
 <Template
@@ -46,20 +51,22 @@
   >
     {#if otpLogin.userOtpCredentials.length > 1}
       <div class="kcFormGroupClass cm-login-field">
-        <div class="cm-login-choice-grid">
+        <RadioGroup.Root
+          class="cm-login-choice-grid"
+          name="selectedCredentialId"
+          bind:value={selectedCredentialId}
+        >
           {#each otpLogin.userOtpCredentials as otpCredential, index (index)}
             <CredentialChoice
               id={`kc-otp-credential-${index}`}
-              name="selectedCredentialId"
               value={otpCredential.id}
-              checked={otpCredential.id === otpLogin.selectedCredentialId}
             >
               {#snippet title()}
                 {otpCredential.userLabel}
               {/snippet}
             </CredentialChoice>
           {/each}
-        </div>
+        </RadioGroup.Root>
       </div>
     {/if}
 

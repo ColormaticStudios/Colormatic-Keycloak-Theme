@@ -4,8 +4,16 @@
 
 .kcBodyClass {
   min-height: 100svh;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: clip;
   background: var(--cm-canvas);
   color: var(--cm-text);
+}
+
+.kcBodyClass button:not(:disabled),
+.kcBodyClass [role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
 }
 
 .cm-login-shell,
@@ -398,6 +406,30 @@
   flex-direction: column;
 }
 
+.cm-login-actions
+  > :is(
+    [name="cancel"],
+    [name="cancel-aia"],
+    [id*="cancel" i],
+    #kc-decline
+  ) {
+  order: -1;
+  width: auto;
+  margin-inline-end: auto;
+}
+
+.cm-login-actions:has(
+    > :is(
+        [name="cancel"],
+        [name="cancel-aia"],
+        [id*="cancel" i],
+        #kc-decline
+      )
+  ) {
+  align-items: center;
+  flex-direction: row;
+}
+
 .cm-login-action--block,
 .kcButtonBlockClass {
   width: 100%;
@@ -545,6 +577,18 @@
   position: relative;
 }
 
+.cm-login-credential-choice:has([data-state="checked"]) {
+  border-color: var(--cm-focus);
+  background: var(--cm-control);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--cm-focus) 35%, transparent);
+}
+
+.cm-login-credential-choice:has([role="radio"]:focus-visible) {
+  outline: 2px solid var(--cm-focus);
+  outline-offset: 2px;
+}
+
 .cm-login-credential-choice > input {
   position: absolute;
   width: 1px;
@@ -640,7 +684,7 @@
   .cm-login-shell,
   .kcLoginClass {
     gap: 2rem;
-    padding-block: 2rem 4rem;
+    padding-block: 2rem;
   }
 
   .cm-login-card,
@@ -672,6 +716,25 @@
   .kcFormButtonsWrapperClass > *,
   #kc-form-buttons > * {
     width: 100%;
+  }
+
+  .cm-login-actions
+    > :is(
+      [name="cancel"],
+      [name="cancel-aia"],
+      [id*="cancel" i],
+      #kc-decline
+    ),
+  .cm-login-actions:has(
+      > :is(
+          [name="cancel"],
+          [name="cancel-aia"],
+          [id*="cancel" i],
+          #kc-decline
+        )
+    )
+    > [data-slot="button"] {
+    width: auto;
   }
 }
 

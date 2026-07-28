@@ -5,6 +5,7 @@
   import { untrack } from "svelte";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import { Button } from "../../lib/components/ui/button";
 
   const {
     Template,
@@ -22,7 +23,6 @@
   const isAppInitiatedAction = $derived(kcContext.isAppInitiatedAction);
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
 
   const authButtonId = "authenticateWebAuthnButton";
 
@@ -58,17 +58,9 @@
       <LogoutOtherSessions {i18n} />
     </div>
   </form>
-  <input
-    type="submit"
-    class="
-      kcButtonClass
-      kcButtonPrimaryClass
-      kcButtonBlockClass
-      kcButtonLargeClass
-    "
-    id={authButtonId}
-    value={msgStr("doRegisterSecurityKey")}
-  />
+  <Button type="submit" class="w-full" id={authButtonId}>
+    {@render msg("doRegisterSecurityKey")()}
+  </Button>
   {#if !isSetRetry && isAppInitiatedAction}
     <form
       action={url.loginAction}
@@ -76,20 +68,16 @@
       id="kc-webauthn-settings-form"
       method="post"
     >
-      <button
+      <Button
         type="submit"
-        class="
-          kcButtonClass
-          kcButtonDefaultClass
-          kcButtonBlockClass
-          kcButtonLargeClass
-        "
+        class="w-full"
+        variant="outline"
         id="cancelWebAuthnAIA"
         name="cancel-aia"
         value="true"
       >
         {@render msg("doCancel")()}
-      </button>
+      </Button>
     </form>
   {/if}
 </Template>

@@ -2,6 +2,7 @@
   import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import { Button } from "../../lib/components/ui/button";
 
   const {
     Template,
@@ -19,7 +20,6 @@
   const client = $derived(kcContext.client);
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
   const advancedMsg = $derived($i18n.advancedMsg);
   const advancedMsgStr = $derived($i18n.advancedMsgStr);
 </script>
@@ -94,28 +94,18 @@
 
         <div id="kc-form-buttons">
           <div class="kcFormButtonsWrapperClass cm-login-actions">
-            <input
-              class="
-                kcButtonClass
-                kcButtonPrimaryClass
-                kcButtonLargeClass
-              "
-              name="accept"
-              id="kc-login"
-              type="submit"
-              value={msgStr("doYes")}
-            />
-            <input
-              class="
-                kcButtonClass
-                kcButtonDefaultClass
-                kcButtonLargeClass
-              "
+            <Button size="lg" name="accept" id="kc-login" type="submit">
+              {@render msg("doYes")()}
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
               name="cancel"
               id="kc-cancel"
               type="submit"
-              value={msgStr("doNo")}
-            />
+            >
+              {@render msg("doNo")()}
+            </Button>
           </div>
         </div>
       </div>

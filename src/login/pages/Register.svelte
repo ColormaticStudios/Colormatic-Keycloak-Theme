@@ -7,6 +7,7 @@
   import TermsAcceptance from "../components/TermsAcceptance.svelte";
   import type { I18n } from "../i18n";
   import type { KcContext } from "../KcContext";
+  import { Button } from "../../lib/components/ui/button";
 
   type RegisterProps = PageProps<
     Extract<KcContext, { pageId: "register.ftl" }>,
@@ -35,7 +36,6 @@
   const termsAcceptanceRequired = $derived(kcContext.termsAcceptanceRequired);
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
   const advancedMsg = $derived($i18n.advancedMsg);
 
   const [isFormSubmittable, setIsFormSubmittable] = useState(false);
@@ -110,36 +110,26 @@
     <div class="kcFormGroupClass cm-login-field">
       {#if recaptchaRequired && !recaptchaVisible && recaptchaAction !== undefined}
         <div id="kc-form-buttons" class="kcFormButtonsClass cm-login-actions">
-          <button
-            class={clsx(
-              "kcButtonClass",
-              "kcButtonPrimaryClass",
-              "kcButtonBlockClass",
-              "kcButtonLargeClass",
-              "g-recaptcha",
-            )}
+          <Button
+            class={clsx("w-full", "g-recaptcha")}
             data-sitekey={recaptchaSiteKey}
             data-callback={untrack(() => "onSubmitRecaptcha")}
             data-action={recaptchaAction}
             type="submit"
           >
             {@render msg("doRegister")()}
-          </button>
+          </Button>
         </div>
       {:else}
         <div id="kc-form-buttons" class="kcFormButtonsClass cm-login-actions">
-          <input
+          <Button
             disabled={!$isFormSubmittable ||
               (termsAcceptanceRequired && !$areTermsAccepted)}
-            class="
-              kcButtonClass
-              kcButtonPrimaryClass
-              kcButtonBlockClass
-              kcButtonLargeClass
-            "
+            class="w-full"
             type="submit"
-            value={msgStr("doRegister")}
-          />
+          >
+            {@render msg("doRegister")()}
+          </Button>
         </div>
       {/if}
       <div id="kc-form-options" class="kcFormOptionsClass">

@@ -5,6 +5,7 @@
   import type { Component } from "svelte";
   import type { I18n } from "../i18n";
   import type { KcContext } from "../KcContext";
+  import { Button } from "../../lib/components/ui/button";
 
   type LoginUpdateProfileProps = PageProps<
     Extract<KcContext, { pageId: "login-update-profile.ftl" }>,
@@ -29,7 +30,6 @@
   const isAppInitiatedAction = $derived(kcContext.isAppInitiatedAction);
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
 
   const [isFormSubmittable, setIsFormSubmittable] = useState(false);
 </script>
@@ -63,31 +63,23 @@
         <div class="kcFormOptionsWrapperClass"></div>
       </div>
       <div id="kc-form-buttons" class="kcFormButtonsClass cm-login-actions">
-        <input
+        <Button
           disabled={!$isFormSubmittable}
-          class="
-            kcButtonClass
-            kcButtonPrimaryClass
-				{!isAppInitiatedAction ? 'kcButtonBlockClass' : ''}
-            kcButtonLargeClass
-          "
+          class={!isAppInitiatedAction ? "w-full" : undefined}
           type="submit"
-          value={msgStr("doSubmit")}
-        />
+        >
+          {@render msg("doSubmit")()}
+        </Button>
         {#if isAppInitiatedAction}
-          <button
-            class="
-              kcButtonClass
-              kcButtonDefaultClass
-              kcButtonLargeClass
-            "
+          <Button
+            variant="outline"
             type="submit"
             name="cancel-aia"
             value="true"
             formnovalidate
           >
             {@render msg("doCancel")()}
-          </button>
+          </Button>
         {/if}
       </div>
     </div>

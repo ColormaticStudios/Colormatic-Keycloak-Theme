@@ -3,6 +3,7 @@
   import type { I18n } from "../i18n";
   import type { KcContext } from "../KcContext";
   import type { PageProps } from "./PageProps";
+  import { Button } from "../../lib/components/ui/button";
 
   const {
     Template,
@@ -56,11 +57,10 @@
       >
         {#each organizations as organization (organization.alias)}
           <li>
-            <button
+            <Button
               id={`organization-${organization.alias}`}
-              class="kcFormSocialAccountListButtonClass {shouldDisplayGrid
-                ? 'kcFormSocialAccountGridItem'
-                : ''}"
+              class="w-full"
+              variant="outline"
               type="button"
               onclick={() => selectOrganization(organization.alias)}
               disabled={isSubmitting}
@@ -68,7 +68,7 @@
               <span class="kcFormSocialAccountNameClass">
                 {organization.name ?? organization.alias}
               </span>
-            </button>
+            </Button>
           </li>
         {/each}
       </ul>

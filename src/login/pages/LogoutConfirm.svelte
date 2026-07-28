@@ -2,6 +2,7 @@
   import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import { Button } from "../../lib/components/ui/button";
 
   const {
     Template,
@@ -19,7 +20,6 @@
   const logoutConfirm = $derived(kcContext.logoutConfirm);
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes}>
@@ -39,18 +39,14 @@
         id="kc-form-buttons"
         class="kcFormGroupClass cm-login-field cm-login-actions"
       >
-        <input
-          class="
-              kcButtonClass
-              kcButtonPrimaryClass
-              kcButtonBlockClass
-              kcButtonLargeClass
-            "
+        <Button
+          class="w-full"
           name="confirmLogout"
           id="kc-logout"
           type="submit"
-          value={msgStr("doLogout")}
-        />
+        >
+          {@render msg("doLogout")()}
+        </Button>
       </div>
     </form>
     <div id="kc-info-message">

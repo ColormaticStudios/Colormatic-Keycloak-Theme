@@ -131,7 +131,6 @@
           id="userLabel"
           name="userLabel"
           autocomplete="off"
-          class="kcInputClass cm-login-input"
           aria-invalid={messagesPerField.existsError("userLabel")}
         />
       {/snippet}
@@ -205,7 +204,7 @@
       <LogoutOtherSessions {i18n} />
     </div>
 
-    <FormActions stacked>
+    <FormActions>
       <Button type="submit" id="saveTOTPBtn">
         {@render msg("doSubmit")()}
       </Button>

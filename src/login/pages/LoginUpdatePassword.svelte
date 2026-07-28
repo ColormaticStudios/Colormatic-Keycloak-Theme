@@ -8,7 +8,7 @@
   import FormActions from "../components/FormActions.svelte";
   import FormField from "../components/FormField.svelte";
   import { Button } from "../../lib/components/ui/button";
-  import { Input } from "../../lib/components/ui/input";
+  import * as InputGroup from "../../lib/components/ui/input-group";
 
   const {
     Template,
@@ -50,11 +50,10 @@
       {#snippet label()}{@render msg("passwordNew")()}{/snippet}
       {#snippet control()}
         <PasswordWrapper {i18n} passwordInputId="password-new">
-          <Input
+          <InputGroup.Input
             type="password"
             id="password-new"
             name="password-new"
-            class="kcInputClass cm-login-input"
             autofocus
             autocomplete="new-password"
             aria-invalid={messagesPerField.existsError(
@@ -80,11 +79,10 @@
       {#snippet label()}{@render msg("passwordConfirm")()}{/snippet}
       {#snippet control()}
         <PasswordWrapper {i18n} passwordInputId="password-confirm">
-          <Input
+          <InputGroup.Input
             type="password"
             id="password-confirm"
             name="password-confirm"
-            class="kcInputClass cm-login-input"
             autocomplete="new-password"
             aria-invalid={messagesPerField.existsError(
               "password",

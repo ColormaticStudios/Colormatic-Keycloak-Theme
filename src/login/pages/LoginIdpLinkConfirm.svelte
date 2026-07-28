@@ -2,6 +2,7 @@
   import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import { Button } from "../../lib/components/ui/button";
 
   const {
     Template,
@@ -31,34 +32,28 @@
     method="post"
   >
     <div class="kcFormGroupClass cm-login-field">
-      <button
+      <Button
         type="submit"
-        class="
-          kcButtonClass
-          kcButtonDefaultClass
-          kcButtonBlockClass
-          kcButtonLargeClass
-        "
+        class="w-full"
+        variant="outline"
+        size="lg"
         name="submitAction"
         id="updateProfile"
         value="updateProfile"
       >
         {@render msg("confirmLinkIdpReviewProfile")()}
-      </button>
-      <button
+      </Button>
+      <Button
         type="submit"
-        class="
-          kcButtonClass
-          kcButtonDefaultClass
-          kcButtonBlockClass
-          kcButtonLargeClass
-        "
+        class="w-full"
+        variant="outline"
+        size="lg"
         name="submitAction"
         id="linkAccount"
         value="linkAccount"
       >
         {@render msg("confirmLinkIdpContinue", idpAlias)()}
-      </button>
+      </Button>
     </div>
   </form>
 </Template>

@@ -3,6 +3,8 @@
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
   import type { Readable } from "svelte/store";
+  import { Checkbox } from "../../lib/components/ui/checkbox";
+  import * as Field from "../../lib/components/ui/field";
 
   type TermsAcceptanceProps = {
     i18n: Readable<I18n>;
@@ -23,35 +25,27 @@
   const msg = $derived($i18n.msg);
 </script>
 
-<div class="form-group cm-login-field">
+<Field.Field>
   <div class="kcInputWrapperClass">
     <div id="kc-registration-terms-text">{@render msg("termsText")()}</div>
   </div>
-</div>
-<div class="form-group cm-login-field">
-  <div class="kcLabelWrapperClass cm-login-check">
-    <input
-      type="checkbox"
+</Field.Field>
+<Field.Field data-invalid={messagesPerField.existsError("termsAccepted")}>
+  <div class="flex items-center gap-2">
+    <Checkbox
       id="termsAccepted"
       name="termsAccepted"
-      class="kcCheckboxInputClass"
       checked={areTermsAccepted}
-      onchange={(e) => onAreTermsAcceptedValueChange(e.currentTarget.checked)}
+      onCheckedChange={onAreTermsAcceptedValueChange}
       aria-invalid={messagesPerField.existsError("termsAccepted")}
     />
-    <label for="termsAccepted" class="kcLabelClass cm-login-label">
+    <Field.Label for="termsAccepted">
       {@render msg("acceptTerms")()}
-    </label>
+    </Field.Label>
   </div>
   {#if messagesPerField.existsError("termsAccepted")}
-    <div class="kcLabelWrapperClass">
-      <span
-        id="input-error-terms-accepted"
-        class="kcInputErrorMessageClass cm-login-field__error"
-        aria-live="polite"
-      >
-        {@html kcSanitize(messagesPerField.get("termsAccepted"))}
-      </span>
-    </div>
+    <Field.Error id="input-error-terms-accepted" aria-live="polite">
+      {@html kcSanitize(messagesPerField.get("termsAccepted"))}
+    </Field.Error>
   {/if}
-</div>
+</Field.Field>

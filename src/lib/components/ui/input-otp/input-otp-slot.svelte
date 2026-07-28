@@ -1,6 +1,6 @@
 <script lang="ts">
   import { PinInput as InputOTPPrimitive } from "bits-ui";
-  import { cn } from "../../../utils.js";
+  import { cn } from "$lib/utils.js";
 
   let {
     ref = $bindable(null),
@@ -15,9 +15,7 @@
   bind:ref
   data-slot="input-otp-slot"
   class={cn(
-    "border-field-border bg-field aria-invalid:border-destructive relative flex size-10 items-center justify-center border-y border-r text-sm transition-all outline-none first:rounded-l-md first:border-l last:rounded-r-md",
-    cell.isActive &&
-      "border-ring ring-ring/50 aria-invalid:border-destructive dark:aria-invalid:ring-destructive/40 aria-invalid:ring-destructive/20 ring-offset-background z-10 ring-[3px]",
+    "dark:bg-input/30 border-input data-[active=true]:border-ring data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:ring-destructive/20 dark:data-[active=true]:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[active=true]:aria-invalid:border-destructive relative flex size-8 items-center justify-center border-y border-r text-sm transition-all outline-none first:rounded-l-lg first:border-l last:rounded-r-lg data-[active=true]:z-10 data-[active=true]:ring-3",
     className,
   )}
   {...restProps}
@@ -25,10 +23,10 @@
   {cell.char}
   {#if cell.hasFakeCaret}
     <div
-      class="pointer-events-none absolute inset-0 flex items-center justify-center"
+      class="cn-input-otp-caret pointer-events-none absolute inset-0 flex items-center justify-center"
     >
       <div
-        class="animate-caret-blink bg-foreground h-4 w-px duration-1000"
+        class="animate-caret-blink bg-foreground bg-foreground h-4 w-px duration-1000"
       ></div>
     </div>
   {/if}

@@ -37,7 +37,13 @@
     {/each}
   {:else}
     {#snippet inputNode()}
-      <InputTag {...sharedProps} bind:displayableErrors />
+      <InputTag
+        {...sharedProps}
+        bind:displayableErrors
+        withinInputGroup={["password", "password-confirm"].includes(
+          attribute.name,
+        )}
+      />
     {/snippet}
     {#if ["password", "password-confirm"].includes(attribute.name)}
       <PasswordWrapper i18n={sharedProps.i18n} passwordInputId={attribute.name}>

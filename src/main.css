@@ -52,7 +52,7 @@
   --accent-foreground: var(--cm-text);
   --destructive: var(--cm-danger);
   --border: var(--cm-border);
-  --input: var(--cm-control);
+  --input: var(--cm-field-border);
   --ring: var(--cm-focus);
   --chart-1: var(--color-orange-500);
   --chart-2: var(--color-teal-600);
@@ -77,9 +77,9 @@
   --cm-control: var(--color-slate-800);
   --cm-control-hover: var(--color-slate-700);
   --cm-field-background: var(--color-slate-800);
-  --cm-field-border: var(--color-slate-700);
-  --cm-border: var(--color-slate-700);
-  --cm-border-strong: var(--color-slate-600);
+  --cm-field-border: var(--color-slate-600);
+  --cm-border: var(--color-slate-600);
+  --cm-border-strong: var(--color-slate-500);
   --cm-text: var(--color-slate-50);
   --cm-text-muted: var(--color-slate-400);
   --cm-action: var(--color-white);

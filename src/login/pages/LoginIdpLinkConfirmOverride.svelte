@@ -2,6 +2,7 @@
   import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import { Button } from "../../lib/components/ui/button";
 
   const {
     Template,
@@ -37,19 +38,16 @@
     </a>
     <br />
     <br />
-    <button
+    <Button
       type="submit"
-      class="
-        kcButtonClass
-        kcButtonDefaultClass
-        kcButtonBlockClass
-        kcButtonLargeClass
-      "
+      class="w-full"
+      variant="outline"
+      size="lg"
       name="submitAction"
       id="confirmOverride"
       value="confirmOverride"
     >
       {@render msg("confirmOverrideIdpContinue", idpDisplayName)()}
-    </button>
+    </Button>
   </form>
 </Template>

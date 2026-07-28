@@ -13,6 +13,25 @@
 
 <Story name="Default" />
 
+<!--
+  Keycloak shows this control when another authenticator, such as a passkey,
+  is available alongside the regular combined username/password form.
+-->
+<Story
+  name="WithPasskeyAlternative"
+  args={{
+    ...args,
+    kcContext: {
+      auth: {
+        showTryAnotherWayLink: true,
+      },
+      url: {
+        loginAction: "/mock-login",
+      },
+    },
+  }}
+/>
+
 <!--  -->
 <Story
   name="WithInvalidCredential"

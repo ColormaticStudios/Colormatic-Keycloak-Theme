@@ -5,6 +5,7 @@
   import type { Component } from "svelte";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import { Button } from "../../lib/components/ui/button";
 
   type IdpReviewUserProfileProps = PageProps<
     Extract<KcContext, { pageId: "idp-review-user-profile.ftl" }>,
@@ -25,7 +26,6 @@
   }: IdpReviewUserProfileProps = $props();
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
 
   const url = $derived(kcContext.url);
   const messagesPerField = $derived(kcContext.messagesPerField);
@@ -61,17 +61,9 @@
         <div class="kcFormOptionsWrapperClass"></div>
       </div>
       <div id="kc-form-buttons" class="kcFormButtonsClass cm-login-actions">
-        <input
-          class="
-            kcButtonClass
-            kcButtonPrimaryClass
-            kcButtonBlockClass
-            kcButtonLargeClass
-          "
-          type="submit"
-          value={msgStr("doSubmit")}
-          disabled={!$isFomSubmittable}
-        />
+        <Button class="w-full" type="submit" disabled={!$isFomSubmittable}>
+          {@render msg("doSubmit")()}
+        </Button>
       </div>
     </div>
   </form>
