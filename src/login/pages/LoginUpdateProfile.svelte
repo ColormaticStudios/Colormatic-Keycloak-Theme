@@ -48,7 +48,7 @@
 
   <form
     id="kc-update-profile-form"
-    class="kcFormClass"
+    class="kcFormClass cm-login-form"
     action={url.loginAction}
     method="post"
   >
@@ -58,11 +58,11 @@
       onIsFormSubmittableValueChange={setIsFormSubmittable}
       {doMakeUserConfirmPassword}
     />
-    <div class="kcFormGroupClass">
+    <div class="kcFormGroupClass cm-login-field">
       <div id="kc-form-options" class="kcFormOptionsClass">
         <div class="kcFormOptionsWrapperClass"></div>
       </div>
-      <div id="kc-form-buttons" class="kcFormButtonsClass">
+      <div id="kc-form-buttons" class="kcFormButtonsClass cm-login-actions">
         <input
           disabled={!$isFormSubmittable}
           class="

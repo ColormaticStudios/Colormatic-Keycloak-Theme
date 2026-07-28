@@ -1,5 +1,6 @@
 <script lang="ts">
   import FieldErrors from "./FieldErrors.svelte";
+  import FormField from "./FormField.svelte";
   import GroupLabel from "./GroupLabel.svelte";
   import InputFieldByType from "./InputFieldByType.svelte";
   import type { UserProfileFormFieldsProps } from "./UserProfileFormFieldsProps";
@@ -41,6 +42,8 @@
 
 {#each $formFieldStates as formFieldState, i (i)}
   {@const { attribute, valueOrValues } = formFieldState}
+  {@const helperTextBefore = attribute.annotations.inputHelperTextBefore}
+  {@const helperTextAfter = attribute.annotations.inputHelperTextAfter}
   <GroupLabel {attribute} {groupNameRef} i18n={props.i18n} />
   {#if props.beforeField}
     {@render props.beforeField({
@@ -51,31 +54,28 @@
       i18n: props.i18n,
     })}
   {/if}
-  <div
-    class="kcFormGroupClass"
-    style:display={attribute.annotations.inputType === "hidden" ||
-    (attribute.name === "password-confirm" && !props.doMakeUserConfirmPassword)
-      ? "none"
-      : undefined}
+  <FormField
+    inputId={attribute.name}
+    required={attribute.required}
+    hasError={$displayableErrors[i].length !== 0}
+    hasHelpBefore={helperTextBefore !== undefined}
+    hasHelpAfter={helperTextAfter !== undefined ||
+      props.afterField !== undefined}
+    hidden={attribute.annotations.inputType === "hidden" ||
+      (attribute.name === "password-confirm" &&
+        !props.doMakeUserConfirmPassword)}
   >
-    <div class="kcLabelWrapperClass">
-      <label for={attribute.name} class="kcLabelClass">
-        {@render advancedMsg(attribute.displayName ?? "")()}
-      </label>
-      {#if attribute.required}
-        *
+    {#snippet label()}
+      {@render advancedMsg(attribute.displayName ?? "")()}
+    {/snippet}
+    {#snippet helpBefore()}
+      {#if helperTextBefore !== undefined}
+        <span id={`form-help-text-before-${attribute.name}`} aria-live="polite">
+          {@render advancedMsg(helperTextBefore)()}
+        </span>
       {/if}
-    </div>
-    <div class="kcInputWrapperClass">
-      {#if attribute.annotations.inputHelperTextBefore !== undefined}
-        <div
-          class="kcInputHelperTextBeforeClass"
-          id={`form-help-text-before-${attribute.name}`}
-          aria-live="polite"
-        >
-          {@render advancedMsg(attribute.annotations.inputHelperTextBefore)()}
-        </div>
-      {/if}
+    {/snippet}
+    {#snippet control()}
       <InputFieldByType
         {attribute}
         {valueOrValues}
@@ -83,17 +83,16 @@
         {dispatchFormAction}
         i18n={props.i18n}
       />
+    {/snippet}
+    {#snippet error()}
       <FieldErrors {attribute} bind:displayableErrors={$displayableErrors[i]} />
-      {#if attribute.annotations.inputHelperTextAfter !== undefined}
-        <div
-          class="kcInputHelperTextAfterClass"
-          id={`form-help-text-after-${attribute.name}`}
-          aria-live="polite"
-        >
-          {@render advancedMsg(attribute.annotations.inputHelperTextAfter)()}
-        </div>
+    {/snippet}
+    {#snippet helpAfter()}
+      {#if helperTextAfter !== undefined}
+        <span id={`form-help-text-after-${attribute.name}`} aria-live="polite">
+          {@render advancedMsg(helperTextAfter)()}
+        </span>
       {/if}
-
       {#if props.afterField}
         {@render props.afterField({
           attribute,
@@ -103,7 +102,6 @@
           i18n: props.i18n,
         })}
       {/if}
-      <!-- NOTE: Downloading of html5DataAnnotations scripts is done in the useUserProfileForm hook -->
-    </div>
-  </div>
+    {/snippet}
+  </FormField>
 {/each}

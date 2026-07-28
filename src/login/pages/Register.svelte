@@ -76,7 +76,7 @@
   {/snippet}
   <form
     id="kc-register-form"
-    class="kcFormClass"
+    class="kcFormClass cm-login-form"
     action={url.registrationAction}
     method="post"
     bind:this={htmlFormElement}
@@ -107,9 +107,9 @@
         </div>
       </div>
     {/if}
-    <div class="kcFormGroupClass">
+    <div class="kcFormGroupClass cm-login-field">
       {#if recaptchaRequired && !recaptchaVisible && recaptchaAction !== undefined}
-        <div id="kc-form-buttons" class="kcFormButtonsClass">
+        <div id="kc-form-buttons" class="kcFormButtonsClass cm-login-actions">
           <button
             class={clsx(
               "kcButtonClass",
@@ -127,7 +127,7 @@
           </button>
         </div>
       {:else}
-        <div id="kc-form-buttons" class="kcFormButtonsClass">
+        <div id="kc-form-buttons" class="kcFormButtonsClass cm-login-actions">
           <input
             disabled={!$isFormSubmittable ||
               (termsAcceptanceRequired && !$areTermsAccepted)}

@@ -48,6 +48,11 @@ export {
 	type FileUploadControlProps,
 } from "./controls/FileUploadControl";
 export { IconMapper } from "./icons/IconMapper";
+export {
+	BootstrapIcon,
+	type BootstrapIconName,
+	type BootstrapIconProps,
+} from "./icons/BootstrapIcon";
 export { FormPanel } from "./scroll-form/FormPanel";
 export { ScrollForm, mainPageContentId } from "./scroll-form/ScrollForm";
 export {

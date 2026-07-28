@@ -46,7 +46,10 @@ export const TableToolbar = ({
 
   return (
     <>
-      <Toolbar data-testid="table-toolbar">
+      <Toolbar
+        data-testid="table-toolbar"
+        aria-label={inputGroupPlaceholder || t("search")}
+      >
         <ToolbarContent>
           {inputGroupName && (
             <ToolbarItem>
@@ -54,6 +57,7 @@ export const TableToolbar = ({
                 {searchTypeComponent}
                 {inputGroupPlaceholder && (
                   <SearchInput
+                    className="cm-account-search"
                     data-testid="table-search-input"
                     placeholder={inputGroupPlaceholder}
                     aria-label={t("search")}
@@ -73,13 +77,15 @@ export const TableToolbar = ({
         </ToolbarContent>
       </Toolbar>
       {subToolbar && (
-        <Toolbar>
+        <Toolbar aria-label={t("actions")}>
           <ToolbarContent>{subToolbar}</ToolbarContent>
         </Toolbar>
       )}
       <Divider />
       {children}
-      <Toolbar>{toolbarItemFooter}</Toolbar>
+      {toolbarItemFooter ? (
+        <Toolbar aria-label={t("pagination")}>{toolbarItemFooter}</Toolbar>
+      ) : null}
     </>
   );
 };

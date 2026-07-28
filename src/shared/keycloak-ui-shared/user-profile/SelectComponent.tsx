@@ -10,7 +10,7 @@ import type {
 } from "./UserProfileFields";
 import { UserProfileGroup } from "./UserProfileGroup";
 import type { UserFormFields } from "./utils";
-import { fieldName, label } from "./utils";
+import { fieldName, label, labelAttribute } from "./utils";
 
 export const SelectComponent = (props: UserProfileFieldProps) => {
   const { t, form, inputType, attribute } = props;
@@ -48,6 +48,7 @@ export const SelectComponent = (props: UserProfileFieldProps) => {
 
   const fetchLabel = (option: string) =>
     label(props.t, optionLabel[option], option, prefix);
+  const selectLabel = labelAttribute(t, attribute) || t("selectOne");
 
   const convertOptions = (selected: string | string[]) =>
     options
@@ -74,7 +75,7 @@ export const SelectComponent = (props: UserProfileFieldProps) => {
         name={fieldName(attribute.name)}
         defaultValue={attribute.defaultValue}
         control={form.control}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <KeycloakSelect
             toggleId={attribute.name}
             onToggle={(b) => setOpen(b)}
@@ -86,11 +87,7 @@ export const SelectComponent = (props: UserProfileFieldProps) => {
                 setOpen(false);
               }
             }}
-            selections={
-              isMultiValue && Array.isArray(field.value)
-                ? field.value.map((option) => fetchLabel(option))
-                : fetchLabel(field.value)
-            }
+            selections={field.value}
             variant={
               isMultiValue
                 ? SelectVariant.typeaheadMulti
@@ -98,7 +95,12 @@ export const SelectComponent = (props: UserProfileFieldProps) => {
                   ? SelectVariant.typeahead
                   : SelectVariant.single
             }
-            aria-label={t("selectOne")}
+            aria-label={selectLabel}
+            typeAheadAriaLabel={selectLabel}
+            inputAriaDescribedBy={
+              fieldState.error ? `${attribute.name}-error` : undefined
+            }
+            validated={fieldState.error ? "error" : "default"}
             isOpen={open}
             isDisabled={attribute.readOnly}
             onFilter={(value) => {

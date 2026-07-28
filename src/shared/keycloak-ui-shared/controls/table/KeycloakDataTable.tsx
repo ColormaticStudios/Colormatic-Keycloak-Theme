@@ -3,8 +3,6 @@ import {
   ButtonVariant,
   ToolbarItem,
 } from "../../../@patternfly/react-core";
-import { SyncAltIcon } from "../../../@patternfly/react-icons";
-import type { SVGIconProps } from "@patternfly/react-icons/dist/js/createIcon";
 import type {
   IAction,
   IActions,
@@ -27,7 +25,7 @@ import {
   Tr,
 } from "../../../@patternfly/react-table";
 import { cloneDeep, get, intersectionBy } from "lodash-es";
-import type { ComponentClass, ReactNode } from "react";
+import type { ReactNode } from "react";
 import {
   isValidElement,
   useEffect,
@@ -43,6 +41,8 @@ import { useStoredState } from "../../utils/useStoredState";
 import { KeycloakSpinner } from "../KeycloakSpinner";
 import { ListEmptyState } from "./ListEmptyState";
 import { PaginatingTableToolbar } from "./PaginatingTableToolbar";
+import type { BootstrapIconName } from "../../icons/BootstrapIcon";
+import { BootstrapIcon } from "../../icons/BootstrapIcon";
 
 type TitleCell = { title: JSX.Element };
 type Cell<T> = keyof T | JSX.Element | TitleCell;
@@ -63,7 +63,10 @@ type SubRow<T> = BaseRow<T> & {
   parent: number;
 };
 
-type DataTableProps<T> = {
+type DataTableProps<T> = Omit<
+  TableProps,
+  "cells" | "onSelect" | "rows" | "selected"
+> & {
   ariaLabelKey: string;
   columns: Field<T>[];
   rows: (Row<T> | SubRow<T>)[];
@@ -80,6 +83,7 @@ type DataTableProps<T> = {
 
 type CellRendererProps = {
   row: IRow;
+  columnLabels?: string[];
   index?: number;
   actions?: IActions;
   actionResolver?: IActionsResolver;
@@ -90,6 +94,7 @@ const isRow = (c: ReactNode | IRowCell): c is IRowCell =>
 
 const CellRenderer = ({
   row,
+  columnLabels,
   index,
   actions,
   actionResolver,
@@ -98,11 +103,15 @@ const CellRenderer = ({
   return (
     <>
       {row.cells!.map((c, i) => (
-        <Td key={`cell-${i}`}>{(isRow(c) ? c.title : c) as ReactNode}</Td>
+        <Td key={`cell-${i}`} dataLabel={columnLabels?.[i]}>
+          {(isRow(c) ? c.title : c) as ReactNode}
+        </Td>
       ))}
-      {items && items.length > 0 && !row.disableActions && (
+      {(actions || actionResolver) && (
         <Td isActionCell>
-          <ActionsColumn items={items} extraData={{ rowIndex: index }} />
+          {items && items.length > 0 && !row.disableActions ? (
+            <ActionsColumn items={items} extraData={{ rowIndex: index }} />
+          ) : null}
         </Td>
       )}
     </>
@@ -130,8 +139,13 @@ function DataTable<T>({
   ...props
 }: DataTableProps<T>) {
   const { t } = useTranslation();
+  const tableId = useId();
+  const resolvedTableId = props.id ?? tableId;
   const [selectedRows, setSelectedRows] = useState<T[]>(selected || []);
-  const [expandedRows, setExpandedRows] = useState<boolean[]>([]);
+  const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
+  const columnLabels = columns.map((column) =>
+    t(column.displayKey || column.name),
+  );
 
   const rowsSelectedOnPage = useMemo(
     () =>
@@ -145,15 +159,19 @@ function DataTable<T>({
 
   useEffect(() => {
     if (canSelectAll) {
-      const selectAllCheckbox = document.getElementsByName("check-all").item(0);
+      const selectAllCheckbox = document
+        .getElementById(resolvedTableId)
+        ?.querySelector<HTMLInputElement>('input[name="check-all"]');
       if (selectAllCheckbox) {
-        const checkbox = selectAllCheckbox as HTMLInputElement;
-        checkbox.indeterminate =
+        selectAllCheckbox.indeterminate =
           rowsSelectedOnPage.length < rows.length &&
           rowsSelectedOnPage.length > 0;
       }
     }
-  }, [selectedRows, canSelectAll, rows]);
+  }, [rowsSelectedOnPage.length, canSelectAll, rows.length, resolvedTableId]);
+
+  const getRowKey = (row: Row<T> | SubRow<T>, index: number) =>
+    String(get(row.data, "id", index));
 
   const updateSelectedRows = (selected: T[]) => {
     setSelectedRows(selected);
@@ -193,17 +211,18 @@ function DataTable<T>({
   return (
     <Table
       {...props}
+      id={resolvedTableId}
       variant={isNotCompact ? undefined : TableVariant.compact}
       aria-label={t(ariaLabelKey)}
     >
       <Thead>
         <Tr>
           {onCollapse && <Th screenReaderText={t("expandRow")} />}
-          {canSelectAll && (
+          {canSelect && (
             <Th
-              screenReaderText={t("selectAll")}
+              screenReaderText={t(isRadio ? "selectOne" : "selectAll")}
               select={
-                !isRadio
+                canSelectAll && !isRadio
                   ? {
                       onSelect: (_, isSelected) => {
                         updateState(-1, isSelected);
@@ -216,19 +235,24 @@ function DataTable<T>({
           )}
           {columns.map((column) => (
             <Th
-              screenReaderText={t("expandRow")}
               key={column.displayKey || column.name}
               className={column.transforms?.[0]().className}
             >
               {t(column.displayKey || column.name)}
             </Th>
           ))}
+          {(actions || actionResolver) && (
+            <Th screenReaderText={t("actions")} />
+          )}
         </Tr>
       </Thead>
       {!onCollapse ? (
         <Tbody>
           {(rows as IRow[]).map((row, index) => (
-            <Tr key={index} isExpanded={expandedRows[index]}>
+            <Tr
+              key={getRowKey(row as Row<T>, index)}
+              isExpanded={expandedRows[getRowKey(row as Row<T>, index)]}
+            >
               {canSelect && (
                 <Td
                   select={{
@@ -246,6 +270,7 @@ function DataTable<T>({
               )}
               <CellRenderer
                 row={row}
+                columnLabels={columnLabels}
                 index={index}
                 actions={actions}
                 actionResolver={actionResolver}
@@ -254,46 +279,54 @@ function DataTable<T>({
           ))}
         </Tbody>
       ) : (
-        (rows as IRow[]).map((row, index) => (
-          <Tbody key={index}>
-            {index % 2 === 0 ? (
-              <Tr>
-                <Td
-                  expand={
-                    rows[index + 1].cells.length === 0
-                      ? undefined
-                      : {
-                          isExpanded: expandedRows[index] ?? false,
-                          rowIndex: index,
-                          expandId: "expandable-row-",
-                          onToggle: (_, rowIndex, isOpen) => {
-                            onCollapse(isOpen, rowIndex);
-                            const expand = [...expandedRows];
-                            expand[index] = isOpen;
-                            setExpandedRows(expand);
-                          },
-                        }
-                  }
-                />
-                <CellRenderer
-                  row={row}
-                  index={index}
-                  actions={actions}
-                  actionResolver={actionResolver}
-                />
-              </Tr>
-            ) : (
-              <Tr isExpanded={expandedRows[index - 1] ?? false}>
-                <Td />
-                <Td colSpan={columns.length}>
-                  <ExpandableRowContent>
-                    <ExpandableRowRenderer row={row} />
-                  </ExpandableRowContent>
-                </Td>
-              </Tr>
-            )}
-          </Tbody>
-        ))
+        (rows as IRow[]).map((row, index) => {
+          const parentIndex = index % 2 === 0 ? index : index - 1;
+          const parentRow = rows[parentIndex];
+          const rowKey = getRowKey(parentRow, parentIndex);
+
+          return (
+            <Tbody key={`${rowKey}-${index % 2 === 0 ? "main" : "detail"}`}>
+              {index % 2 === 0 ? (
+                <Tr>
+                  <Td
+                    expand={
+                      rows[index + 1].cells.length === 0
+                        ? undefined
+                        : {
+                            isExpanded: expandedRows[rowKey] ?? false,
+                            rowIndex: index,
+                            expandId: `expandable-row-${rowKey}`,
+                            onToggle: (_, rowIndex, isOpen) => {
+                              onCollapse(isOpen, rowIndex);
+                              setExpandedRows((current) => ({
+                                ...current,
+                                [rowKey]: isOpen,
+                              }));
+                            },
+                          }
+                    }
+                  />
+                  <CellRenderer
+                    row={row}
+                    columnLabels={columnLabels}
+                    index={index}
+                    actions={actions}
+                    actionResolver={actionResolver}
+                  />
+                </Tr>
+              ) : (
+                <Tr isExpanded={expandedRows[rowKey] ?? false}>
+                  <Td />
+                  <Td colSpan={columns.length}>
+                    <ExpandableRowContent>
+                      <ExpandableRowRenderer row={row} />
+                    </ExpandableRowContent>
+                  </Td>
+                </Tr>
+              )}
+            </Tbody>
+          );
+        })
       )}
     </Table>
   );
@@ -347,7 +380,7 @@ export type DataListProps<T> = Omit<
   toolbarItem?: ReactNode;
   subToolbar?: ReactNode;
   emptyState?: ReactNode;
-  icon?: ComponentClass<SVGIconProps>;
+  icon?: BootstrapIconName;
   isNotCompact?: boolean;
   isRadio?: boolean;
   isSearching?: boolean;
@@ -496,7 +529,7 @@ export function KeycloakDataTable<T>({
               ),
             )
             .slice(first, first + max + 1),
-    [search, first, max],
+    [search, first, max, isPaginated, unPaginatedData],
   );
 
   useFetch(
@@ -599,8 +632,13 @@ export function KeycloakDataTable<T>({
             <>
               {toolbarItem} <ToolbarItem variant="separator" />{" "}
               <ToolbarItem>
-                <Button variant="link" onClick={refresh} data-testid="refresh">
-                  <SyncAltIcon /> {t("refresh")}
+                <Button
+                  type="button"
+                  variant="link"
+                  onClick={refresh}
+                  data-testid="refresh"
+                >
+                  <BootstrapIcon icon="bi-arrow-clockwise" /> {t("refresh")}
                 </Button>
               </ToolbarItem>
             </>

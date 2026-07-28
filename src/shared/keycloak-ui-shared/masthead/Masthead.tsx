@@ -13,10 +13,10 @@ import {
   ToolbarContent,
   ToolbarItem,
 } from "../../@patternfly/react-core";
-import { BarsIcon } from "../../@patternfly/react-icons";
 import type { TFunction } from "i18next";
 import type { Keycloak, KeycloakTokenParsed } from "oidc-spa/keycloak-js";
 import type { ReactNode } from "react";
+import { BootstrapIcon } from "../icons/BootstrapIcon";
 import { useTranslation } from "react-i18next";
 import { KeycloakDropdown } from "./KeycloakDropdown";
 
@@ -95,7 +95,7 @@ const KeycloakMasthead = ({
     <Masthead {...rest}>
       <MastheadToggle>
         <PageToggleButton variant="plain" aria-label={t("navigation")}>
-          <BarsIcon />
+          <BootstrapIcon icon="bi-list" />
         </PageToggleButton>
       </MastheadToggle>
       <MastheadBrand {...brandProps}>
@@ -136,6 +136,7 @@ const KeycloakMasthead = ({
               <KeycloakDropdown
                 data-testid="options-kebab"
                 isKebab
+                toggleAriaLabel={t("manageAccount")}
                 dropDownItems={[
                   ...(kebabDropdownItems || dropdownItems),
                   extraItems,

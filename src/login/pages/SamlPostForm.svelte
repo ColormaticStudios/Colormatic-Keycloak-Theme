@@ -42,6 +42,7 @@
   {/snippet}
   <p>{@render msg("saml.post-form.message")()}</p>
   <form
+    class="cm-login-form"
     name="saml-post-binding"
     method="post"
     action={samlPost.url}

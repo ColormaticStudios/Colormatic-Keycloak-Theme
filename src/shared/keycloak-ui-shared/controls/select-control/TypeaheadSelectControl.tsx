@@ -11,17 +11,18 @@ import {
   TextInputGroupMain,
   TextInputGroupUtilities,
 } from "../../../@patternfly/react-core";
-import { TimesIcon } from "../../../@patternfly/react-icons";
 import { get } from "lodash-es";
-import { useMemo, useRef, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import type {
   ControllerRenderProps,
   FieldPath,
   FieldValues,
 } from "react-hook-form";
 import { Controller, useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { getRuleValue } from "../../utils/getRuleValue";
 import { FormLabel } from "../FormLabel";
+import { BootstrapIcon } from "../../icons/BootstrapIcon";
 import type {
   OptionType,
   SelectControlOption,
@@ -54,10 +55,11 @@ export const TypeaheadSelectControl = <
   isFullWidth = true,
   ...rest
 }: SelectControlProps<T, P>) => {
+  const { t } = useTranslation();
   const {
     control,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<T>();
   const [open, setOpen] = useState(false);
   const [filterValue, setFilterValue] = useState("");
   const [focusedItemIndex, setFocusedItemIndex] = useState<number>(0);
@@ -65,6 +67,7 @@ export const TypeaheadSelectControl = <
     SelectControlOption[]
   >([]);
   const textInputRef = useRef<HTMLInputElement>();
+  const listboxId = useId();
   const required = getRuleValue(controller.rules?.required) === true;
   const isTypeaheadMulti = variant === SelectVariant.typeaheadMulti;
 
@@ -84,18 +87,20 @@ export const TypeaheadSelectControl = <
   );
 
   const updateValue = (
-    option: string | string[],
-    field: ControllerRenderProps<FieldValues, string>,
+    option: string,
+    value: unknown,
+    onChange: (value: string[]) => void,
   ) => {
-    if (field.value.includes(option)) {
-      field.onChange(field.value.filter((item: string) => item !== option));
+    const values = Array.isArray(value) ? value : [];
+    if (values.includes(option)) {
+      onChange(values.filter((item: string) => item !== option));
       if (isSelectBasedOptions(options)) {
         setSelectedOptions(
           selectedOptionsState.filter((item) => item.key !== option),
         );
       }
     } else {
-      field.onChange([...field.value, option]);
+      onChange([...values, option]);
       if (isSelectBasedOptions(combinedOptions)) {
         setSelectedOptions([
           ...selectedOptionsState,
@@ -107,7 +112,7 @@ export const TypeaheadSelectControl = <
 
   const onInputKeyDown = (
     event: React.KeyboardEvent<HTMLDivElement>,
-    field: ControllerRenderProps<FieldValues, string>,
+    field: ControllerRenderProps<T, P>,
   ) => {
     const focusedItem = filteredOptions[focusedItemIndex];
     setOpen(true);
@@ -123,7 +128,11 @@ export const TypeaheadSelectControl = <
           setFilterValue("");
         }
 
-        updateValue(key(focusedItem), field);
+        if (isTypeaheadMulti) {
+          updateValue(key(focusedItem), field.value, field.onChange);
+        } else {
+          field.onChange(key(focusedItem));
+        }
 
         setOpen(false);
         setFocusedItemIndex(0);
@@ -133,7 +142,6 @@ export const TypeaheadSelectControl = <
       case "Tab":
       case "Escape": {
         setOpen(false);
-        field.onChange(undefined);
         break;
       }
       case "Backspace": {
@@ -187,7 +195,7 @@ export const TypeaheadSelectControl = <
         render={({ field }) => (
           <Select
             {...rest}
-            onOpenChange={() => setOpen(false)}
+            onOpenChange={setOpen}
             selected={
               isSelectBasedOptions(combinedOptions)
                 ? combinedOptions
@@ -212,6 +220,12 @@ export const TypeaheadSelectControl = <
                 isExpanded={open}
                 isFullWidth={isFullWidth}
                 status={get(errors, name) ? MenuToggleStatus.danger : undefined}
+                aria-label={label}
+                aria-describedby={
+                  get(errors, name) ? `${name}-error` : undefined
+                }
+                aria-invalid={Boolean(get(errors, name))}
+                isDisabled={rest.isDisabled}
               >
                 <TextInputGroup isPlain>
                   <TextInputGroupMain
@@ -229,9 +243,13 @@ export const TypeaheadSelectControl = <
                           : field.value
                         : filterValue
                     }
-                    onClick={() => setOpen(!open)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setOpen(true);
+                    }}
                     onChange={(_, value) => {
                       setFilterValue(value);
+                      setOpen(true);
                       onFilter?.(value);
                     }}
                     onKeyDown={(event) => onInputKeyDown(event, field)}
@@ -239,33 +257,37 @@ export const TypeaheadSelectControl = <
                     innerRef={textInputRef}
                     role="combobox"
                     isExpanded={open}
-                    aria-controls="select-typeahead-listbox"
+                    aria-controls={listboxId}
+                    aria-label={label}
                   >
                     {variant === SelectVariant.typeaheadMulti &&
                       Array.isArray(field.value) && (
-                        <ChipGroup aria-label="Current selections">
-                          {field.value.map(
-                            (selection: string, index: number) => (
-                              <Chip
-                                key={index}
-                                onClick={(ev) => {
-                                  ev.stopPropagation();
-                                  field.onChange(
-                                    field.value.filter(
-                                      (item: string) => item !== key(selection),
-                                    ),
-                                  );
-                                }}
-                              >
-                                {isSelectBasedOptions(combinedOptions)
-                                  ? [
-                                      ...combinedOptions,
-                                      ...selectedOptionsState,
-                                    ].find((o) => selection === o.key)?.value
-                                  : getValue(selection)}
-                              </Chip>
-                            ),
+                        <ChipGroup
+                          aria-label={t(
+                            "currentSelections",
+                            "Current selections",
                           )}
+                        >
+                          {field.value.map((selection: string) => (
+                            <Chip
+                              key={selection}
+                              onClick={(ev) => {
+                                ev.stopPropagation();
+                                field.onChange(
+                                  field.value.filter(
+                                    (item: string) => item !== key(selection),
+                                  ),
+                                );
+                              }}
+                            >
+                              {isSelectBasedOptions(combinedOptions)
+                                ? [
+                                    ...combinedOptions,
+                                    ...selectedOptionsState,
+                                  ].find((o) => selection === o.key)?.value
+                                : getValue(selection)}
+                            </Chip>
+                          ))}
                         </ChipGroup>
                       )}
                   </TextInputGroupMain>
@@ -278,9 +300,9 @@ export const TypeaheadSelectControl = <
                           field.onChange(isTypeaheadMulti ? [] : "");
                           textInputRef.current?.focus();
                         }}
-                        aria-label="Clear input value"
+                        aria-label={t("clearInputValue", "Clear input value")}
                       >
-                        <TimesIcon aria-hidden />
+                        <BootstrapIcon icon="bi-x-lg" />
                       </Button>
                     )}
                   </TextInputGroupUtilities>
@@ -292,21 +314,24 @@ export const TypeaheadSelectControl = <
               const option = v?.toString();
               if (isTypeaheadMulti && Array.isArray(field.value)) {
                 setFilterValue("");
-                updateValue(option || "", field);
+                updateValue(option || "", field.value, field.onChange);
               } else {
-                field.onChange(Array.isArray(field.value) ? [option] : option);
+                field.onChange(option);
                 setOpen(false);
               }
             }}
             isOpen={open}
           >
-            <SelectList>
+            <SelectList id={listboxId}>
               {filteredOptions.map((option, index) => (
                 <SelectOption
                   key={key(option)}
                   value={key(option)}
                   isFocused={focusedItemIndex === index}
-                  isActive={field.value.includes(getValue(option))}
+                  isActive={
+                    Array.isArray(field.value) &&
+                    field.value.includes(key(option))
+                  }
                   description={
                     !isString(option) && "description" in option
                       ? option.description

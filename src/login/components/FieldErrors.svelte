@@ -21,7 +21,7 @@
   {#if _displayableErrors.length !== 0}
     <span
       id={`input-error-${attribute.name}${fieldIndex === undefined ? "" : `-${fieldIndex}`}`}
-      class="kcInputErrorMessageClass"
+      class="kcInputErrorMessageClass cm-login-field__error"
       aria-live="polite"
     >
       {#each _displayableErrors as displayableError, i (displayableError.errorMessage)}

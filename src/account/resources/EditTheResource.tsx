@@ -22,6 +22,9 @@ type FormValues = {
   permissions: Permission[];
 };
 
+const scopeName = (scope: Permission["scopes"][number]) =>
+  typeof scope === "string" ? scope : scope.name;
+
 export const EditTheResource = ({
   resource,
   permissions,
@@ -39,15 +42,20 @@ export const EditTheResource = ({
     name: "permissions",
   });
 
-  useEffect(() => reset({ permissions }), []);
+  useEffect(
+    () =>
+      reset({
+        permissions: permissions?.map((permission) => ({
+          ...permission,
+          scopes: permission.scopes.map(scopeName),
+        })),
+      }),
+    [permissions, reset],
+  );
 
   const editShares = async ({ permissions }: FormValues) => {
     try {
-      await Promise.all(
-        permissions.map((permission) =>
-          updatePermissions(context, resource._id, [permission]),
-        ),
-      );
+      await updatePermissions(context, resource._id, permissions);
       addAlert(t("updateSuccess"));
       onClose();
     } catch (error) {
@@ -71,6 +79,9 @@ export const EditTheResource = ({
         >
           {t("done")}
         </Button>,
+        <Button key="cancel" variant="link" type="button" onClick={onClose}>
+          {t("cancel")}
+        </Button>,
       ]}
     >
       <Form id="edit-form" onSubmit={handleSubmit(editShares)}>
@@ -85,7 +96,7 @@ export const EditTheResource = ({
               <SelectControl
                 id={`permissions-${p.id}`}
                 name={`permissions.${index}.scopes`}
-                label="permissions"
+                label={t("permissions")}
                 variant="typeaheadMulti"
                 controller={{ defaultValue: [] }}
                 options={resource.scopes.map(({ name, displayName }) => ({

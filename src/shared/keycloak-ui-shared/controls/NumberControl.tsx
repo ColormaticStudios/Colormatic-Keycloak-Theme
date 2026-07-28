@@ -57,6 +57,7 @@ export const NumberControl = <
         render={({ field }) => {
           const required = !!controller.rules?.required;
           const min = getRuleValue(controller.rules?.min);
+          const max = getRuleValue(controller.rules?.max);
           const value = field.value ?? controller.defaultValue;
           const setValue = (newValue: number) =>
             field.onChange(
@@ -72,8 +73,17 @@ export const NumberControl = <
                 errors[name] ? ValidatedOptions.error : ValidatedOptions.default
               }
               required={required}
-              min={Number(min)}
-              max={Number(controller.rules?.max)}
+              min={min === undefined ? undefined : Number(min)}
+              max={max === undefined ? undefined : Number(max)}
+              onBlur={field.onBlur}
+              inputName={field.name}
+              inputProps={{
+                ...rest.inputProps,
+                ref: field.ref,
+                required,
+                "aria-invalid": Boolean(errors[name]),
+                "aria-describedby": errors[name] ? `${name}-error` : undefined,
+              }}
               onPlus={() => setValue(value + 1)}
               onMinus={() => setValue(value - 1)}
               onChange={(event) => {

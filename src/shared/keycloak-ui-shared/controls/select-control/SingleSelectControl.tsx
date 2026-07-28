@@ -6,7 +6,7 @@ import {
   SelectOption,
 } from "../../../@patternfly/react-core";
 import { get } from "lodash-es";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { FieldPath, FieldValues } from "react-hook-form";
 import { Controller, useFormContext } from "react-hook-form";
 import { getRuleValue } from "../../utils/getRuleValue";
@@ -33,9 +33,18 @@ export const SingleSelectControl = <
   const {
     control,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<T>();
   const [open, setOpen] = useState(false);
   const required = getRuleValue(controller.rules?.required) === true;
+  const allOptions = useMemo(
+    () =>
+      [...options, ...selectedOptions].filter(
+        (option, index, all) =>
+          all.findIndex((candidate) => key(candidate) === key(option)) ===
+          index,
+      ),
+    [options, selectedOptions],
+  );
 
   return (
     <FormLabel
@@ -50,12 +59,11 @@ export const SingleSelectControl = <
         {...controller}
         name={name}
         control={control}
-        render={({ field: { onChange, value } }) => (
+        render={({ field: { onBlur, onChange, value } }) => (
           <Select
             {...rest}
             variant="default"
-            onClick={() => setOpen(!open)}
-            onOpenChange={() => setOpen(false)}
+            onOpenChange={setOpen}
             selected={
               isSelectBasedOptions(options)
                 ? options
@@ -67,25 +75,38 @@ export const SingleSelectControl = <
                     .map((o) => o.value)
                 : value
             }
-            toggle={(ref) => (
-              <MenuToggle
-                id={id || name}
-                ref={ref}
-                onClick={() => setOpen(!open)}
-                isExpanded={open}
-                isFullWidth={isFullWidth}
-                status={get(errors, name) ? MenuToggleStatus.danger : undefined}
-                aria-label={label}
-                isDisabled={isDisabled}
-              >
-                {isSelectBasedOptions(options)
-                  ? options.find(
-                      (o) =>
-                        o.key === (Array.isArray(value) ? value[0] : value),
-                    )?.value
-                  : value}
-              </MenuToggle>
-            )}
+            toggle={(ref) => {
+              const selectedValue = Array.isArray(value) ? value[0] : value;
+              const selectedOption = allOptions.find(
+                (option) => key(option) === selectedValue,
+              );
+              const selectedLabel =
+                selectedOption && !isString(selectedOption)
+                  ? selectedOption.value
+                  : selectedValue;
+
+              return (
+                <MenuToggle
+                  id={id || name}
+                  ref={ref}
+                  onClick={() => setOpen(!open)}
+                  isExpanded={open}
+                  isFullWidth={isFullWidth}
+                  status={
+                    get(errors, name) ? MenuToggleStatus.danger : undefined
+                  }
+                  aria-label={label}
+                  aria-describedby={
+                    get(errors, name) ? `${name}-error` : undefined
+                  }
+                  aria-invalid={Boolean(get(errors, name))}
+                  isDisabled={isDisabled}
+                  onBlur={onBlur}
+                >
+                  {selectedLabel}
+                </MenuToggle>
+              );
+            }}
             onSelect={(_event, v) => {
               const option = v?.toString();
               if (option === undefined) {
@@ -102,7 +123,7 @@ export const SingleSelectControl = <
             isOpen={open}
           >
             <SelectList data-testid={`select-${name}`}>
-              {[...options, ...selectedOptions].map((option) => (
+              {allOptions.map((option) => (
                 <SelectOption
                   key={key(option)}
                   value={key(option)}

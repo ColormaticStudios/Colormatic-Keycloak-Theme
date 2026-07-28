@@ -48,7 +48,7 @@
   {/snippet}
   <form
     id="kc-update-email-form"
-    class="kcFormClass"
+    class="kcFormClass cm-login-form"
     action={url.loginAction}
     method="post"
   >
@@ -59,14 +59,17 @@
       {doMakeUserConfirmPassword}
     />
 
-    <div class="kcFormGroupClass">
+    <div class="kcFormGroupClass cm-login-field">
       <div id="kc-form-options" class="kcFormOptionsClass">
         <div class="kcFormOptionsWrapperClass"></div>
       </div>
 
       <LogoutOtherSessions {i18n} />
 
-      <div id="kc-form-buttons" class="kcFormButtonsWrapperClass">
+      <div
+        id="kc-form-buttons"
+        class="kcFormButtonsWrapperClass cm-login-actions"
+      >
         <input
           disabled={!$isFormSubmittable}
           class="

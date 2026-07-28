@@ -24,8 +24,13 @@
   {#snippet headerNode()}
     {@render msg("confirmLinkIdpTitle")()}
   {/snippet}
-  <form id="kc-register-form" action={url.loginAction} method="post">
-    <div class="kcFormGroupClass">
+  <form
+    class="cm-login-form"
+    id="kc-register-form"
+    action={url.loginAction}
+    method="post"
+  >
+    <div class="kcFormGroupClass cm-login-field">
       <button
         type="submit"
         class="

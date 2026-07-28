@@ -2,6 +2,8 @@
   import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import FormActions from "../components/FormActions.svelte";
+  import { Button } from "../../lib/components/ui/button";
 
   const {
     Template,
@@ -18,7 +20,6 @@
   const x509 = $derived(kcContext.x509);
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes}>
@@ -27,76 +28,44 @@
   {/snippet}
   <form
     id="kc-x509-login-info"
-    class="kcFormClass"
+    class="kcFormClass cm-login-form"
     action={url.loginAction}
     method="post"
   >
-    <div class="kcFormGroupClass">
-      <div class="kcLabelWrapperClass">
-        <label for="certificate_subjectDN" class="kcLabelClass">
+    <dl class="cm-login-description-list">
+      <div>
+        <dt class="cm-login-label">
           {@render msg("clientCertificate")()}
-        </label>
-      </div>
-      {#if x509.formData.subjectDN}
-        <div class="kcLabelWrapperClass">
-          <!-- svelte-ignore a11y_label_has_associated_control -->
-          <label id="certificate_subjectDN" class="kcLabelClass">
+        </dt>
+        <dd id="certificate_subjectDN">
+          {#if x509.formData.subjectDN}
             {x509.formData.subjectDN}
-          </label>
-        </div>
-      {:else}
-        <div class="kcLabelWrapperClass">
-          <label id="certificate_subjectDN" class="kcLabelClass">
+          {:else}
             {@render msg("noCertificate")()}
-          </label>
-        </div>
-      {/if}
-    </div>
-    <div class="kcFormGroupClass">
+          {/if}
+        </dd>
+      </div>
       {#if x509.formData.isUserEnabled}
-        <div class="kcLabelWrapperClass">
-          <label for="username" class="kcLabelClass">
-            {@render msg("doX509Login")()}
-          </label>
-        </div>
-        <div class="kcLabelWrapperClass">
-          <!-- svelte-ignore a11y_label_has_associated_control -->
-          <label id="username" class="kcLabelClass">
-            {x509.formData.username}
-          </label>
+        <div>
+          <dt class="cm-login-label">{@render msg("doX509Login")()}</dt>
+          <dd id="username">{x509.formData.username}</dd>
         </div>
       {/if}
-    </div>
-    <div class="kcFormGroupClass">
+    </dl>
+    <div class="kcFormGroupClass cm-login-field">
       <div id="kc-form-options" class="kcFormOptionsClass">
         <div class="kcFormOptionsWrapperClass"></div>
       </div>
-      <div id="kc-form-buttons" class="kcFormButtonsWrapperClass">
-        <input
-          class="
-                kcButtonClass
-                kcButtonPrimaryClass
-                kcButtonLargeClass
-              "
-          name="login"
-          id="kc-login"
-          type="submit"
-          value={msgStr("doContinue")}
-        />
+      <FormActions>
+        <Button name="login" id="kc-login" type="submit">
+          {@render msg("doContinue")()}
+        </Button>
         {#if x509.formData.isUserEnabled}
-          <input
-            class="
-                  kcButtonClass
-                  kcButtonDefaultClass
-                  kcButtonLargeClass
-                "
-            name="cancel"
-            id="kc-cancel"
-            type="submit"
-            value={msgStr("doIgnore")}
-          />
+          <Button variant="outline" name="cancel" id="kc-cancel" type="submit">
+            {@render msg("doIgnore")()}
+          </Button>
         {/if}
-      </div>
+      </FormActions>
     </div>
   </form>
 </Template>

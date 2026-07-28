@@ -40,11 +40,11 @@
   {/snippet}
   <form
     id="register"
-    class="kcFormClass"
+    class="kcFormClass cm-login-form"
     action={url.loginAction}
     method="post"
   >
-    <div class="kcFormGroupClass">
+    <div class="kcFormGroupClass cm-login-field">
       <input type="hidden" id="clientDataJSON" name="clientDataJSON" />
       <input type="hidden" id="attestationObject" name="attestationObject" />
       <input
@@ -72,7 +72,7 @@
   {#if !isSetRetry && isAppInitiatedAction}
     <form
       action={url.loginAction}
-      class="kcFormClass"
+      class="kcFormClass cm-login-form"
       id="kc-webauthn-settings-form"
       method="post"
     >

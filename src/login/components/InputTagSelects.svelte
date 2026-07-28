@@ -73,13 +73,13 @@
 </script>
 
 {#each options as option, i (i)}
-  <div class={classDiv}>
+  <div class={`${classDiv} cm-login-check`}>
     <input
       type={inputType}
       id={`${attribute.name}-${option}`}
       name={attribute.name}
       value={option}
-      class={classInput}
+      class={`${classInput} cm-login-check__input`}
       aria-invalid={displayableErrors.length !== 0}
       disabled={attribute.readOnly}
       checked={valueOrValues instanceof Array
@@ -116,7 +116,7 @@
     />
     <label
       for={`${attribute.name}-${option}`}
-      class={`${classLabel}${attribute.readOnly ? ` $"kcInputClassRadioCheckboxLabelDisabled"` : ""}`}
+      class={`${classLabel} cm-login-label${attribute.readOnly ? " kcInputClassRadioCheckboxLabelDisabled" : ""}`}
     >
       {@render inputLabel($i18n, attribute, option)()}
     </label>

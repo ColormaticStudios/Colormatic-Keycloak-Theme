@@ -1,39 +1,66 @@
 .kcButtonClass {
-  @apply hover:cursor-pointer;
-  @apply inline;
-  @apply rounded-md;
-  @apply px-4 py-1;
+  display: inline-flex;
+  min-height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  outline: none;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.kcButtonClass:focus-visible {
+  border-color: var(--cm-focus);
+  box-shadow: 0 0 0 2px var(--cm-focus);
+}
+
+.kcButtonClass:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .kcButtonClass.kcButtonDefaultClass {
-  @apply border border-slate-950 dark:border-white;
+  border-color: var(--cm-border);
+  background: var(--cm-field-background);
+  color: var(--cm-text);
+}
+
+.kcButtonClass.kcButtonDefaultClass:hover:not(:disabled) {
+  background: var(--cm-control-hover);
 }
 
 .kcButtonClass.kcButtonPrimaryClass {
-  @apply bg-slate-950 text-white dark:bg-white dark:text-black;
-  @apply duration-150;
-  @apply hover:bg-slate-700 hover:dark:bg-slate-300;
+  background: var(--cm-action);
+  color: var(--cm-action-text);
+}
 
-  @apply disabled:bg-slate-500 disabled:hover:bg-slate-500;
-  @apply disabled:dark:bg-slate-500 disabled:hover:dark:bg-slate-500;
-  @apply disabled:hover:cursor-not-allowed;
+.kcButtonClass.kcButtonPrimaryClass:hover:not(:disabled) {
+  background: var(--cm-action-hover);
 }
 
 .kcButtonClass.kcButtonRedClass {
-  @apply bg-red-500 text-white;
-  @apply duration-150;
-  @apply hover:bg-red-600;
+  background: var(--cm-danger);
+  color: var(--color-white);
+}
+
+.kcButtonClass.kcButtonRedClass:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--cm-danger) 85%, var(--color-slate-950));
 }
 
 .kcButtonBlockClass {
-  @apply my-2 block w-full;
+  width: 100%;
 }
 
 .kcButtonLargeClass {
-  @apply text-lg;
-}
-
-.kcFormButtonsWrapperClass {
-  @apply flex w-full flex-row justify-between;
-  @apply mt-4;
+  min-height: 2.5rem;
 }

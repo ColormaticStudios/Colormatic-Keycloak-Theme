@@ -44,19 +44,26 @@
     groupDisplayHeader !== ""
       ? advancedMsg(groupDisplayHeader)
       : createRawSnippet(() => ({ render: () => attribute.group?.name ?? "" }))}
-  <div class="kcFormGroupClass" {...html5DataAnnotations}>
+  <section
+    class="kcFormGroupClass cm-login-field cm-login-field-group"
+    aria-labelledby={`header-${attribute.group?.name}`}
+    {...html5DataAnnotations}
+  >
     <div class="kcContentWrapperClass">
-      <label id={`header-${attribute.group?.name}`} class="kcFormGroupHeader">
+      <h2 id={`header-${attribute.group?.name}`} class="kcFormGroupHeader">
         {@render groupHeaderText()}
-      </label>
+      </h2>
     </div>
     {#if groupDisplayDescription !== ""}
       {@const groupDescriptionText = advancedMsg(groupDisplayDescription)}
       <div class="kcLabelWrapperClass">
-        <label id={`description-${attribute.group?.name}`} class="kcLabelClass">
+        <p
+          id={`description-${attribute.group?.name}`}
+          class="kcLabelClass cm-login-field__help"
+        >
           {@render groupDescriptionText()}
-        </label>
+        </p>
       </div>
     {/if}
-  </div>
+  </section>
 {/if}

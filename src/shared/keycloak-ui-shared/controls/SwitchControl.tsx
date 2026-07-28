@@ -9,6 +9,7 @@ import type { SwitchProps } from "../../@patternfly/react-core";
 import { Switch } from "../../@patternfly/react-core";
 import { FormLabel } from "./FormLabel";
 import { debeerify } from "../user-profile/utils";
+import { getRuleValue } from "../utils/getRuleValue";
 
 export type SwitchControlProps<
   T extends FieldValues,
@@ -27,40 +28,53 @@ export const SwitchControl = <
   T extends FieldValues,
   P extends FieldPath<T> = FieldPath<T>,
 >({
+  control: providedControl,
+  label,
+  labelOff,
   labelOn,
+  name,
+  rules,
+  shouldUnregister,
   stringify,
   defaultValue,
   labelIcon,
-  ...props
+  ...switchProps
 }: SwitchControlProps<T, P>) => {
   const fallbackValue = stringify ? "false" : false;
   const defValue = defaultValue ?? (fallbackValue as PathValue<T, P>);
-  const { control } = useFormContext<T>();
+  const { control: contextControl } = useFormContext<T>();
+  const control = providedControl ?? contextControl;
   return (
     <FormLabel
       hasNoPaddingTop
-      name={props.name}
-      isRequired={props.rules?.required === true}
-      label={props.label}
+      name={name}
+      isRequired={Boolean(getRuleValue(rules?.required))}
+      label={label}
       labelIcon={labelIcon}
     >
       <Controller
         control={control}
-        name={props.name}
+        name={name}
         defaultValue={defValue}
-        render={({ field: { onChange, value } }) => (
+        rules={rules}
+        shouldUnregister={shouldUnregister}
+        render={({ field: { onBlur, onChange, ref, value }, fieldState }) => (
           <Switch
-            {...props}
-            id={props.name}
-            data-testid={debeerify(props.name)}
+            {...switchProps}
+            id={name}
+            data-testid={debeerify(name)}
             label={labelOn}
-            aria-label={props.label}
+            labelOff={labelOff}
+            aria-label={label}
+            aria-invalid={fieldState.invalid}
             isChecked={stringify ? value === "true" : value}
+            onBlur={onBlur}
             onChange={(e, checked) => {
               const value = stringify ? checked.toString() : checked;
-              props.onChange?.(e, checked);
+              switchProps.onChange?.(e, checked);
               onChange(value);
             }}
+            ref={ref}
           />
         )}
       />

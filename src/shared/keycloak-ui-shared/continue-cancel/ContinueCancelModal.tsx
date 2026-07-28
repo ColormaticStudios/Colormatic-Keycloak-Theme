@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import type { ButtonProps, ModalProps } from "../../@patternfly/react-core";
 import { Button, Modal } from "../../@patternfly/react-core";
 
@@ -30,11 +30,13 @@ export const ContinueCancelModal = ({
   ...rest
 }: ContinueCancelModalProps) => {
   const [open, setOpen] = useState(false);
+  const id = useId();
   const Component = component;
 
   return (
     <>
       <Component
+        {...(Component === Button ? { type: "button" } : {})}
         variant={buttonVariant}
         onClick={() => setOpen(true)}
         isDisabled={isDisabled}
@@ -50,8 +52,9 @@ export const ContinueCancelModal = ({
         onClose={() => setOpen(false)}
         actions={[
           <Button
-            id="modal-confirm"
+            id={`${id}-confirm`}
             key="confirm"
+            type="button"
             variant="primary"
             onClick={() => {
               setOpen(false);
@@ -61,8 +64,9 @@ export const ContinueCancelModal = ({
             {continueLabel}
           </Button>,
           <Button
-            id="modal-cancel"
+            id={`${id}-cancel`}
             key="cancel"
+            type="button"
             variant="secondary"
             onClick={() => setOpen(false)}
           >

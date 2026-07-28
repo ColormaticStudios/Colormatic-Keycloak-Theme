@@ -23,13 +23,13 @@
   const msg = $derived($i18n.msg);
 </script>
 
-<div class="form-group pt-4">
+<div class="form-group cm-login-field">
   <div class="kcInputWrapperClass">
     <div id="kc-registration-terms-text">{@render msg("termsText")()}</div>
   </div>
 </div>
-<div class="form-group">
-  <div class="kcLabelWrapperClass">
+<div class="form-group cm-login-field">
+  <div class="kcLabelWrapperClass cm-login-check">
     <input
       type="checkbox"
       id="termsAccepted"
@@ -39,7 +39,7 @@
       onchange={(e) => onAreTermsAcceptedValueChange(e.currentTarget.checked)}
       aria-invalid={messagesPerField.existsError("termsAccepted")}
     />
-    <label for="termsAccepted" class="kcLabelClass">
+    <label for="termsAccepted" class="kcLabelClass cm-login-label">
       {@render msg("acceptTerms")()}
     </label>
   </div>
@@ -47,7 +47,7 @@
     <div class="kcLabelWrapperClass">
       <span
         id="input-error-terms-accepted"
-        class="kcInputErrorMessageClass"
+        class="kcInputErrorMessageClass cm-login-field__error"
         aria-live="polite"
       >
         {@html kcSanitize(messagesPerField.get("termsAccepted"))}

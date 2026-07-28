@@ -5,6 +5,10 @@
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
   import * as InputOTP from "../../lib/components/ui/input-otp/index.js";
+  import FormActions from "../components/FormActions.svelte";
+  import FormField from "../components/FormField.svelte";
+  import { Button } from "../../lib/components/ui/button";
+  import { Input } from "../../lib/components/ui/input";
 
   const {
     Template,
@@ -24,7 +28,6 @@
   const messagesPerField = $derived(kcContext.messagesPerField);
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
   const advancedMsg = $derived($i18n.advancedMsg);
 
   let OTPValue = $state("");
@@ -110,62 +113,60 @@
     </li>
   </ol>
 
-  <div class="kcFormGroupClass">
-    <div class="kcLabelWrapperClass">
-      <label for="userLabel" class="kcLabelClass">
-        {@render msg("loginTotpDeviceName")()}
-      </label>
-      &nbsp;
-      {#if totp.otpCredentials.length >= 1}<span class="required">*</span>{/if}
-    </div>
-    <div class="kcInputWrapperClass">
-      <input
-        type="text"
-        id="userLabel"
-        name="userLabel"
-        autocomplete="off"
-        class="kcInputClass"
-        aria-invalid={messagesPerField.existsError("userLabel")}
-      />
-      {#if messagesPerField.existsError("userLabel")}
-        <span
-          id="input-error-otp-label"
-          class="kcInputErrorMessageClass"
-          aria-live="polite"
-        >
-          {@html kcSanitize(messagesPerField.get("userLabel"))}
-        </span>
-      {/if}
-    </div>
-  </div>
-
   <form
     action={url.loginAction}
-    class="kcFormClass"
+    class="kcFormClass cm-login-form"
     id="kc-totp-settings-form"
     method="post"
   >
-    <div class="kcFormGroupClass">
-      <div class="kcLabelWrapperClass">
-        <label for="totp" class="kcLabelClass">
-          {@render msg("authenticatorCode")()}
-        </label>
-        &nbsp;
-        <span class="required">*</span>
-      </div>
-      <div class="kcInputWrapperClass">
+    <FormField
+      inputId="userLabel"
+      required={totp.otpCredentials.length >= 1}
+      hasError={messagesPerField.existsError("userLabel")}
+    >
+      {#snippet label()}{@render msg("loginTotpDeviceName")()}{/snippet}
+      {#snippet control()}
+        <Input
+          type="text"
+          id="userLabel"
+          name="userLabel"
+          autocomplete="off"
+          class="kcInputClass cm-login-input"
+          aria-invalid={messagesPerField.existsError("userLabel")}
+        />
+      {/snippet}
+      {#snippet error()}
+        {#if messagesPerField.existsError("userLabel")}
+          <span id="input-error-otp-label">
+            {@html kcSanitize(messagesPerField.get("userLabel"))}
+          </span>
+        {/if}
+      {/snippet}
+    </FormField>
+
+    <FormField
+      inputId="totp"
+      required
+      hasError={messagesPerField.existsError("totp")}
+    >
+      {#snippet label()}{@render msg("authenticatorCode")()}{/snippet}
+      {#snippet control()}
         <input
           type="hidden"
           id="totp"
           name="totp"
           autocomplete="off"
-          class="kcInputClass"
+          class="kcInputClass cm-login-input"
           value={OTPValue}
           aria-invalid={messagesPerField.existsError("totp")}
         />
 
         <div class="flex justify-center">
-          <InputOTP.Root maxlength={6} bind:value={OTPValue}>
+          <InputOTP.Root
+            maxlength={6}
+            bind:value={OTPValue}
+            aria-labelledby="totp-label"
+          >
             {#snippet children({ cells })}
               <InputOTP.Group>
                 {#each cells.slice(0, 3) as cell, i (i)}
@@ -181,68 +182,44 @@
             {/snippet}
           </InputOTP.Root>
         </div>
-
+      {/snippet}
+      {#snippet error()}
         {#if messagesPerField.existsError("totp")}
-          <span
-            id="input-error-otp-code"
-            class="kcInputErrorMessageClass"
-            aria-live="polite"
-          >
+          <span id="input-error-otp-code">
             {@html kcSanitize(messagesPerField.get("totp"))}
           </span>
         {/if}
-      </div>
-      <input
-        type="hidden"
-        id="totpSecret"
-        name="totpSecret"
-        value={totp.totpSecret}
-      />
-      {#if mode}<input type="hidden" id="mode" value={mode} />{/if}
-    </div>
+      {/snippet}
+    </FormField>
+    <input
+      type="hidden"
+      id="totpSecret"
+      name="totpSecret"
+      value={totp.totpSecret}
+    />
+    {#if mode}
+      <input type="hidden" id="mode" name="mode" value={mode} />
+    {/if}
 
-    <div class="kcFormGroupClass">
+    <div class="kcFormGroupClass cm-login-field">
       <LogoutOtherSessions {i18n} />
     </div>
 
-    {#if isAppInitiatedAction}
-      <input
-        type="submit"
-        class="
-          kcButtonClass
-          kcButtonPrimaryClass
-          kcButtonLargeClass
-          kcButtonBlockClass
-        "
-        id="saveTOTPBtn"
-        value={msgStr("doSubmit")}
-      />
-      <button
-        type="submit"
-        class="
-          kcButtonClass
-          kcButtonDefaultClass
-          kcButtonLargeClass
-          kcButtonBlockClass
-        "
-        id="cancelTOTPBtn"
-        name="cancel-aia"
-        value="true"
-      >
-        {@render msg("doCancel")()}
-      </button>
-    {:else}
-      <input
-        type="submit"
-        class="
-          kcButtonClass
-          kcButtonPrimaryClass
-          kcButtonLargeClass
-          kcButtonBlockClass
-        "
-        id="saveTOTPBtn"
-        value={msgStr("doSubmit")}
-      />
-    {/if}
+    <FormActions stacked>
+      <Button type="submit" id="saveTOTPBtn">
+        {@render msg("doSubmit")()}
+      </Button>
+      {#if isAppInitiatedAction}
+        <Button
+          type="submit"
+          variant="outline"
+          id="cancelTOTPBtn"
+          name="cancel-aia"
+          value="true"
+        >
+          {@render msg("doCancel")()}
+        </Button>
+      {/if}
+    </FormActions>
   </form>
 </Template>

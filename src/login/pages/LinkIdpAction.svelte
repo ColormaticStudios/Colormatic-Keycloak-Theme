@@ -29,9 +29,13 @@
   <div id="kc-link-text" class="kcContentWrapperClass">
     {@render msg("linkIdpActionMessage", idpDisplayName)()}
   </div>
-  <form class="kcFormClass" action={url.loginAction} method="post">
-    <div class="kcFormGroupClass">
-      <div id="kc-form-buttons" class="kcFormButtonsClass">
+  <form
+    class="kcFormClass cm-login-form"
+    action={url.loginAction}
+    method="post"
+  >
+    <div class="kcFormGroupClass cm-login-field">
+      <div id="kc-form-buttons" class="kcFormButtonsClass cm-login-actions">
         <input
           class="kcButtonClass kcButtonPrimaryClass kcButtonLargeClass"
           name="continue"

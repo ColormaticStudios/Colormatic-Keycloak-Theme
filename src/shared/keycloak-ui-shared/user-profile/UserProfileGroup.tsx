@@ -1,5 +1,9 @@
 import type { UserProfileAttributeMetadata } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { FormGroup, InputGroup } from "../../@patternfly/react-core";
+import {
+  FormGroup,
+  InputGroup,
+  InputGroupItem,
+} from "../../@patternfly/react-core";
 import type { TFunction } from "i18next";
 import { get } from "lodash-es";
 import type { PropsWithChildren, ReactNode } from "react";
@@ -50,14 +54,15 @@ export const UserProfileGroup = ({
     >
       {component ? (
         <InputGroup>
-          {children}
-          {component}
+          <InputGroupItem isFill>{children}</InputGroupItem>
+          <InputGroupItem>{component}</InputGroupItem>
         </InputGroup>
       ) : (
         children
       )}
       {error && (
         <FormErrorText
+          id={`${attribute.name}-error`}
           data-testid={`${attribute.name}-helper`}
           message={error.message as string}
         />

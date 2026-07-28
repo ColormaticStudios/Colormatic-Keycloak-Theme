@@ -29,8 +29,15 @@
   <div id="kc-delete-text">
     {@render msg("deleteCredentialMessage", credentialLabel)()}
   </div>
-  <form class="form-actions" action={url.loginAction} method="POST">
-    <div id="kc-form-buttons" class="kcFormButtonsWrapperClass">
+  <form
+    class="form-actions cm-login-form"
+    action={url.loginAction}
+    method="POST"
+  >
+    <div
+      id="kc-form-buttons"
+      class="kcFormButtonsWrapperClass cm-login-actions"
+    >
       <input
         class="
           kcButtonClass

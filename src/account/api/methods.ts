@@ -2,7 +2,7 @@ import type { BaseEnvironment } from "../../shared/keycloak-ui-shared";
 import { type KeycloakContext } from "../../shared/keycloak-ui-shared";
 
 import type OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
-import { parseResponse } from "./parse-response";
+import { parseResponse, throwIfResponseNotOk } from "./parse-response";
 import type {
 	ClientRepresentation,
 	CredentialContainer,
@@ -89,18 +89,24 @@ export async function deleteConsent(
 	context: KeycloakContext<BaseEnvironment>,
 	id: string,
 ) {
-	return request(`/applications/${encodeURIComponent(id)}/consent`, context, {
-		method: "DELETE",
-	});
+	const response = await request(
+		`/applications/${encodeURIComponent(id)}/consent`,
+		context,
+		{
+			method: "DELETE",
+		},
+	);
+	await throwIfResponseNotOk(response);
 }
 
 export async function deleteSession(
 	context: KeycloakContext<BaseEnvironment>,
 	id?: string,
 ) {
-	return request(`/sessions${id ? `/${id}` : ""}`, context, {
+	const response = await request(`/sessions${id ? `/${id}` : ""}`, context, {
 		method: "DELETE",
 	});
+	await throwIfResponseNotOk(response);
 }
 
 export async function getCredentials({ signal, context }: CallOptions) {
@@ -134,14 +140,13 @@ export async function unLinkAccount(
 	account: LinkedAccountRepresentation,
 ) {
 	const response = await request(
-		"/linked-accounts/" + account.providerName,
+		"/linked-accounts/" + encodeURIComponent(account.providerName),
 		context,
 		{
 			method: "DELETE",
 		},
 	);
-	if (response.ok) return;
-	return parseResponse(response);
+	await throwIfResponseNotOk(response);
 }
 
 export async function getGroups({ signal, context }: CallOptions) {

@@ -1,62 +1,29 @@
-import { Icon } from "../../@patternfly/react-core";
-import {
-  BitbucketIcon,
-  CubeIcon,
-  FacebookSquareIcon,
-  GithubIcon,
-  GitlabIcon,
-  GoogleIcon,
-  InstagramIcon,
-  LinkedinIcon,
-  MicrosoftIcon,
-  OpenshiftIcon,
-  PaypalIcon,
-  StackOverflowIcon,
-  TwitterIcon,
-} from "../../@patternfly/react-icons";
+import type { BootstrapIconName } from "./BootstrapIcon";
+import { BootstrapIcon } from "./BootstrapIcon";
 
 type IconMapperProps = {
   icon: string;
 };
 
-export const IconMapper = ({ icon }: IconMapperProps) => {
-  const SpecificIcon = getIcon(icon);
-  return (
-    <Icon size="lg">
-      <SpecificIcon alt={icon} />
-    </Icon>
-  );
+const providerIcons: Record<string, BootstrapIconName> = {
+  github: "bi-github",
+  facebook: "bi-facebook",
+  gitlab: "bi-gitlab",
+  google: "bi-google",
+  linkedin: "bi-linkedin",
+  "linkedin-openid-connect": "bi-linkedin",
+  "openshift-v4": "bi-box",
+  stackoverflow: "bi-stack-overflow",
+  twitter: "bi-twitter-x",
+  microsoft: "bi-microsoft",
+  bitbucket: "bi-box",
+  instagram: "bi-instagram",
+  paypal: "bi-paypal",
 };
 
-function getIcon(icon: string) {
-  switch (icon) {
-    case "github":
-      return GithubIcon;
-    case "facebook":
-      return FacebookSquareIcon;
-    case "gitlab":
-      return GitlabIcon;
-    case "google":
-      return GoogleIcon;
-    case "linkedin":
-    case "linkedin-openid-connect":
-      return LinkedinIcon;
-
-    case "openshift-v4":
-      return OpenshiftIcon;
-    case "stackoverflow":
-      return StackOverflowIcon;
-    case "twitter":
-      return TwitterIcon;
-    case "microsoft":
-      return MicrosoftIcon;
-    case "bitbucket":
-      return BitbucketIcon;
-    case "instagram":
-      return InstagramIcon;
-    case "paypal":
-      return PaypalIcon;
-    default:
-      return CubeIcon;
-  }
-}
+export const IconMapper = ({ icon }: IconMapperProps) => (
+  <BootstrapIcon
+    icon={providerIcons[icon.toLowerCase()] ?? "bi-box"}
+    className="cm-identity-provider-icon"
+  />
+);

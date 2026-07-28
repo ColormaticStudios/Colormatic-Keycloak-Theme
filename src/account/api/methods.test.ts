@@ -5,7 +5,11 @@ const { request } = vi.hoisted(() => ({ request: vi.fn() }));
 vi.mock("./request", () => ({ request }));
 vi.mock("../../shared/keycloak-ui-shared", () => ({}));
 
-import { deleteConsent, deleteVerifiableCredential } from "./methods";
+import {
+	deleteConsent,
+	deleteVerifiableCredential,
+	unLinkAccount,
+} from "./methods";
 
 const context = {} as never;
 
@@ -33,5 +37,28 @@ describe("account API path construction", () => {
 			context,
 			{ method: "DELETE" },
 		);
+	});
+
+	it("encodes identity-provider names before unlinking accounts", async () => {
+		await unLinkAccount(context, {
+			providerName: "provider/with spaces?",
+		} as never);
+
+		expect(request).toHaveBeenCalledWith(
+			"/linked-accounts/provider%2Fwith%20spaces%3F",
+			context,
+			{ method: "DELETE" },
+		);
+	});
+
+	it("rejects a failed consent deletion", async () => {
+		request.mockResolvedValueOnce(
+			new Response(JSON.stringify({ error: "server_error" }), {
+				status: 500,
+				headers: { "content-type": "application/json" },
+			}),
+		);
+
+		await expect(deleteConsent(context, "client")).rejects.toThrow();
 	});
 });

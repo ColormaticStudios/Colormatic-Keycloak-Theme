@@ -5,6 +5,10 @@
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
   import type { I18n } from "../i18n";
   import type { KcContext } from "../KcContext";
+  import FormActions from "../components/FormActions.svelte";
+  import FormField from "../components/FormField.svelte";
+  import { Button } from "../../lib/components/ui/button";
+  import { Input } from "../../lib/components/ui/input";
 
   const {
     Template,
@@ -18,8 +22,6 @@
   > = $props();
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
-
   const url = $derived(kcContext.url);
   const messagesPerField = $derived(kcContext.messagesPerField);
   const isAppInitiatedAction = $derived(kcContext.isAppInitiatedAction);
@@ -37,24 +39,22 @@
   {/snippet}
   <form
     id="kc-passwd-update-form"
-    class="kcFormClass"
+    class="kcFormClass cm-login-form"
     action={url.loginAction}
     method="post"
   >
-    <div class="kcFormGroupClass">
-      <div class="kcLabelWrapperClass">
-        <label for="password-new" class="kcLabelClass">
-          {@render msg("passwordNew")()}
-        </label>
-      </div>
-      <div class="kcInputWrapperClass">
+    <FormField
+      inputId="password-new"
+      hasError={messagesPerField.existsError("password")}
+    >
+      {#snippet label()}{@render msg("passwordNew")()}{/snippet}
+      {#snippet control()}
         <PasswordWrapper {i18n} passwordInputId="password-new">
-          <!-- svelte-ignore a11y_autofocus -->
-          <input
+          <Input
             type="password"
             id="password-new"
             name="password-new"
-            class="kcInputClass"
+            class="kcInputClass cm-login-input"
             autofocus
             autocomplete="new-password"
             aria-invalid={messagesPerField.existsError(
@@ -63,32 +63,28 @@
             )}
           />
         </PasswordWrapper>
-
+      {/snippet}
+      {#snippet error()}
         {#if messagesPerField.existsError("password")}
-          <span
-            id="input-error-password"
-            class="kcInputErrorMessageClass"
-            aria-live="polite"
-          >
+          <span id="input-error-password">
             {@html kcSanitize(messagesPerField.get("password"))}
           </span>
         {/if}
-      </div>
-    </div>
+      {/snippet}
+    </FormField>
 
-    <div class="kcFormGroupClass">
-      <div class="kcLabelWrapperClass">
-        <label for="password-confirm" class="kcLabelClass">
-          {@render msg("passwordConfirm")()}
-        </label>
-      </div>
-      <div class="kcInputWrapperClass">
+    <FormField
+      inputId="password-confirm"
+      hasError={messagesPerField.existsError("password-confirm")}
+    >
+      {#snippet label()}{@render msg("passwordConfirm")()}{/snippet}
+      {#snippet control()}
         <PasswordWrapper {i18n} passwordInputId="password-confirm">
-          <input
+          <Input
             type="password"
             id="password-confirm"
             name="password-confirm"
-            class="kcInputClass"
+            class="kcInputClass cm-login-input"
             autocomplete="new-password"
             aria-invalid={messagesPerField.existsError(
               "password",
@@ -96,46 +92,35 @@
             )}
           />
         </PasswordWrapper>
-
+      {/snippet}
+      {#snippet error()}
         {#if messagesPerField.existsError("password-confirm")}
-          <span
-            id="input-error-password-confirm"
-            class="kcInputErrorMessageClass"
-            aria-live="polite"
-          >
+          <span id="input-error-password-confirm">
             {@html kcSanitize(messagesPerField.get("password-confirm"))}
           </span>
         {/if}
-      </div>
-    </div>
-    <div class="kcFormGroupClass">
+      {/snippet}
+    </FormField>
+    <div class="kcFormGroupClass cm-login-field">
       <LogoutOtherSessions {i18n} />
-      <div id="kc-form-buttons" class="kcFormButtonsClass">
-        <input
-          class="
-            kcButtonClass
-            kcButtonPrimaryClass
-				{!isAppInitiatedAction ? 'kcButtonBlockClass' : ''}
-            kcButtonLargeClass
-          "
+      <FormActions>
+        <Button
+          class={!isAppInitiatedAction ? "cm-login-action--block" : undefined}
           type="submit"
-          value={msgStr("doSubmit")}
-        />
+        >
+          {@render msg("doSubmit")()}
+        </Button>
         {#if isAppInitiatedAction}
-          <button
-            class="
-              kcButtonClass
-              kcButtonDefaultClass
-              kcButtonLargeClass
-            "
+          <Button
+            variant="outline"
             type="submit"
             name="cancel-aia"
             value="true"
           >
             {@render msg("doCancel")()}
-          </button>
+          </Button>
         {/if}
-      </div>
+      </FormActions>
     </div>
   </form>
 </Template>

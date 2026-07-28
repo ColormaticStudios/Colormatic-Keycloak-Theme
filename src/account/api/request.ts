@@ -1,5 +1,7 @@
-import type { KeycloakContext } from "../../shared/keycloak-ui-shared";
-import { type BaseEnvironment } from "../../shared/keycloak-ui-shared";
+import type {
+	BaseEnvironment,
+	KeycloakContext,
+} from "../../shared/keycloak-ui-shared";
 import type { Keycloak } from "oidc-spa/keycloak-js";
 
 import { joinPath } from "../utils/joinPath";
@@ -35,7 +37,7 @@ async function _request(
 }
 
 function createJsonResponse(data: unknown, status = 200): Response {
-	return new Response(JSON.stringify(data), {
+	return new Response(status === 204 ? null : JSON.stringify(data), {
 		status,
 		headers: {
 			[CONTENT_TYPE_HEADER]: CONTENT_TYPE_JSON,
@@ -46,6 +48,7 @@ function createJsonResponse(data: unknown, status = 200): Response {
 function getMockResponse(path: string, opts: RequestOptions = {}): Response {
 	const cleanPath = path.split("?")[0];
 	const method = opts.method ?? "GET";
+	const nowSeconds = Math.floor(Date.now() / 1000);
 
 	if (method === "POST" || method === "PUT") {
 		return createJsonResponse({}, 204);
@@ -172,16 +175,16 @@ function getMockResponse(path: string, opts: RequestOptions = {}): Response {
 				osVersion: "14.2",
 				browser: "Firefox",
 				device: "Desktop",
-				lastAccess: Date.now() - 1000 * 60 * 5,
+				lastAccess: nowSeconds - 60 * 5,
 				current: true,
 				mobile: false,
 				sessions: [
 					{
 						id: "session-1",
 						ipAddress: "127.0.0.1",
-						started: Date.now() - 1000 * 60 * 60,
-						lastAccess: Date.now() - 1000 * 60 * 5,
-						expires: Date.now() + 1000 * 60 * 30,
+						started: nowSeconds - 60 * 60,
+						lastAccess: nowSeconds - 60 * 5,
+						expires: nowSeconds + 60 * 30,
 						clients: [],
 						browser: "Firefox",
 						current: true,
@@ -189,9 +192,9 @@ function getMockResponse(path: string, opts: RequestOptions = {}): Response {
 					{
 						id: "session-2",
 						ipAddress: "127.0.0.1",
-						started: Date.now() - 1000 * 60 * 60 * 24,
-						lastAccess: Date.now() - 1000 * 60 * 60 * 8,
-						expires: Date.now() + 1000 * 60 * 10,
+						started: nowSeconds - 60 * 60 * 24,
+						lastAccess: nowSeconds - 60 * 60 * 8,
+						expires: nowSeconds + 60 * 10,
 						clients: [],
 						browser: "Firefox",
 						current: false,
@@ -202,7 +205,52 @@ function getMockResponse(path: string, opts: RequestOptions = {}): Response {
 	}
 
 	if (cleanPath === "/applications") {
-		return createJsonResponse([]);
+		return createJsonResponse([
+			{
+				clientId: "colormatic-dashboard",
+				clientName: "Colormatic Dashboard",
+				description: "Manage Colormatic services and account settings.",
+				userConsentRequired: true,
+				inUse: true,
+				offlineAccess: true,
+				rootUrl: "https://example.com",
+				baseUrl: "https://example.com/dashboard",
+				effectiveUrl: "https://example.com/dashboard",
+				logoUri: "",
+				policyUri: "https://example.com/privacy",
+				tosUri: "https://example.com/terms",
+				consent: {
+					grantedScopes: [
+						{
+							id: "profile",
+							name: "profile",
+							displayText: "User profile",
+						},
+						{
+							id: "email",
+							name: "email",
+							displayText: "Email address",
+						},
+					],
+					createdDate: Date.now() - 1000 * 60 * 60 * 24 * 30,
+					lastUpdatedDate: Date.now() - 1000 * 60 * 60 * 24,
+				},
+			},
+			{
+				clientId: "account-console",
+				clientName: "Account Console",
+				description: "Built-in account management.",
+				userConsentRequired: false,
+				inUse: false,
+				offlineAccess: false,
+				rootUrl: "",
+				baseUrl: "",
+				effectiveUrl: "",
+				logoUri: "",
+				policyUri: "",
+				tosUri: "",
+			},
+		]);
 	}
 
 	if (cleanPath === "/credentials") {
@@ -280,22 +328,180 @@ function getMockResponse(path: string, opts: RequestOptions = {}): Response {
 	}
 
 	if (cleanPath === "/linked-accounts") {
-		return createJsonResponse([]);
+		const accounts = [
+			{
+				connected: true,
+				providerAlias: "github",
+				providerName: "github",
+				displayName: "GitHub",
+				linkedUsername: "dev-user",
+				social: true,
+			},
+			{
+				connected: false,
+				providerAlias: "google",
+				providerName: "google",
+				displayName: "Google",
+				linkedUsername: "",
+				social: true,
+			},
+			{
+				connected: false,
+				providerAlias: "colormatic-sso",
+				providerName: "colormatic-sso",
+				displayName: "Colormatic SSO",
+				linkedUsername: "",
+				social: false,
+			},
+		];
+		const linked = opts.searchParams?.["linked"];
+		const search = opts.searchParams?.["search"]?.toLocaleLowerCase();
+
+		return createJsonResponse(
+			accounts.filter(
+				(account) =>
+					(linked === undefined || account.connected === (linked === "true")) &&
+					(!search ||
+						account.displayName.toLocaleLowerCase().includes(search) ||
+						account.providerName.toLocaleLowerCase().includes(search)),
+			),
+		);
+	}
+
+	if (cleanPath === "/resources") {
+		return createJsonResponse([
+			{
+				_id: "resource-1",
+				name: "Colormatic project",
+				client: {
+					baseUrl: "https://example.com/projects",
+					clientId: "colormatic-dashboard",
+					name: "Colormatic Dashboard",
+				},
+				scopes: [
+					{ name: "view", displayName: "View" },
+					{ name: "edit", displayName: "Edit" },
+				],
+				uris: ["https://example.com/projects/1"],
+			},
+		]);
+	}
+
+	if (cleanPath === "/resources/shared-with-me") {
+		return createJsonResponse([
+			{
+				_id: "shared-resource-1",
+				name: "Shared design library",
+				client: {
+					baseUrl: "https://example.com/design",
+					clientId: "colormatic-dashboard",
+					name: "Colormatic Dashboard",
+				},
+				scopes: [{ name: "view", displayName: "View" }],
+				uris: ["https://example.com/design/library"],
+			},
+		]);
 	}
 
 	if (
 		cleanPath.startsWith("/resources/") &&
 		cleanPath.endsWith("/permissions/requests")
 	) {
-		return createJsonResponse([]);
+		return createJsonResponse([
+			{
+				email: "collaborator@example.com",
+				firstName: "Casey",
+				lastName: "Collaborator",
+				scopes: [{ name: "view", displayName: "View" }],
+				username: "collaborator",
+			},
+		]);
+	}
+
+	if (
+		cleanPath.startsWith("/resources/") &&
+		cleanPath.endsWith("/permissions")
+	) {
+		return createJsonResponse([
+			{
+				email: "teammate@example.com",
+				firstName: "Taylor",
+				lastName: "Teammate",
+				scopes: [
+					{ name: "view", displayName: "View" },
+					{ name: "edit", displayName: "Edit" },
+				],
+				username: "teammate",
+			},
+		]);
 	}
 
 	if (cleanPath === "/groups") {
-		return createJsonResponse([]);
+		return createJsonResponse([
+			{ id: "group-1", name: "Engineering", path: "/Engineering" },
+			{
+				id: "group-2",
+				name: "Frontend",
+				path: "/Engineering/Frontend",
+			},
+			{ id: "group-3", name: "Design", path: "/Design" },
+		]);
 	}
 
 	if (cleanPath === "/organizations") {
-		return createJsonResponse([]);
+		return createJsonResponse([
+			{
+				id: "organization-1",
+				name: "Colormatic",
+				alias: "colormatic",
+				description: "Colormatic software and services.",
+				enabled: true,
+				domains: [{ name: "colormatic.org", verified: true }],
+				attributes: {},
+			},
+			{
+				id: "organization-2",
+				name: "Example partner",
+				alias: "example-partner",
+				description: "A disabled example organization.",
+				enabled: false,
+				domains: [{ name: "example.com", verified: false }],
+				attributes: {},
+			},
+		]);
+	}
+
+	if (cleanPath === "/verifiable-credentials") {
+		return createJsonResponse([
+			{
+				credentialScopeName: "ColormaticEmployeeCredential",
+				credentialConfigurationId: "colormatic-employee",
+				revision: "1",
+				createdDate: Date.now() - 1000 * 60 * 60 * 24 * 90,
+				updatedDate: Date.now() - 1000 * 60 * 60 * 24 * 7,
+				userAttributes: {
+					email: ["dev@example.com"],
+					firstName: ["Dev"],
+					lastName: ["User"],
+				},
+			},
+		]);
+	}
+
+	if (cleanPath === "/issued-verifiable-credentials") {
+		return createJsonResponse([
+			{
+				id: "issued-credential-1",
+				userId: "dev-user",
+				credentialType: "ColormaticEmployeeCredential",
+				issuedAt: Date.now() - 1000 * 60 * 60 * 24 * 30,
+				expiresAt: Date.now() + 1000 * 60 * 60 * 24 * 335,
+				clientId: "colormatic-wallet",
+				revision: "1",
+				clientName: "Colormatic Wallet",
+				clientBaseUrl: "https://example.com/wallet",
+			},
+		]);
 	}
 
 	return createJsonResponse({});

@@ -46,7 +46,7 @@
   {/snippet}
   <form
     id="kc-idp-review-profile-form"
-    class="kcFormClass"
+    class="kcFormClass cm-login-form"
     action={url.loginAction}
     method="post"
   >
@@ -56,11 +56,11 @@
       onIsFormSubmittableValueChange={setIsFomSubmittable}
       {doMakeUserConfirmPassword}
     />
-    <div class="kcFormGroupClass">
+    <div class="kcFormGroupClass cm-login-field">
       <div id="kc-form-options" class="kcFormOptionsClass">
         <div class="kcFormOptionsWrapperClass"></div>
       </div>
-      <div id="kc-form-buttons" class="kcFormButtonsClass">
+      <div id="kc-form-buttons" class="kcFormButtonsClass cm-login-actions">
         <input
           class="
             kcButtonClass

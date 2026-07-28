@@ -1,4 +1,5 @@
 import {
+  BootstrapIcon,
   UserProfileFields,
   debeerify,
   isUserProfileError,
@@ -16,7 +17,6 @@ import {
   Form,
   Spinner,
 } from "../../shared/@patternfly/react-core";
-import { ExternalLinkSquareAltIcon } from "../../shared/@patternfly/react-icons";
 import { useState } from "react";
 import type { ErrorOption, FieldPath } from "react-hook-form";
 import { useForm } from "react-hook-form";
@@ -114,7 +114,14 @@ export const PersonalInfo = () => {
   };
 
   if (!userProfileMetadata) {
-    return <Spinner />;
+    return (
+      <Page
+        title={t("personalInfo")}
+        description={t("personalInfoDescription")}
+      >
+        <Spinner aria-label={t("personalInfo")} />
+      </Page>
+    );
   }
 
   const allFieldsReadOnly = () =>
@@ -147,12 +154,13 @@ export const PersonalInfo = () => {
               annotations["kc.required.action.supported"] &&
               (!isRegistrationEmailAsUsername || isEditUserNameAllowed) ? (
               <Button
+                type="button"
                 id="update-email-btn"
                 variant="link"
                 onClick={() =>
                   context.keycloak.login({ action: "UPDATE_EMAIL" })
                 }
-                icon={<ExternalLinkSquareAltIcon />}
+                icon={<BootstrapIcon icon="bi-box-arrow-up-right" />}
                 iconPosition="right"
               >
                 {t("updateEmail")}
@@ -172,6 +180,7 @@ export const PersonalInfo = () => {
             </Button>
             <Button
               data-testid="cancel"
+              type="button"
               id="cancel-btn"
               variant="link"
               onClick={() => reset()}
@@ -192,6 +201,7 @@ export const PersonalInfo = () => {
               actionLinks={
                 <Button
                   id="delete-account-btn"
+                  type="button"
                   variant="danger"
                   onClick={() =>
                     context.keycloak.login({

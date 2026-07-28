@@ -2,6 +2,10 @@
   import type { PageProps } from "./PageProps";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import FormActions from "../components/FormActions.svelte";
+  import FormField from "../components/FormField.svelte";
+  import { Button } from "../../lib/components/ui/button";
+  import { Input } from "../../lib/components/ui/input";
 
   const {
     Template,
@@ -17,7 +21,6 @@
   const url = $derived(kcContext.url);
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes}>
@@ -26,49 +29,36 @@
   {/snippet}
   <form
     id="kc-user-verify-device-user-code-form"
-    class="kcFormClass"
+    class="kcFormClass cm-login-form"
     action={url.oauth2DeviceVerificationAction}
     method="post"
   >
-    <div class="kcFormGroupClass">
-      <div class="kcLabelWrapperClass">
-        <label for="device-user-code" class="kcLabelClass">
-          {@render msg("verifyOAuth2DeviceUserCode")()}
-        </label>
-      </div>
-
-      <div class="kcInputWrapperClass">
-        <!-- svelte-ignore a11y_autofocus -->
-        <input
+    <FormField inputId="device-user-code">
+      {#snippet label()}
+        {@render msg("verifyOAuth2DeviceUserCode")()}
+      {/snippet}
+      {#snippet control()}
+        <Input
           id="device-user-code"
           name="device_user_code"
           autocomplete="off"
           type="text"
-          class="kcInputClass"
+          class="kcInputClass cm-login-input"
           autofocus
         />
-      </div>
-    </div>
+      {/snippet}
+    </FormField>
 
-    <div class="kcFormGroupClass">
+    <div class="kcFormGroupClass cm-login-field">
       <div id="kc-form-options" class="kcFormOptionsClass">
         <div class="kcFormOptionsWrapperClass"></div>
       </div>
 
-      <div id="kc-form-buttons" class="kcFormButtonsClass">
-        <div class="kcFormButtonsWrapperClass">
-          <input
-            class="
-              kcButtonClass
-              kcButtonPrimaryClass
-              kcButtonLargeClass
-              kcButtonBlockClass
-            "
-            type="submit"
-            value={msgStr("doSubmit")}
-          />
-        </div>
-      </div>
+      <FormActions>
+        <Button class="cm-login-action--block" type="submit">
+          {@render msg("doSubmit")()}
+        </Button>
+      </FormActions>
     </div>
   </form>
 </Template>

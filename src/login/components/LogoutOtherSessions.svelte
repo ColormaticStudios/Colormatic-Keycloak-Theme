@@ -9,15 +9,15 @@
 
 <div id="kc-form-options" class="kcFormOptionsClass">
   <div class="kcFormOptionsWrapperClass">
-    <div class="checkbox">
-      <label>
-        <input
-          type="checkbox"
-          id="logout-sessions"
-          name="logout-sessions"
-          value="on"
-          checked={true}
-        />
+    <div class="checkbox cm-login-check">
+      <input
+        type="checkbox"
+        id="logout-sessions"
+        name="logout-sessions"
+        value="on"
+        checked={true}
+      />
+      <label for="logout-sessions" class="cm-login-label">
         {@render msg("logoutOtherSessions")()}
       </label>
     </div>

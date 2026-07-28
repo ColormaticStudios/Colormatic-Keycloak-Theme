@@ -3,6 +3,8 @@
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import FormField from "../components/FormField.svelte";
+  import { Input } from "../../lib/components/ui/input";
 
   let {
     kcContext,
@@ -27,8 +29,17 @@
   {/snippet}
   <div id="kc-code">
     {#if code.success}
-      <p>{@render msg("copyCodeInstruction")()}</p>
-      <input id="code" class="kcTextareaClass" value={code.code} />
+      <FormField inputId="code">
+        {#snippet label()}{@render msg("copyCodeInstruction")()}{/snippet}
+        {#snippet control()}
+          <Input
+            id="code"
+            class="kcTextareaClass cm-login-input"
+            value={code.code}
+            readonly
+          />
+        {/snippet}
+      </FormField>
     {:else if code.error}
       <p id="error">{@html kcSanitize(code.error)}</p>
     {/if}

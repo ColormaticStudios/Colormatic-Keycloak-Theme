@@ -1,34 +1,37 @@
-import { useEnvironment } from "../../shared/keycloak-ui-shared";
 import {
-  DataList,
-  DataListCell,
-  DataListItem,
-  DataListItemCells,
-  DataListItemRow,
-  Stack,
-  StackItem,
-  Title,
-} from "../../shared/@patternfly/react-core";
+  KeycloakSpinner,
+  ListEmptyState,
+  useEnvironment,
+} from "../../shared/keycloak-ui-shared";
+import {
+  Table,
+  TableVariant,
+  Tbody,
+  Th,
+  Thead,
+  Tr,
+} from "../../shared/@patternfly/react-table";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getVerifiableCredentials } from "../api/methods";
 import type { UserVerifiableCredentialRepresentation } from "../api/representations";
-import { EmptyRow } from "../components/datalist/EmptyRow";
-import { Page } from "../components/page/Page";
+import { AccountPageSection, Page } from "../components/page/Page";
 import { CredentialRow } from "./CredentialRow";
 
 export const VerifiableCredentials = () => {
   const { t } = useTranslation();
   const context = useEnvironment();
-  const [credentials, setCredentials] = useState<
-    UserVerifiableCredentialRepresentation[]
-  >([]);
+  const [credentials, setCredentials] =
+    useState<UserVerifiableCredentialRepresentation[]>();
+  const [loadError, setLoadError] = useState(false);
 
   const [key, setKey] = useState(1);
-  const refresh = () => setKey(key + 1);
+  const refresh = () => setKey((current) => current + 1);
 
   useEffect(() => {
     const controller = new AbortController();
+    setCredentials(undefined);
+    setLoadError(false);
 
     async function fetchCredentials() {
       try {
@@ -37,9 +40,10 @@ export const VerifiableCredentials = () => {
           context,
         });
         setCredentials(data);
-      } catch (error) {
-        console.error("Error fetching verifiable credentials:", error);
-        setCredentials([]);
+      } catch {
+        if (!controller.signal.aborted) {
+          setLoadError(true);
+        }
       }
     }
 
@@ -52,51 +56,48 @@ export const VerifiableCredentials = () => {
       title={t("verifiableCredentials")}
       description={t("verifiableCredentialsDescription")}
     >
-      <Stack hasGutter>
-        <StackItem>
-          <Title headingLevel="h2" className="pf-v5-u-mb-lg" size="xl">
-            {t("myVerifiableCredentials")}
-          </Title>
-          <DataList
+      <AccountPageSection title={t("myVerifiableCredentials")}>
+        {loadError ? (
+          <ListEmptyState
+            message={t("somethingWentWrong")}
+            instructions={t("somethingWentWrongDescription")}
+            primaryActionText={t("tryAgain")}
+            onPrimaryAction={refresh}
+            icon="bi-exclamation-triangle"
+          />
+        ) : !credentials ? (
+          <KeycloakSpinner />
+        ) : credentials.length === 0 ? (
+          <ListEmptyState
+            message={t("noVerifiableCredentials")}
+            hasIcon={false}
+          />
+        ) : (
+          <Table
             id="verifiable-credentials"
             aria-label={t("verifiableCredentials")}
-            isCompact
+            variant={TableVariant.compact}
           >
-            <DataListItem id="verifiable-credentials-header">
-              <DataListItemRow>
-                <DataListItemCells
-                  dataListCells={[
-                    <DataListCell key="credential-name-header" width={2}>
-                      <strong>{t("credentialScopeName")}</strong>
-                    </DataListCell>,
-                    <DataListCell key="credential-created-header" width={2}>
-                      <strong>{t("credentialCreatedDate")}</strong>
-                    </DataListCell>,
-                    <DataListCell key="credential-updated-header" width={2}>
-                      <strong>{t("credentialUpdatedDate")}</strong>
-                    </DataListCell>,
-                    <DataListCell
-                      key="column-placeholder-header"
-                      width={2}
-                    ></DataListCell>,
-                  ]}
-                />
-              </DataListItemRow>
-            </DataListItem>
-            {credentials.length > 0 ? (
-              credentials.map((credential) => (
+            <Thead>
+              <Tr>
+                <Th>{t("credentialScopeName")}</Th>
+                <Th>{t("credentialCreatedDate")}</Th>
+                <Th>{t("credentialUpdatedDate")}</Th>
+                <Th screenReaderText={t("credentialActions")} />
+              </Tr>
+            </Thead>
+            <Tbody>
+              {credentials.map((credential) => (
                 <CredentialRow
                   key={credential.credentialScopeName}
                   credential={credential}
                   refresh={refresh}
                 />
-              ))
-            ) : (
-              <EmptyRow message={t("noVerifiableCredentials")} />
-            )}
-          </DataList>
-        </StackItem>
-      </Stack>
+              ))}
+            </Tbody>
+          </Table>
+        )}
+      </AccountPageSection>
     </Page>
   );
 };

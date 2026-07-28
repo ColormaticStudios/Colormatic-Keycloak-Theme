@@ -11,7 +11,9 @@
 
 <style>
   .wrapper {
-    font-family: "Noto Sans", sans-serif;
+    font-family: var(--cm-font-sans, ui-sans-serif, system-ui, sans-serif);
+    background-color: var(--cm-canvas, #f1f5f9);
+    color: var(--cm-text, #020617);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,6 +27,7 @@
 
   /* spinner from https://projects.lukehaas.me/css-loaders/ */
   .loader {
+    color: currentColor;
     font-size: 10px;
     margin: 3rem auto 0;
     width: 1em;
@@ -37,15 +40,6 @@
     -webkit-transform: translateZ(0);
     -ms-transform: translateZ(0);
     transform: translateZ(0);
-  }
-  @media (prefers-color-scheme: dark) {
-    .wrapper {
-      background-color: black;
-      color: white;
-    }
-    .loader {
-      color: white;
-    }
   }
   @-webkit-keyframes load4 {
     0%,

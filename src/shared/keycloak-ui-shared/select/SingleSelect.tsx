@@ -1,6 +1,6 @@
 import type { SelectOptionProps } from "../../@patternfly/react-core";
 import { MenuToggle, Select, SelectList } from "../../@patternfly/react-core";
-import { Children, useRef, useState } from "react";
+import { Children, useRef } from "react";
 import type { KeycloakSelectProps } from "./KeycloakSelect";
 import { propertyToString } from "./KeycloakSelect";
 
@@ -22,11 +22,9 @@ export const SingleSelect = ({
   children,
   ...props
 }: SingleSelectProps) => {
-  const [open, setOpen] = useState(false);
   const ref = useRef<HTMLElement>();
   const toggle = () => {
-    setOpen(!open);
-    onToggle(!open);
+    onToggle(!isOpen);
   };
 
   const append = () => {
@@ -51,14 +49,11 @@ export const SingleSelect = ({
         width: propertyToString(width),
       }}
       {...props}
-      onClick={toggle}
-      onOpenChange={(isOpen) => {
-        if (isOpen !== open) toggle();
-      }}
+      onOpenChange={onToggle}
       selected={selections}
       onSelect={(_, value) => {
         onSelect?.(value || "");
-        toggle();
+        onToggle(false);
       }}
       toggle={(ref) => (
         <MenuToggle

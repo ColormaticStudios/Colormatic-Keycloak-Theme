@@ -1,9 +1,12 @@
 <script lang="ts">
   import PasswordWrapper from "../components/PasswordWrapper.svelte";
+  import FormActions from "../components/FormActions.svelte";
+  import FormField from "../components/FormField.svelte";
+  import { Button } from "../../lib/components/ui/button";
+  import { Input } from "../../lib/components/ui/input";
   import type { PageProps } from "./PageProps";
   import { useState } from "@keycloakify/svelte/tools/useState";
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
-  import { clsx } from "keycloakify/tools/clsx";
   import type { I18n } from "../i18n";
   import type { KcContext } from "../KcContext";
 
@@ -23,8 +26,6 @@
   const messagesPerField = $derived(kcContext.messagesPerField);
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
-
   const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
 </script>
 
@@ -42,6 +43,7 @@
   <div id="kc-form">
     <div id="kc-form-wrapper">
       <form
+        class="cm-login-form"
         id="kc-form-login"
         onsubmit={() => {
           setIsLoginButtonDisabled(true);
@@ -50,37 +52,38 @@
         action={url.loginAction}
         method="post"
       >
-        <div class={clsx("kcFormGroupClass", "no-bottom-margin")}>
-          <label for="password" class="kcLabelClass">
+        <FormField
+          inputId="password"
+          class="no-bottom-margin"
+          hasError={messagesPerField.existsError("password")}
+        >
+          {#snippet label()}
             {@render msg("password")()}
-          </label>
-
-          <PasswordWrapper {i18n} passwordInputId="password">
-            <!-- svelte-ignore a11y_autofocus -->
-            <input
-              id="password"
-              class="kcInputClass"
-              name="password"
-              type="password"
-              autofocus
-              autocomplete="current-password"
-              aria-invalid={messagesPerField.existsError(
-                "username",
-                "password",
-              )}
-            />
-          </PasswordWrapper>
-
-          {#if messagesPerField.existsError("password")}
-            <span
-              id="input-error-password"
-              class="kcInputErrorMessageClass"
-              aria-live="polite"
-            >
-              {@html kcSanitize(messagesPerField.get("password"))}
-            </span>
-          {/if}
-        </div>
+          {/snippet}
+          {#snippet control()}
+            <PasswordWrapper {i18n} passwordInputId="password">
+              <Input
+                id="password"
+                class="kcInputClass cm-login-input"
+                name="password"
+                type="password"
+                autofocus
+                autocomplete="current-password"
+                aria-invalid={messagesPerField.existsError(
+                  "username",
+                  "password",
+                )}
+              />
+            </PasswordWrapper>
+          {/snippet}
+          {#snippet error()}
+            {#if messagesPerField.existsError("password")}
+              <span id="input-error-password">
+                {@html kcSanitize(messagesPerField.get("password"))}
+              </span>
+            {/if}
+          {/snippet}
+        </FormField>
         <div class="kcFormGroupClass kcFormSettingClass">
           <div id="kc-form-options"></div>
           <div class="kcFormOptionsWrapperClass">
@@ -93,21 +96,17 @@
             {/if}
           </div>
         </div>
-        <div id="kc-form-buttons" class="kcFormGroupClass">
-          <input
-            class="
-              kcButtonClass
-              kcButtonPrimaryClass
-              kcButtonBlockClass
-              kcButtonLargeClass
-            "
+        <FormActions>
+          <Button
+            class="cm-login-action--block"
             name="login"
             id="kc-login"
             type="submit"
-            value={msgStr("doLogIn")}
             disabled={$isLoginButtonDisabled}
-          />
-        </div>
+          >
+            {@render msg("doLogIn")()}
+          </Button>
+        </FormActions>
       </form>
     </div>
   </div>

@@ -1,140 +1,122 @@
 import {
   Checkbox,
-  DataList,
-  DataListCell,
-  DataListItem,
-  DataListItemCells,
-  DataListItemRow,
+  Toolbar,
+  ToolbarContent,
+  ToolbarItem,
 } from "../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useEnvironment } from "../../shared/keycloak-ui-shared";
+import {
+  KeycloakSpinner,
+  useEnvironment,
+} from "../../shared/keycloak-ui-shared";
+import {
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "../../shared/@patternfly/react-table";
 import { getGroups } from "../api/methods";
 import type { Group } from "../api/representations";
 import { Page } from "../components/page/Page";
 import { usePromise } from "../utils/usePromise";
 
+const withMissingParents = (groups: Group[]) => {
+  const result = [...groups];
+  const groupPaths = new Set(groups.map(({ path }) => path));
+
+  for (const group of groups) {
+    let parentPath = group.path.slice(0, group.path.lastIndexOf("/"));
+
+    while (parentPath) {
+      if (!groupPaths.has(parentPath)) {
+        result.push({
+          name: parentPath.slice(parentPath.lastIndexOf("/") + 1),
+          path: parentPath,
+        });
+        groupPaths.add(parentPath);
+      }
+      parentPath = parentPath.slice(0, parentPath.lastIndexOf("/"));
+    }
+  }
+
+  return result;
+};
+
 export const Groups = () => {
   const { t } = useTranslation();
   const context = useEnvironment();
 
-  const [groups, setGroups] = useState<Group[]>([]);
+  const [groups, setGroups] = useState<Group[]>();
   const [directMembership, setDirectMembership] = useState(false);
 
   usePromise(
     (signal) => getGroups({ signal, context }),
-    (groups) => {
-      if (!directMembership) {
-        groups.forEach((el) =>
-          getParents(
-            el,
-            groups,
-            groups.map(({ path }) => path),
-          ),
-        );
-      }
-      setGroups(groups);
-    },
+    (groups) =>
+      setGroups(directMembership ? groups : withMissingParents(groups)),
     [directMembership],
   );
 
-  const getParents = (el: Group, groups: Group[], groupsPaths: string[]) => {
-    const parentPath = el.path.slice(0, el.path.lastIndexOf("/"));
-    if (parentPath && !groupsPaths.includes(parentPath)) {
-      el = {
-        name: parentPath.slice(parentPath.lastIndexOf("/") + 1),
-        path: parentPath,
-      };
-      groups.push(el);
-      groupsPaths.push(parentPath);
-
-      getParents(el, groups, groupsPaths);
-    }
-  };
-
   return (
     <Page title={t("groups")} description={t("groupDescriptionLabel")}>
-      <DataList id="groups-list" aria-label={t("groups")} isCompact>
-        <DataListItem
-          id="groups-list-header"
-          aria-label={t("groupsListHeader")}
-        >
-          <DataListItemRow>
-            <DataListItemCells
-              dataListCells={[
-                <DataListCell key="directMembership-header">
-                  <Checkbox
-                    label={t("directMembership")}
-                    id="directMembership-checkbox"
-                    data-testid="directMembership-checkbox"
-                    isChecked={directMembership}
-                    onChange={(_event, checked) => setDirectMembership(checked)}
-                  />
-                </DataListCell>,
-              ]}
+      <Toolbar aria-label={t("groupsListHeader")}>
+        <ToolbarContent>
+          <ToolbarItem>
+            <Checkbox
+              label={t("directMembership")}
+              id="directMembership-checkbox"
+              data-testid="directMembership-checkbox"
+              isChecked={directMembership}
+              onChange={(_event, checked) => {
+                setGroups(undefined);
+                setDirectMembership(checked);
+              }}
             />
-          </DataListItemRow>
-        </DataListItem>
-        <DataListItem
-          id="groups-list-columns-names"
-          aria-label={t("groupsListColumnsNames")}
-        >
-          <DataListItemRow>
-            <DataListItemCells
-              dataListCells={[
-                <DataListCell key="group-name-header" width={2}>
-                  <strong>{t("name")}</strong>
-                </DataListCell>,
-                <DataListCell key="group-path-header" width={2}>
-                  <strong>{t("path")}</strong>
-                </DataListCell>,
-                <DataListCell key="group-direct-membership-header" width={2}>
-                  <strong>{t("directMembership")}</strong>
-                </DataListCell>,
-              ]}
-            />
-          </DataListItemRow>
-        </DataListItem>
-        {groups.map((group, appIndex) => (
-          <DataListItem
-            id={`${appIndex}-group`}
-            key={"group-" + appIndex}
-            aria-labelledby="groups-list"
-          >
-            <DataListItemRow>
-              <DataListItemCells
-                dataListCells={[
-                  <DataListCell
-                    data-testid={`group[${appIndex}].name`}
-                    width={2}
-                    key={"name-" + appIndex}
+          </ToolbarItem>
+        </ToolbarContent>
+      </Toolbar>
+      {!groups ? (
+        <KeycloakSpinner />
+      ) : (
+        <Table id="groups-list" aria-label={t("groups")}>
+          <Thead>
+            <Tr>
+              <Th>{t("name")}</Th>
+              <Th>{t("path")}</Th>
+              <Th>{t("directMembership")}</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {groups.length === 0 ? (
+              <Tr>
+                <Td colSpan={3}>{t("noGroupsText")}</Td>
+              </Tr>
+            ) : (
+              groups.map((group, index) => (
+                <Tr key={group.path}>
+                  <Td
+                    dataLabel={t("name")}
+                    data-testid={`group[${index}].name`}
                   >
                     {group.name}
-                  </DataListCell>,
-                  <DataListCell
-                    id={`${appIndex}-group-path`}
-                    width={2}
-                    key={"path-" + appIndex}
-                  >
-                    {group.path}
-                  </DataListCell>,
-                  <DataListCell
-                    id={`${appIndex}-group-directMembership`}
-                    width={2}
-                    key={"directMembership-" + appIndex}
-                  >
+                  </Td>
+                  <Td dataLabel={t("path")}>{group.path}</Td>
+                  <Td dataLabel={t("directMembership")}>
                     <Checkbox
-                      id={`${appIndex}-checkbox-directMembership`}
+                      id={`${index}-checkbox-directMembership`}
+                      aria-label={`${group.name}: ${t("directMembership")}`}
                       isChecked={group.id != null}
-                      isDisabled={true}
+                      isDisabled
                     />
-                  </DataListCell>,
-                ]}
-              />
-            </DataListItemRow>
-          </DataListItem>
-        ))}
-      </DataList>
+                  </Td>
+                </Tr>
+              ))
+            )}
+          </Tbody>
+        </Table>
+      )}
     </Page>
   );
 };

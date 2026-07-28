@@ -3,7 +3,6 @@ import type {
   UserProfileAttributeMetadata,
   UserProfileMetadata,
 } from "@keycloak/keycloak-admin-client/lib/defs/userProfileMetadata";
-import { Text } from "../../@patternfly/react-core";
 import type { TFunction } from "i18next";
 import type { ReactNode } from "react";
 import { useMemo, type JSX } from "react";
@@ -145,9 +144,9 @@ export const UserProfileFields = ({
           panel: (
             <div className="pf-v5-c-form">
               {group.displayDescription && (
-                <Text className="pf-v5-u-pb-lg">
+                <p className="cm-form-section__description">
                   {label(t, group.displayDescription, "")}
-                </Text>
+                </p>
               )}
               {attributes.map((attribute) => (
                 <FormField

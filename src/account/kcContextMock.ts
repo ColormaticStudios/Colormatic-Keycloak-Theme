@@ -20,12 +20,12 @@ const defaultKcContext: KcContext = {
 		editUsernameAllowed: true,
 		isInternationalizationEnabled: true,
 		identityFederationEnabled: true,
-		userManagedAccessAllowed: false,
+		userManagedAccessAllowed: true,
 	},
 	resourceUrl: `${baseUrl.origin}/resources`,
 	baseUrl: baseUrlParts,
 	locale: "en",
-	isAuthorizationEnabled: false,
+	isAuthorizationEnabled: true,
 	deleteAccountAllowed: true,
 	updateEmailFeatureEnabled: true,
 	updateEmailActionEnabled: true,
@@ -35,9 +35,10 @@ const defaultKcContext: KcContext = {
 	authUrl: "http://localhost:8080",
 	clientId: "account",
 	authServerUrl: "http://localhost:8080",
-	isOid4VciEnabled: false,
+	isOid4VciEnabled: true,
 	isViewApplicationsEnabled: true,
-	isViewGroupsEnabled: false,
+	isViewGroupsEnabled: true,
+	isViewOrganizationsEnabled: true,
 };
 
 export function getKcContextMock(overrides?: Partial<KcContext>): KcContext {

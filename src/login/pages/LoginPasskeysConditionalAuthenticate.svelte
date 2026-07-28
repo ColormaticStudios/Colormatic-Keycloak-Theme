@@ -62,7 +62,12 @@
       </div>
     {/if}
   {/snippet}
-  <form id="webauth" action={url.loginAction} method="post">
+  <form
+    class="cm-login-form"
+    id="webauth"
+    action={url.loginAction}
+    method="post"
+  >
     <input type="hidden" id="clientDataJSON" name="clientDataJSON" />
     <input type="hidden" id="authenticatorData" name="authenticatorData" />
     <input type="hidden" id="signature" name="signature" />
@@ -70,9 +75,9 @@
     <input type="hidden" id="userHandle" name="userHandle" />
     <input type="hidden" id="error" name="error" />
   </form>
-  <div class="kcFormGroupClass">
+  <div class="kcFormGroupClass cm-login-field">
     {#if authenticators !== undefined && Object.keys(authenticators).length !== 0}
-      <form id="authn_select" class="kcFormClass">
+      <form id="authn_select" class="kcFormClass cm-login-form">
         {#each authenticators.authenticators as authenticator (authenticator.credentialId)}
           <input
             type="hidden"
@@ -88,7 +93,7 @@
             {msg("passkey-available-authenticators")}
           </p>
         {/if}
-        <div class="kcFormClass">
+        <div class="kcFormClass cm-login-form">
           {#each authenticators.authenticators as authenticator, i (i)}
             <div
               id={`kc-webauthn-authenticator-item-${i}`}
@@ -145,6 +150,7 @@
       <div id="kc-form-wrapper">
         {#if realm.password}
           <form
+            class="cm-login-form"
             id="kc-form-login"
             action={url.loginAction}
             method="post"
@@ -160,15 +166,15 @@
             }}
           >
             {#if !usernameHidden}
-              <div class="kcFormGroupClass">
-                <label for="username" class="kcLabelClass">
+              <div class="kcFormGroupClass cm-login-field">
+                <label for="username" class="kcLabelClass cm-login-label">
                   {msg("passkey-autofill-select")}
                 </label>
                 <!-- svelte-ignore a11y_autofocus -->
                 <input
                   id="username"
                   aria-invalid={messagesPerField.existsError("username")}
-                  class="kcInputClass"
+                  class="kcInputClass cm-login-input"
                   name="username"
                   value={login.username ?? ""}
                   autocomplete="username webauthn"
@@ -178,7 +184,7 @@
                 {#if messagesPerField.existsError("username")}
                   <span
                     id="input-error-username"
-                    class="kcInputErrorMessageClass"
+                    class="kcInputErrorMessageClass cm-login-field__error"
                     aria-live="polite"
                   >
                     {messagesPerField.get("username")}
@@ -190,7 +196,7 @@
         {/if}
         <div
           id="kc-form-passkey-button"
-          class="kcFormButtonsClass"
+          class="kcFormButtonsClass cm-login-actions"
           style:display="none"
         >
           <input

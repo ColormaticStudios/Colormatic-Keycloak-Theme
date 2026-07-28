@@ -36,36 +36,55 @@ export const TextControl = <
 >(
   props: TextControlProps<T, P>,
 ) => {
-  const { labelIcon, helperText, ...rest } = props;
+  const {
+    control,
+    defaultValue: providedDefaultValue,
+    helperText,
+    label,
+    labelIcon,
+    name,
+    rules,
+    shouldUnregister,
+    ...inputProps
+  } = props;
   const required = !!getRuleValue(props.rules?.required);
-  const defaultValue = props.defaultValue ?? ("" as PathValue<T, P>);
+  const defaultValue = providedDefaultValue ?? ("" as PathValue<T, P>);
 
   const { field, fieldState } = useController({
-    ...props,
+    control,
     defaultValue,
+    name,
+    rules,
+    shouldUnregister,
   });
+  const helperId = helperText ? `${name}-description` : undefined;
+  const errorId = fieldState.error ? `${name}-error` : undefined;
+  const describedBy =
+    [helperId, errorId].filter(Boolean).join(" ") || undefined;
 
   return (
     <FormLabel
-      name={props.name}
-      label={props.label}
+      name={name}
+      label={label}
       labelIcon={labelIcon}
       isRequired={required}
       error={fieldState.error}
     >
       <TextInput
         isRequired={required}
-        id={props.name}
-        data-testid={props["data-testid"] || props.name}
+        id={name}
+        data-testid={props["data-testid"] || name}
         validated={
           fieldState.error ? ValidatedOptions.error : ValidatedOptions.default
         }
+        aria-describedby={describedBy}
+        aria-invalid={fieldState.invalid}
         isDisabled={props.isDisabled}
-        {...rest}
+        {...inputProps}
         {...field}
       />
       {helperText && (
-        <FormHelperText>
+        <FormHelperText id={helperId}>
           <HelperText>
             <HelperTextItem>{helperText}</HelperTextItem>
           </HelperText>

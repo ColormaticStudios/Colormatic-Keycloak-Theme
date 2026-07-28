@@ -28,9 +28,12 @@ type ScrollFormProps = GridProps & {
   showJumpLinks?: boolean;
 };
 
-const spacesToHyphens = (string: string): string => {
-  return string.replace(/\s+/g, "-");
-};
+const sectionId = (title: string, index: number): string =>
+  `section-${index + 1}-${title
+    .trim()
+    .toLocaleLowerCase()
+    .replace(/[^\p{Letter}\p{Number}]+/gu, "-")
+    .replace(/^-|-$/g, "")}`;
 
 export const ScrollForm = ({
   label,
@@ -56,7 +59,7 @@ export const ScrollForm = ({
       let active = 0;
 
       shownSections.forEach(({ title }, index) => {
-        const id = spacesToHyphens(title.toLowerCase());
+        const id = sectionId(title, index);
         const element = document.getElementById(id);
         if (element && scrollTop >= element.offsetTop) {
           active = index;
@@ -74,8 +77,8 @@ export const ScrollForm = ({
   return (
     <Grid hasGutter {...rest}>
       <GridItem md={showJumpLinks ? 8 : 12} sm={12}>
-        {shownSections.map(({ title, panel }) => {
-          const scrollId = spacesToHyphens(title.toLowerCase());
+        {shownSections.map(({ title, panel }, index) => {
+          const scrollId = sectionId(title, index);
 
           return (
             <Fragment key={title}>
@@ -101,7 +104,7 @@ export const ScrollForm = ({
           <PageSection className={style.sticky}>
             <JumpLinks isVertical label={label}>
               {shownSections.map(({ title }, index) => {
-                const scrollId = spacesToHyphens(title.toLowerCase());
+                const scrollId = sectionId(title, index);
 
                 return (
                   <JumpLinksItem
@@ -110,6 +113,7 @@ export const ScrollForm = ({
                     onClick={() => {
                       const element = document.getElementById(scrollId);
                       if (element) {
+                        element.focus({ preventScroll: true });
                         element.scrollIntoView({
                           behavior: "smooth",
                           block: "start",

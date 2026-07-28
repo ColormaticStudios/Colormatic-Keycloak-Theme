@@ -25,7 +25,12 @@
     {@render msg("confirmOverrideIdpTitle")()}
   {/snippet}
 
-  <form id="kc-register-form" action={url.loginAction} method="post">
+  <form
+    class="cm-login-form"
+    id="kc-register-form"
+    action={url.loginAction}
+    method="post"
+  >
     {@render msg("pageExpiredMsg1")()}
     <a id="loginRestartLink" href={url.loginRestartFlowUrl}>
       {@render msg("doClickHere")()}

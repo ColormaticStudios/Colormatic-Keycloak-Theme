@@ -1,7 +1,9 @@
-import { Spinner } from "../../shared/@patternfly/react-core";
 import { Suspense, lazy, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useEnvironment } from "../../shared/keycloak-ui-shared";
+import {
+  KeycloakSpinner,
+  useEnvironment,
+} from "../../shared/keycloak-ui-shared";
 import type { MenuItem } from "../root/PageNav";
 import type { ContentComponentParams } from "../routes";
 import { joinPath } from "../utils/joinPath";
@@ -39,7 +41,15 @@ export const ContentComponent = () => {
     [content, componentId],
   );
 
-  return modulePath && <Component modulePath={modulePath} />;
+  if (!content) {
+    return <KeycloakSpinner />;
+  }
+
+  if (!componentId || !modulePath) {
+    throw new Error("pageNotFound");
+  }
+
+  return <Component modulePath={modulePath} />;
 };
 
 type ComponentProps = {
@@ -53,7 +63,7 @@ const Component = ({ modulePath }: ComponentProps) => {
     () => import(joinPath(environment.resourceUrl, modulePath)),
   );
   return (
-    <Suspense fallback={<Spinner />}>
+    <Suspense fallback={<KeycloakSpinner />}>
       <Element />
     </Suspense>
   );

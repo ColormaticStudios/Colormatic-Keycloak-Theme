@@ -18,7 +18,8 @@
 <textarea
   id={attribute.name}
   name={attribute.name}
-  class="kcInputClass"
+  class="kcInputClass cm-login-input"
+  data-slot="textarea"
   aria-invalid={displayableErrors.length !== 0}
   disabled={attribute.readOnly}
   cols={attribute.annotations.inputTypeCols === undefined

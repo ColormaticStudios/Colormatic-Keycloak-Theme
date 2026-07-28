@@ -50,7 +50,7 @@ export const ShareTheResource = ({
   const { t } = useTranslation();
   const context = useEnvironment();
   const { addAlert, addError } = useAccountAlerts();
-  const form = useForm<FormValues>();
+  const form = useForm<FormValues>({ mode: "onChange" });
   const {
     control,
     register,
@@ -69,7 +69,7 @@ export const ShareTheResource = ({
     if (fields.length === 0) {
       append({ value: "" });
     }
-  }, [fields]);
+  }, [append, fields.length]);
 
   const watchFields = useWatch({
     control,
@@ -85,21 +85,24 @@ export const ShareTheResource = ({
     try {
       await Promise.all(
         usernames
-          .filter(({ value }) => value !== "")
-          .map(({ value: username }) =>
+          .map(({ value }) => value.trim())
+          .filter(Boolean)
+          .map((username) =>
             updateRequest(context, resource._id, username, permissions),
           ),
       );
       addAlert(t("shareSuccess"));
+      reset({ permissions: [], usernames: [{ value: "" }] });
       onClose();
     } catch (error) {
       addError("shareError", error);
     }
-    reset({});
   };
 
-  const validateUser = async () => {
-    const userOrEmails = fields.map((f) => f.value).filter((f) => f !== "");
+  const validateUser = () => {
+    const userOrEmails = watchFields
+      .map(({ value }) => value.trim())
+      .filter(Boolean);
     const userPermission = permissions
       ?.map((p) => [p.username, p.email])
       .flat();
@@ -113,7 +116,7 @@ export const ShareTheResource = ({
         message: !hasUsers ? t("required") : t("resourceAlreadyShared"),
       });
     } else {
-      clearErrors();
+      clearErrors("usernames");
     }
 
     return hasUsers && !alreadyShared;
@@ -136,65 +139,66 @@ export const ShareTheResource = ({
         >
           {t("done")}
         </Button>,
-        <Button key="cancel" variant="link" onClick={onClose}>
+        <Button key="cancel" variant="link" type="button" onClick={onClose}>
           {t("cancel")}
         </Button>,
       ]}
     >
-      <Form id="share-form" onSubmit={handleSubmit(addShare)}>
-        <FormGroup
-          label={t("shareUser")}
-          type="string"
-          fieldId="users"
-          isRequired
-        >
-          <InputGroup>
-            <InputGroupItem>
-              <TextInput
-                id="users"
-                data-testid="users"
-                placeholder={t("usernamePlaceholder")}
-                validated={
-                  errors.usernames
-                    ? ValidatedOptions.error
-                    : ValidatedOptions.default
-                }
-                {...register(`usernames.${fields.length - 1}.value`, {
-                  validate: validateUser,
-                })}
-              />
-            </InputGroupItem>
-            <InputGroupItem>
-              <Button
-                key="add-user"
-                variant="primary"
-                data-testid="add"
-                onClick={() => append({ value: "" })}
-                isDisabled={isDisabled}
-              >
-                {t("add")}
-              </Button>
-            </InputGroupItem>
-          </InputGroup>
-          {fields.length > 1 && (
-            <ChipGroup categoryName={t("shareWith") + " "}>
-              {fields.map(
-                (field, index) =>
-                  index !== fields.length - 1 && (
-                    <Chip key={field.id} onClick={() => remove(index)}>
-                      {field.value}
-                    </Chip>
-                  ),
-              )}
-            </ChipGroup>
-          )}
-          {errors.usernames && (
-            <FormErrorText message={errors.usernames.message!} />
-          )}
-        </FormGroup>
-        <FormProvider {...form}>
+      <FormProvider {...form}>
+        <Form id="share-form" onSubmit={handleSubmit(addShare)}>
           <FormGroup
-            label=""
+            label={t("shareUser")}
+            type="string"
+            fieldId="users"
+            isRequired
+          >
+            <InputGroup>
+              <InputGroupItem isFill>
+                <TextInput
+                  id="users"
+                  data-testid="users"
+                  placeholder={t("usernamePlaceholder")}
+                  validated={
+                    errors.usernames
+                      ? ValidatedOptions.error
+                      : ValidatedOptions.default
+                  }
+                  {...register(`usernames.${fields.length - 1}.value`, {
+                    validate: validateUser,
+                  })}
+                />
+              </InputGroupItem>
+              <InputGroupItem>
+                <Button
+                  key="add-user"
+                  type="button"
+                  variant="secondary"
+                  data-testid="add"
+                  onClick={() => append({ value: "" })}
+                  isDisabled={isDisabled}
+                >
+                  {t("add")}
+                </Button>
+              </InputGroupItem>
+            </InputGroup>
+            {fields.length > 1 && (
+              <ChipGroup categoryName={t("shareWith") + " "}>
+                {fields.map(
+                  (field, index) =>
+                    index !== fields.length - 1 && (
+                      <Chip key={field.id} onClick={() => remove(index)}>
+                        {watchFields[index]?.value ?? field.value}
+                      </Chip>
+                    ),
+                )}
+              </ChipGroup>
+            )}
+            {errors.usernames && (
+              <FormErrorText message={errors.usernames.message!} />
+            )}
+          </FormGroup>
+          <FormGroup
+            label={t("permissions")}
             fieldId="permissions-selected"
             data-testid="permissions"
           >
@@ -208,11 +212,9 @@ export const ShareTheResource = ({
               }))}
             />
           </FormGroup>
-        </FormProvider>
-        <FormGroup>
           <SharedWith permissions={permissions} />
-        </FormGroup>
-      </Form>
+        </Form>
+      </FormProvider>
     </Modal>
   );
 };

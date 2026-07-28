@@ -12,7 +12,7 @@ type FormTitleProps = Omit<TitleProps, "headingLevel"> & {
 export const FormTitle = ({
   id,
   title,
-  headingLevel = "h1",
+  headingLevel = "h2",
   size = "xl",
   ...rest
 }: FormTitleProps) => (

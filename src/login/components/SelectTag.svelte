@@ -46,7 +46,8 @@
 <select
   id={attribute.name}
   name={attribute.name}
-  class="kcInputClass"
+  class="kcInputClass cm-login-input"
+  data-slot="select"
   aria-invalid={displayableErrors.length !== 0}
   disabled={attribute.readOnly}
   multiple={isMultiple}

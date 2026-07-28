@@ -1,4 +1,5 @@
 import { Checkbox, Radio } from "../../@patternfly/react-core";
+import { useId } from "react";
 import { Controller } from "react-hook-form";
 import type {
   OptionLabel,
@@ -13,6 +14,7 @@ export const OptionComponent = (props: UserProfileFieldProps) => {
   const isRequired = isRequiredAttribute(attribute);
   const isMultiSelect = inputType.startsWith("multiselect");
   const Component = isMultiSelect ? Checkbox : Radio;
+  const idPrefix = useId();
   const options =
     (attribute.validators?.options as Options | undefined)?.options || [];
 
@@ -28,15 +30,23 @@ export const OptionComponent = (props: UserProfileFieldProps) => {
         name={fieldName(attribute.name)}
         control={form.control}
         defaultValue={attribute.defaultValue}
-        render={({ field }) => (
-          <>
-            {options.map((option) => (
+        render={({ field, fieldState }) => (
+          <div
+            role={isMultiSelect ? "group" : "radiogroup"}
+            aria-label={label(props.t, attribute.displayName, attribute.name)}
+            aria-invalid={fieldState.invalid}
+            aria-describedby={
+              fieldState.error ? `${attribute.name}-error` : undefined
+            }
+          >
+            {options.map((option, index) => (
               <Component
                 key={option}
-                id={option}
+                id={`${idPrefix}-${index}`}
                 data-testid={option}
                 label={label(props.t, optionLabel[option], option, prefix)}
                 value={option}
+                name={attribute.name}
                 isChecked={field.value?.includes(option)}
                 onChange={() => {
                   if (isMultiSelect) {
@@ -51,11 +61,11 @@ export const OptionComponent = (props: UserProfileFieldProps) => {
                     field.onChange([option]);
                   }
                 }}
-                readOnly={attribute.readOnly}
+                isDisabled={attribute.readOnly}
                 isRequired={isRequired}
               />
             ))}
-          </>
+          </div>
         )}
       />
     </UserProfileGroup>

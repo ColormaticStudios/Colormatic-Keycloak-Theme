@@ -1,12 +1,6 @@
-import type {
-  ComponentClass,
-  MouseEventHandler,
-  PropsWithChildren,
-  ReactNode,
-} from "react";
+import type { MouseEventHandler, PropsWithChildren, ReactNode } from "react";
 import {
   EmptyState,
-  EmptyStateIcon,
   EmptyStateBody,
   Button,
   ButtonVariant,
@@ -14,8 +8,8 @@ import {
   EmptyStateHeader,
   EmptyStateFooter,
 } from "../../../@patternfly/react-core";
-import type { SVGIconProps } from "@patternfly/react-icons/dist/js/createIcon";
-import { PlusCircleIcon, SearchIcon } from "../../../@patternfly/react-icons";
+import type { BootstrapIconName } from "../../icons/BootstrapIcon";
+import { BootstrapIcon } from "../../icons/BootstrapIcon";
 
 export type Action = {
   text: string;
@@ -25,11 +19,11 @@ export type Action = {
 
 export type ListEmptyStateProps = {
   message: string;
-  instructions: ReactNode;
+  instructions?: ReactNode;
   primaryActionText?: string;
   onPrimaryAction?: MouseEventHandler<HTMLButtonElement>;
   hasIcon?: boolean;
-  icon?: ComponentClass<SVGIconProps>;
+  icon?: BootstrapIconName;
   isSearchVariant?: boolean;
   secondaryActions?: Action[];
   isDisabled?: boolean;
@@ -49,16 +43,19 @@ export const ListEmptyState = ({
 }: PropsWithChildren<ListEmptyStateProps>) => {
   return (
     <EmptyState data-testid="empty-state" variant="lg">
-      {hasIcon && isSearchVariant ? (
-        <EmptyStateIcon icon={SearchIcon} />
-      ) : (
-        hasIcon && <EmptyStateIcon icon={icon ? icon : PlusCircleIcon} />
+      {hasIcon && (
+        <div className="pf-v5-c-empty-state__icon">
+          <BootstrapIcon
+            icon={isSearchVariant ? "bi-search" : (icon ?? "bi-plus-circle")}
+          />
+        </div>
       )}
-      <EmptyStateHeader titleText={message} headingLevel="h1" />
-      <EmptyStateBody>{instructions}</EmptyStateBody>
+      <EmptyStateHeader titleText={message} headingLevel="h2" />
+      {instructions ? <EmptyStateBody>{instructions}</EmptyStateBody> : null}
       <EmptyStateFooter>
         {primaryActionText && (
           <Button
+            type="button"
             data-testid={`${message
               .replace(/\W+/g, "-")
               .toLowerCase()}-empty-action`}
@@ -74,6 +71,7 @@ export const ListEmptyState = ({
           <EmptyStateActions>
             {secondaryActions.map((action) => (
               <Button
+                type="button"
                 key={action.text}
                 data-testid={`${action.text
                   .replace(/\W+/g, "-")

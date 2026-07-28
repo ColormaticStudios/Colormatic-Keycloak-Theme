@@ -34,24 +34,20 @@
   });
 </script>
 
-<div class="kcInputGroup">
+<div class="kcInputGroup cm-login-input-group" data-slot="password-field">
   {@render children?.()}
   <button
     type="button"
     class="kcFormPasswordVisibilityButtonClass"
+    data-slot="password-toggle"
     aria-label={msgStr($isPasswordRevealed ? "hidePassword" : "showPassword")}
     aria-controls={passwordInputId}
     onclick={() => toggleIsPasswordRevealed($isPasswordRevealed)}
   >
-    <!-- Icons from Bootstrap Icons -->
-    <!--
-	 We really shouldn't be using base svg elements,
-	 but I'm lazy. I'll probably fix it later.
-	 -->
     {#if $isPasswordRevealed}
-      <i class="bi bi-eye-slash-fill"></i>
+      <i class="bi bi-eye-slash-fill" aria-hidden="true"></i>
     {:else}
-      <i class="bi bi-eye-fill"></i>
+      <i class="bi bi-eye-fill" aria-hidden="true"></i>
     {/if}
   </button>
 </div>

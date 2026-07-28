@@ -4,11 +4,27 @@
  */
 
 :root {
-  --cm-account-canvas: var(--color-slate-100);
-  --cm-account-chrome: var(--color-white);
+  --cm-account-canvas: var(--cm-canvas);
+  --cm-account-chrome: var(--cm-surface);
+  --cm-account-surface: var(--cm-surface-subtle);
+  --cm-account-card: var(--color-slate-200);
+  --cm-account-control: var(--color-slate-300);
+  --cm-account-control-hover: var(--color-slate-400);
+  --cm-account-selection: var(--color-slate-300);
+  --cm-account-border: var(--cm-border);
+  --cm-account-border-strong: var(--cm-border-strong);
+  --cm-account-text: var(--cm-text);
+  --cm-account-text-muted: var(--cm-text-muted);
+  --cm-account-action: var(--cm-action);
+  --cm-account-action-hover: var(--cm-action-hover);
+  --cm-account-action-text: var(--cm-action-text);
+  --cm-account-focus: var(--cm-focus);
 }
 
-.pf-v5-theme-dark {
-  --cm-account-canvas: var(--color-slate-950);
+.dark {
   --cm-account-chrome: var(--color-slate-900);
+  --cm-account-card: var(--color-slate-900);
+  --cm-account-control: var(--color-slate-800);
+  --cm-account-control-hover: var(--color-slate-700);
+  --cm-account-selection: var(--color-slate-700);
 }

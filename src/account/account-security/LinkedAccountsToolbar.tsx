@@ -10,17 +10,20 @@ import {
 } from "../../shared/@patternfly/react-core";
 
 type LinkedAccountsToolbarProps = {
+  id: string;
   onFilter: (nameFilter: string) => void;
   count: number;
   first: number;
   max: number;
   onNextClick: (page: number) => void;
   onPreviousClick: (page: number) => void;
-  onPerPageSelect: (max: number, first: number) => void;
+  onPerPageSelect: (first: number, max: number) => void;
   hasNext: boolean;
+  ariaLabel: string;
 };
 
 export const LinkedAccountsToolbar = ({
+  id,
   count,
   first,
   max,
@@ -29,28 +32,38 @@ export const LinkedAccountsToolbar = ({
   onPerPageSelect,
   onFilter,
   hasNext,
+  ariaLabel,
 }: LinkedAccountsToolbarProps) => {
   const { t } = useTranslation();
   const [nameFilter, setNameFilter] = useState("");
 
+  const applyFilter = (value: string) => {
+    const normalizedValue = value.trim();
+    setNameFilter(normalizedValue);
+    onFilter(normalizedValue);
+  };
+
   const page = Math.round(first / max) + 1;
   return (
-    <Toolbar>
+    <Toolbar
+      id={`${id}-toolbar`}
+      aria-label={ariaLabel}
+      className="cm-account-list-toolbar"
+    >
       <ToolbarContent>
         <ToolbarItem>
           <SearchInput
+            className="cm-account-search"
+            searchInputId={`${id}-filter`}
+            name="name"
             placeholder={t("filterByName")}
             aria-label={t("filterByName")}
+            submitSearchButtonLabel={t("filterByName")}
             value={nameFilter}
             onChange={(_, value) => {
               setNameFilter(value);
             }}
-            onSearch={() => onFilter(nameFilter)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                onFilter(nameFilter);
-              }
-            }}
+            onSearch={() => applyFilter(nameFilter)}
             onClear={() => {
               setNameFilter("");
               onFilter("");
@@ -61,18 +74,17 @@ export const LinkedAccountsToolbar = ({
           <Pagination
             isCompact
             perPageOptions={[
-              { title: "5", value: 6 },
-              { title: "10", value: 11 },
-              { title: "20", value: 21 },
+              { title: "5", value: 5 },
+              { title: "10", value: 10 },
+              { title: "20", value: 20 },
             ]}
             toggleTemplate={({
               firstIndex,
               lastIndex,
             }: PaginationToggleTemplateProps) => (
-              <b>
-                {firstIndex && firstIndex > 1 ? firstIndex - 1 : firstIndex} -{" "}
-                {lastIndex && lastIndex > 1 ? lastIndex - 1 : lastIndex}
-              </b>
+              <span>
+                {firstIndex} - {lastIndex}
+              </span>
             )}
             itemCount={count + (page - 1) * max + (hasNext ? 1 : 0)}
             page={page}

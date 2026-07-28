@@ -14,18 +14,14 @@ export type AlertPanelProps = {
 
 export function AlertPanel({ alerts, onCloseAlert }: AlertPanelProps) {
   return (
-    <AlertGroup
-      data-testid="global-alerts"
-      isToast
-      style={{ whiteSpace: "pre-wrap" }}
-    >
+    <AlertGroup data-testid="global-alerts" isToast className="cm-alert">
       {alerts.map(({ id, variant, message, description }, index) => (
         <Alert
           key={id}
           data-testid={index === 0 ? "last-alert" : undefined}
           isLiveRegion
           variant={AlertVariant[variant]}
-          component="p"
+          component="div"
           variantLabel=""
           title={message}
           actionClose={

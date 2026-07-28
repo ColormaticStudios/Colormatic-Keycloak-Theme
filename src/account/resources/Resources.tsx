@@ -12,6 +12,7 @@ export const Resources = () => {
   return (
     <Page title={t("resources")} description={t("resourceIntroMessage")}>
       <Tabs
+        aria-label={t("resources")}
         activeKey={activeTabKey}
         onSelect={(_, key) => setActiveTabKey(key as number)}
         mountOnEnter

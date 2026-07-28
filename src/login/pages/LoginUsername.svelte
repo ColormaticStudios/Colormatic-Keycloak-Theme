@@ -4,6 +4,10 @@
   import { clsx } from "keycloakify/tools/clsx";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import FormActions from "../components/FormActions.svelte";
+  import FormField from "../components/FormField.svelte";
+  import { Button } from "../../lib/components/ui/button";
+  import { Input } from "../../lib/components/ui/input";
 
   const {
     Template,
@@ -28,8 +32,6 @@
   );
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
-
   const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
 </script>
 
@@ -104,6 +106,7 @@
     <div id="kc-form-wrapper">
       {#if realm.password}
         <form
+          class="cm-login-form"
           id="kc-form-login"
           onsubmit={() => {
             setIsLoginButtonDisabled(true);
@@ -113,8 +116,11 @@
           method="post"
         >
           {#if !usernameHidden}
-            <div class="kcFormGroupClass">
-              <label for="username" class="kcLabelClass">
+            <FormField
+              inputId="username"
+              hasError={messagesPerField.existsError("username")}
+            >
+              {#snippet label()}
                 {#if !realm.loginWithEmailAllowed}
                   {@render msg("username")()}
                 {:else if !realm.registrationEmailAsUsername}
@@ -122,30 +128,29 @@
                 {:else}
                   {@render msg("email")()}
                 {/if}
-              </label>
-              <!-- svelte-ignore a11y_autofocus -->
-              <input
-                id="username"
-                class="kcInputClass"
-                name="username"
-                value={login.username ?? ""}
-                type="text"
-                autofocus
-                autocomplete={enableWebAuthnConditionalUI
-                  ? "username webauthn"
-                  : "username"}
-                aria-invalid={messagesPerField.existsError("username")}
-              />
-              {#if messagesPerField.existsError("username")}
-                <span
-                  id="input-error"
-                  class="kcInputErrorMessageClass"
-                  aria-live="polite"
-                >
-                  {messagesPerField.getFirstError("username")}
-                </span>
-              {/if}
-            </div>
+              {/snippet}
+              {#snippet control()}
+                <Input
+                  id="username"
+                  class="kcInputClass cm-login-input"
+                  name="username"
+                  value={login.username ?? ""}
+                  type="text"
+                  autofocus
+                  autocomplete={enableWebAuthnConditionalUI
+                    ? "username webauthn"
+                    : "username"}
+                  aria-invalid={messagesPerField.existsError("username")}
+                />
+              {/snippet}
+              {#snippet error()}
+                {#if messagesPerField.existsError("username")}
+                  <span id="input-error">
+                    {messagesPerField.getFirstError("username")}
+                  </span>
+                {/if}
+              {/snippet}
+            </FormField>
           {/if}
 
           <div class="kcFormGroupClass kcFormSettingClass">
@@ -166,21 +171,17 @@
             </div>
           </div>
 
-          <div id="kc-form-buttons" class="kcFormGroupClass">
-            <input
+          <FormActions>
+            <Button
               disabled={$isLoginButtonDisabled}
-              class="
-                kcButtonClass
-                kcButtonPrimaryClass
-                kcButtonBlockClass
-                kcButtonLargeClass
-              "
+              class="cm-login-action--block"
               name="login"
               id="kc-login"
               type="submit"
-              value={msgStr("doLogIn")}
-            />
-          </div>
+            >
+              {@render msg("doLogIn")()}
+            </Button>
+          </FormActions>
         </form>
       {/if}
     </div>

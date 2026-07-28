@@ -16,7 +16,7 @@ type ResourceToolbarProps = {
   max: number;
   onNextClick: (page: number) => void;
   onPreviousClick: (page: number) => void;
-  onPerPageSelect: (max: number, first: number) => void;
+  onPerPageSelect: (first: number, max: number) => void;
   hasNext: boolean;
 };
 
@@ -34,21 +34,25 @@ export const ResourceToolbar = ({
   const [nameFilter, setNameFilter] = useState("");
 
   const page = Math.round(first / max) + 1;
+
+  const applyFilter = () => onFilter(nameFilter.trim());
+
   return (
-    <Toolbar>
+    <Toolbar aria-label={t("resources")}>
       <ToolbarContent>
-        <ToolbarItem>
+        <ToolbarItem variant="search-filter">
           <SearchInput
+            className="cm-account-search"
             placeholder={t("filterByName")}
             aria-label={t("filterByName")}
             value={nameFilter}
             onChange={(_, value) => {
               setNameFilter(value);
             }}
-            onSearch={() => onFilter(nameFilter)}
+            onSearch={(_, value) => onFilter(value.trim())}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                onFilter(nameFilter);
+                applyFilter();
               }
             }}
             onClear={() => {

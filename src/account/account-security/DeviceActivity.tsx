@@ -1,31 +1,29 @@
 import {
+  BootstrapIcon,
   ContinueCancelModal,
+  ListEmptyState,
   useEnvironment,
   label,
 } from "../../shared/keycloak-ui-shared";
 import {
   Button,
   DataList,
-  DataListContent,
+  DataListAction,
+  DataListCell,
   DataListItem,
+  DataListItemCells,
   DataListItemRow,
   DescriptionList,
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
+  Flex,
+  FlexItem,
   Grid,
   GridItem,
   Label,
   Spinner,
-  Split,
-  SplitItem,
-  Title,
 } from "../../shared/@patternfly/react-core";
-import {
-  DesktopIcon,
-  MobileAltIcon,
-  SyncAltIcon,
-} from "../../shared/@patternfly/react-icons";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -36,7 +34,7 @@ import type {
   DeviceRepresentation,
   SessionRepresentation,
 } from "../api/representations";
-import { Page } from "../components/page/Page";
+import { AccountPageSection, Page } from "../components/page/Page";
 import { formatDate } from "../utils/formatDate";
 import { useAccountAlerts } from "../utils/useAccountAlerts";
 import { usePromise } from "../utils/usePromise";
@@ -48,34 +46,19 @@ export const DeviceActivity = () => {
 
   const [devices, setDevices] = useState<DeviceRepresentation[]>();
   const [key, setKey] = useState(0);
-  const refresh = () => setKey(key + 1);
+  const refresh = () => setKey((currentKey) => currentKey + 1);
 
   const moveCurrentToTop = (devices: DeviceRepresentation[]) => {
-    if (devices.length === 0) {
-      setDevices([]);
-      return;
-    }
+    const orderedDevices = devices
+      .map((device) => ({
+        ...device,
+        sessions: [...device.sessions].sort(
+          (left, right) => Number(right.current) - Number(left.current),
+        ),
+      }))
+      .sort((left, right) => Number(right.current) - Number(left.current));
 
-    let currentDevice = devices[0];
-
-    const index = devices.findIndex((d) => d.current);
-    if (index >= 0) {
-      currentDevice = devices.splice(index, 1)[0];
-      devices.unshift(currentDevice);
-    }
-
-    if (currentDevice.sessions?.length) {
-      const sessionIndex = currentDevice.sessions.findIndex((s) => s.current);
-      if (sessionIndex >= 0) {
-        const currentSession = currentDevice.sessions.splice(
-          sessionIndex,
-          1,
-        )[0];
-        currentDevice.sessions.unshift(currentSession);
-      }
-    }
-
-    setDevices(devices);
+    setDevices(orderedDevices);
   };
 
   usePromise((signal) => getDevices({ signal, context }), moveCurrentToTop, [
@@ -121,79 +104,188 @@ export const DeviceActivity = () => {
   };
 
   if (!devices) {
-    return <Spinner />;
+    return (
+      <Page
+        title={t("deviceActivity")}
+        description={t("signedInDevicesExplanation")}
+      >
+        <Spinner aria-label={t("deviceActivity")} />
+      </Page>
+    );
   }
+
+  const deviceSessions = devices.flatMap((device) =>
+    device.sessions.map((session) => ({ device, session })),
+  );
+  const sessionCount = deviceSessions.length;
 
   return (
     <Page
       title={t("deviceActivity")}
       description={t("signedInDevicesExplanation")}
     >
-      <Split hasGutter className="pf-v5-u-mb-lg">
-        <SplitItem isFilled>
-          <Title headingLevel="h2" size="xl">
-            {t("signedInDevices")}
-          </Title>
-        </SplitItem>
-        <SplitItem>
-          <Button
-            id="refresh-page"
-            variant="link"
-            onClick={() => refresh()}
-            icon={<SyncAltIcon />}
+      <AccountPageSection
+        title={t("signedInDevices")}
+        actions={
+          <Flex
+            alignItems={{ default: "alignItemsCenter" }}
+            flexWrap={{ default: "wrap" }}
+            gap={{ default: "gapSm" }}
           >
-            {t("refreshPage")}
-          </Button>
+            <FlexItem>
+              <Button
+                type="button"
+                id="refresh-page"
+                variant="secondary"
+                onClick={refresh}
+                icon={<BootstrapIcon icon="bi-arrow-clockwise" />}
+              >
+                {t("refreshPage")}
+              </Button>
+            </FlexItem>
 
-          {(devices.length > 1 || devices[0].sessions.length > 1) && (
-            <ContinueCancelModal
-              buttonTitle={t("signOutAllDevices")}
-              modalTitle={t("signOutAllDevices")}
-              continueLabel={t("confirm")}
-              cancelLabel={t("cancel")}
-              onContinue={() => signOutAll()}
-            >
-              {t("signOutAllDevicesWarning")}
-            </ContinueCancelModal>
-          )}
-        </SplitItem>
-      </Split>
-      <DataList
-        className="signed-in-device-list"
-        aria-label={t("signedInDevices")}
-      >
-        <DataListItem aria-labelledby={`sessions-${key}`}>
-          {devices.map((device) =>
-            device.sessions.map((session, index) => (
-              <DataListItemRow key={device.id} data-testid={`row-${index}`}>
-                <DataListContent
-                  aria-label="device-sessions-content"
-                  className="pf-v5-u-flex-grow-1"
+            {sessionCount > 1 && (
+              <FlexItem>
+                <ContinueCancelModal
+                  buttonTitle={t("signOutAllDevices")}
+                  modalTitle={t("signOutAllDevices")}
+                  continueLabel={t("confirm")}
+                  cancelLabel={t("cancel")}
+                  buttonVariant="secondary"
+                  onContinue={signOutAll}
                 >
-                  <Grid hasGutter>
-                    <GridItem span={1} rowSpan={2}>
-                      {device.mobile ? <MobileAltIcon /> : <DesktopIcon />}
-                    </GridItem>
-                    <GridItem sm={8} md={9} span={10}>
-                      <span className="pf-v5-u-mr-md session-title">
-                        {device.os.toLowerCase().includes("unknown")
-                          ? t("unknownOperatingSystem")
-                          : device.os}{" "}
-                        {!device.osVersion.toLowerCase().includes("unknown") &&
-                          device.osVersion}{" "}
-                        / {session.browser}
-                      </span>
-                      {session.current && (
-                        <Label color="green">{t("currentSession")}</Label>
-                      )}
-                    </GridItem>
-                    <GridItem
-                      className="pf-v5-u-text-align-right"
-                      sm={3}
-                      md={2}
-                      span={1}
-                    >
-                      {!session.current && (
+                  {t("signOutAllDevicesWarning")}
+                </ContinueCancelModal>
+              </FlexItem>
+            )}
+          </Flex>
+        }
+      >
+        {sessionCount === 0 ? (
+          <ListEmptyState
+            message={t("signedInDevices")}
+            instructions={t("signedInDevicesExplanation")}
+            hasIcon={false}
+          />
+        ) : (
+          <DataList
+            className="signed-in-device-list"
+            aria-label={t("signedInDevices")}
+          >
+            {deviceSessions.map(({ device, session }, index) => {
+              const sessionKey = `${device.id}-${session.id}`;
+              const sessionTitleId = `session-${sessionKey}-title`;
+
+              return (
+                <DataListItem key={sessionKey} aria-labelledby={sessionTitleId}>
+                  <DataListItemRow data-testid={`row-${index}`}>
+                    <DataListItemCells
+                      dataListCells={[
+                        <DataListCell key="details">
+                          <Grid hasGutter>
+                            <GridItem span={1}>
+                              <BootstrapIcon
+                                icon={device.mobile ? "bi-phone" : "bi-display"}
+                              />
+                            </GridItem>
+                            <GridItem sm={11} span={10}>
+                              <Flex
+                                alignItems={{ default: "alignItemsCenter" }}
+                                flexWrap={{ default: "wrap" }}
+                                gap={{ default: "gapSm" }}
+                              >
+                                <FlexItem>
+                                  <strong
+                                    id={sessionTitleId}
+                                    className="session-title"
+                                  >
+                                    {device.os.toLowerCase().includes("unknown")
+                                      ? t("unknownOperatingSystem")
+                                      : device.os}{" "}
+                                    {!device.osVersion
+                                      .toLowerCase()
+                                      .includes("unknown") &&
+                                      device.osVersion}{" "}
+                                    / {session.browser}
+                                  </strong>
+                                </FlexItem>
+                                {session.current && (
+                                  <FlexItem>
+                                    <Label color="green">
+                                      {t("currentSession")}
+                                    </Label>
+                                  </FlexItem>
+                                )}
+                              </Flex>
+                            </GridItem>
+                            <GridItem span={11} offset={1}>
+                              <DescriptionList
+                                className="signed-in-device-grid"
+                                columnModifier={{ sm: "2Col", lg: "3Col" }}
+                                cols={5}
+                                rows={1}
+                              >
+                                <DescriptionListGroup>
+                                  <DescriptionListTerm>
+                                    {t("ipAddress")}
+                                  </DescriptionListTerm>
+                                  <DescriptionListDescription>
+                                    {session.ipAddress}
+                                  </DescriptionListDescription>
+                                </DescriptionListGroup>
+                                <DescriptionListGroup>
+                                  <DescriptionListTerm>
+                                    {t("lastAccessedOn")}
+                                  </DescriptionListTerm>
+                                  <DescriptionListDescription>
+                                    {formatDate(
+                                      new Date(session.lastAccess * 1000),
+                                      context.environment.locale,
+                                    )}
+                                  </DescriptionListDescription>
+                                </DescriptionListGroup>
+                                <DescriptionListGroup>
+                                  <DescriptionListTerm>
+                                    {t("clients")}
+                                  </DescriptionListTerm>
+                                  <DescriptionListDescription>
+                                    {makeClientsString(session.clients)}
+                                  </DescriptionListDescription>
+                                </DescriptionListGroup>
+                                <DescriptionListGroup>
+                                  <DescriptionListTerm>
+                                    {t("started")}
+                                  </DescriptionListTerm>
+                                  <DescriptionListDescription>
+                                    {formatDate(
+                                      new Date(session.started * 1000),
+                                      context.environment.locale,
+                                    )}
+                                  </DescriptionListDescription>
+                                </DescriptionListGroup>
+                                <DescriptionListGroup>
+                                  <DescriptionListTerm>
+                                    {t("expires")}
+                                  </DescriptionListTerm>
+                                  <DescriptionListDescription>
+                                    {formatDate(
+                                      new Date(session.expires * 1000),
+                                      context.environment.locale,
+                                    )}
+                                  </DescriptionListDescription>
+                                </DescriptionListGroup>
+                              </DescriptionList>
+                            </GridItem>
+                          </Grid>
+                        </DataListCell>,
+                      ]}
+                    />
+                    {!session.current && (
+                      <DataListAction
+                        id={`session-${sessionKey}-action`}
+                        aria-label={t("signOut")}
+                        aria-labelledby={sessionTitleId}
+                      >
                         <ContinueCancelModal
                           buttonTitle={t("signOut")}
                           modalTitle={t("signOut")}
@@ -204,73 +296,15 @@ export const DeviceActivity = () => {
                         >
                           {t("signOutWarning")}
                         </ContinueCancelModal>
-                      )}
-                    </GridItem>
-                    <GridItem span={11}>
-                      <DescriptionList
-                        className="signed-in-device-grid"
-                        columnModifier={{ sm: "2Col", lg: "3Col" }}
-                        cols={5}
-                        rows={1}
-                      >
-                        <DescriptionListGroup>
-                          <DescriptionListTerm>
-                            {t("ipAddress")}
-                          </DescriptionListTerm>
-                          <DescriptionListDescription>
-                            {session.ipAddress}
-                          </DescriptionListDescription>
-                        </DescriptionListGroup>
-                        <DescriptionListGroup>
-                          <DescriptionListTerm>
-                            {t("lastAccessedOn")}
-                          </DescriptionListTerm>
-                          <DescriptionListDescription>
-                            {formatDate(
-                              new Date(session.lastAccess * 1000),
-                              context.environment.locale,
-                            )}
-                          </DescriptionListDescription>
-                        </DescriptionListGroup>
-                        <DescriptionListGroup>
-                          <DescriptionListTerm>
-                            {t("clients")}
-                          </DescriptionListTerm>
-                          <DescriptionListDescription>
-                            {makeClientsString(session.clients)}
-                          </DescriptionListDescription>
-                        </DescriptionListGroup>
-                        <DescriptionListGroup>
-                          <DescriptionListTerm>
-                            {t("started")}
-                          </DescriptionListTerm>
-                          <DescriptionListDescription>
-                            {formatDate(
-                              new Date(session.started * 1000),
-                              context.environment.locale,
-                            )}
-                          </DescriptionListDescription>
-                        </DescriptionListGroup>
-                        <DescriptionListGroup>
-                          <DescriptionListTerm>
-                            {t("expires")}
-                          </DescriptionListTerm>
-                          <DescriptionListDescription>
-                            {formatDate(
-                              new Date(session.expires * 1000),
-                              context.environment.locale,
-                            )}
-                          </DescriptionListDescription>
-                        </DescriptionListGroup>
-                      </DescriptionList>
-                    </GridItem>
-                  </Grid>
-                </DataListContent>
-              </DataListItemRow>
-            )),
-          )}
-        </DataListItem>
-      </DataList>
+                      </DataListAction>
+                    )}
+                  </DataListItemRow>
+                </DataListItem>
+              );
+            })}
+          </DataList>
+        )}
+      </AccountPageSection>
     </Page>
   );
 };

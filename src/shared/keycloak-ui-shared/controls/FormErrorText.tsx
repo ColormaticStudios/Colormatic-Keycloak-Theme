@@ -4,17 +4,20 @@ import {
   HelperText,
   HelperTextItem,
 } from "../../@patternfly/react-core";
-import { ExclamationCircleIcon } from "../../@patternfly/react-icons";
+import { BootstrapIcon } from "../icons/BootstrapIcon";
 
 export type FormErrorTextProps = FormHelperTextProps & {
-  message: string;
+  message?: string;
 };
 
 export const FormErrorText = ({ message, ...props }: FormErrorTextProps) => {
   return (
-    <FormHelperText {...props}>
+    <FormHelperText {...props} aria-live="polite">
       <HelperText>
-        <HelperTextItem icon={<ExclamationCircleIcon />} variant="error">
+        <HelperTextItem
+          icon={<BootstrapIcon icon="bi-exclamation-circle-fill" />}
+          variant="error"
+        >
           {message}
         </HelperTextItem>
       </HelperText>

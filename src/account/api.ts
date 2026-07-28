@@ -4,7 +4,7 @@ import { type BaseEnvironment } from "../shared/keycloak-ui-shared";
 import type { CallOptions } from "./api/methods";
 import type { Links } from "./api/parse-links";
 import { parseLinks } from "./api/parse-links";
-import { parseResponse } from "./api/parse-response";
+import { parseResponse, throwIfResponseNotOk } from "./api/parse-response";
 import type { Permission, Resource, Scope } from "./api/representations";
 import { request } from "./api/request";
 
@@ -16,7 +16,7 @@ export const fetchResources = async (
 	const response = await request(
 		`/resources${shared ? "/shared-with-me?" : "?"}`,
 		context,
-		{ searchParams: shared ? requestParams : undefined, signal },
+		{ searchParams: requestParams, signal },
 	);
 
 	const links = parseLinks(response);
@@ -39,26 +39,38 @@ export const fetchPermission = async (
 	return parseResponse<Permission[]>(response);
 };
 
-export const updateRequest = (
+export const updateRequest = async (
 	context: KeycloakContext<BaseEnvironment>,
 	resourceId: string,
 	username: string,
 	scopes: Scope[] | string[],
-) =>
-	request(`/resources/${resourceId}/permissions`, context, {
-		method: "PUT",
-		body: [{ username, scopes }],
-	});
+): Promise<void> => {
+	const response = await request(
+		`/resources/${resourceId}/permissions`,
+		context,
+		{
+			method: "PUT",
+			body: [{ username, scopes }],
+		},
+	);
+	await throwIfResponseNotOk(response);
+};
 
-export const updatePermissions = (
+export const updatePermissions = async (
 	context: KeycloakContext<BaseEnvironment>,
 	resourceId: string,
 	permissions: Permission[],
-) =>
-	request(`/resources/${resourceId}/permissions`, context, {
-		method: "PUT",
-		body: permissions,
-	});
+): Promise<void> => {
+	const response = await request(
+		`/resources/${resourceId}/permissions`,
+		context,
+		{
+			method: "PUT",
+			body: permissions,
+		},
+	);
+	await throwIfResponseNotOk(response);
+};
 
 function checkResponse<T>(response: T) {
 	if (!response) throw new Error("Could not fetch");

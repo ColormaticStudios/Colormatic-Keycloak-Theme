@@ -28,7 +28,7 @@
   {/snippet}
   <form
     id="kc-error-credential-form"
-    class="kcFormClass"
+    class="kcFormClass cm-login-form"
     action={url.loginAction}
     method="post"
   >
@@ -56,7 +56,7 @@
   {#if isAppInitiatedAction}
     <form
       action={url.loginAction}
-      class="kcFormClass"
+      class="kcFormClass cm-login-form"
       id="kc-webauthn-settings-form"
       method="post"
     >

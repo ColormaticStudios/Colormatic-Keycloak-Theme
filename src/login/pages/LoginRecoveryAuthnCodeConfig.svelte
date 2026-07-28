@@ -232,7 +232,7 @@
   </div>
 
   <!-- confirmation checkbox -->
-  <div class="kcFormOptionsClass">
+  <div class="kcFormOptionsClass cm-login-check">
     <input
       class="kcCheckInputClass"
       type="checkbox"
@@ -240,14 +240,17 @@
       name="kcRecoveryCodesConfirmationCheck"
       bind:checked={hasConfirmedRecoveryCodes}
     />
-    <label for="kcRecoveryCodesConfirmationCheck" class="font-bold">
+    <label
+      for="kcRecoveryCodesConfirmationCheck"
+      class="cm-login-label font-bold"
+    >
       {@render msg("recovery-codes-confirmation-message")()}
     </label>
   </div>
 
   <form
     action={kcContext.url.loginAction}
-    class="kcFormGroupClass"
+    class="kcFormClass cm-login-form"
     id="kc-recovery-codes-settings-form"
     method="post"
   >
@@ -270,45 +273,47 @@
 
     <LogoutOtherSessions {i18n} />
 
-    {#if isAppInitiatedAction}
-      <input
-        type="submit"
-        class="
+    <div class="cm-login-actions">
+      {#if isAppInitiatedAction}
+        <input
+          type="submit"
+          class="
           kcButtonClass
           kcButtonPrimaryClass
           kcButtonLargeClass
         "
-        id="saveRecoveryAuthnCodesBtn"
-        value={msgStr("recovery-codes-action-complete")}
-        disabled={!hasConfirmedRecoveryCodes}
-      />
-      <button
-        type="submit"
-        class="
+          id="saveRecoveryAuthnCodesBtn"
+          value={msgStr("recovery-codes-action-complete")}
+          disabled={!hasConfirmedRecoveryCodes}
+        />
+        <button
+          type="submit"
+          class="
           kcButtonClass
           kcButtonDefaultClass
           kcButtonLargeClass
           my-3
         "
-        id="cancelRecoveryAuthnCodesBtn"
-        name="cancel-aia"
-        value="true"
-      >
-        {@render msg("recovery-codes-action-cancel")()}
-      </button>
-    {:else}
-      <input
-        type="submit"
-        class="
+          id="cancelRecoveryAuthnCodesBtn"
+          name="cancel-aia"
+          value="true"
+        >
+          {@render msg("recovery-codes-action-cancel")()}
+        </button>
+      {:else}
+        <input
+          type="submit"
+          class="
           kcButtonClass
           kcButtonPrimaryClass
           kcButtonBlockClass
           kcButtonLargeClass
         "
-        id="saveRecoveryAuthnCodesBtn"
-        value={msgStr("recovery-codes-action-complete")}
-        disabled={!hasConfirmedRecoveryCodes}
-      />
-    {/if}
+          id="saveRecoveryAuthnCodesBtn"
+          value={msgStr("recovery-codes-action-complete")}
+          disabled={!hasConfirmedRecoveryCodes}
+        />
+      {/if}
+    </div>
   </form>
 </Template>

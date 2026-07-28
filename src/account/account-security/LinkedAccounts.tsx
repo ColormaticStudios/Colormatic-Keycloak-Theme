@@ -1,9 +1,9 @@
 import { useEnvironment } from "../../shared/keycloak-ui-shared";
 import {
   DataList,
+  Spinner,
   Stack,
   StackItem,
-  Title,
 } from "../../shared/@patternfly/react-core";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -11,7 +11,7 @@ import type { LinkedAccountQueryParams } from "../api/methods";
 import { getLinkedAccounts } from "../api/methods";
 import type { LinkedAccountRepresentation } from "../api/representations";
 import { EmptyRow } from "../components/datalist/EmptyRow";
-import { Page } from "../components/page/Page";
+import { AccountPageSection, Page } from "../components/page/Page";
 import { usePromise } from "../utils/usePromise";
 import { AccountRow } from "./AccountRow";
 import { LinkedAccountsToolbar } from "./LinkedAccountsToolbar";
@@ -20,11 +20,11 @@ export const LinkedAccounts = () => {
   const { t } = useTranslation();
   const context = useEnvironment();
   const [linkedAccounts, setLinkedAccounts] = useState<
-    LinkedAccountRepresentation[]
-  >([]);
+    LinkedAccountRepresentation[] | undefined
+  >();
   const [unlinkedAccounts, setUninkedAccounts] = useState<
-    LinkedAccountRepresentation[]
-  >([]);
+    LinkedAccountRepresentation[] | undefined
+  >();
 
   const [paramsUnlinked, setParamsUnlinked] =
     useState<LinkedAccountQueryParams>({
@@ -38,7 +38,7 @@ export const LinkedAccounts = () => {
     linked: true,
   });
   const [key, setKey] = useState(1);
-  const refresh = () => setKey(key + 1);
+  const refresh = () => setKey((currentKey) => currentKey + 1);
 
   usePromise(
     (signal) => getLinkedAccounts({ signal, context }, paramsUnlinked),
@@ -52,6 +52,17 @@ export const LinkedAccounts = () => {
     [paramsLinked, key],
   );
 
+  if (!linkedAccounts || !unlinkedAccounts) {
+    return (
+      <Page
+        title={t("linkedAccounts")}
+        description={t("linkedAccountsIntroMessage")}
+      >
+        <Spinner aria-label={t("linkedAccounts")} />
+      </Page>
+    );
+  }
+
   return (
     <Page
       title={t("linkedAccounts")}
@@ -59,107 +70,120 @@ export const LinkedAccounts = () => {
     >
       <Stack hasGutter>
         <StackItem>
-          <Title headingLevel="h2" className="pf-v5-u-mb-lg" size="xl">
-            {t("linkedLoginProviders")}
-          </Title>
-          <LinkedAccountsToolbar
-            onFilter={(search) =>
-              setParamsLinked({ ...paramsLinked, first: 0, search })
-            }
-            count={linkedAccounts.length}
-            first={paramsLinked["first"]}
-            max={paramsLinked["max"]}
-            onNextClick={() => {
-              setParamsLinked({
-                ...paramsLinked,
-                first: paramsLinked.first + paramsLinked.max - 1,
-              });
-            }}
-            onPreviousClick={() =>
-              setParamsLinked({
-                ...paramsLinked,
-                first: paramsLinked.first - paramsLinked.max + 1,
-              })
-            }
-            onPerPageSelect={(first, max) =>
-              setParamsLinked({
-                ...paramsLinked,
-                first,
-                max,
-              })
-            }
-            hasNext={linkedAccounts.length > paramsLinked.max - 1}
-          />
-          <DataList id="linked-idps" aria-label={t("linkedLoginProviders")}>
-            {linkedAccounts.length > 0 ? (
-              linkedAccounts.map(
-                (account, index) =>
-                  index !== paramsLinked.max - 1 && (
+          <AccountPageSection title={t("linkedLoginProviders")}>
+            <LinkedAccountsToolbar
+              id="linked-idps"
+              ariaLabel={t("linkedLoginProviders")}
+              onFilter={(search) =>
+                setParamsLinked((currentParams) => ({
+                  ...currentParams,
+                  first: 0,
+                  search,
+                }))
+              }
+              count={Math.min(linkedAccounts.length, paramsLinked.max - 1)}
+              first={paramsLinked.first}
+              max={paramsLinked.max - 1}
+              onNextClick={() => {
+                setParamsLinked((currentParams) => ({
+                  ...currentParams,
+                  first: currentParams.first + currentParams.max - 1,
+                }));
+              }}
+              onPreviousClick={() =>
+                setParamsLinked((currentParams) => ({
+                  ...currentParams,
+                  first: Math.max(
+                    0,
+                    currentParams.first - currentParams.max + 1,
+                  ),
+                }))
+              }
+              onPerPageSelect={(first, pageSize) =>
+                setParamsLinked((currentParams) => ({
+                  ...currentParams,
+                  first,
+                  max: pageSize + 1,
+                }))
+              }
+              hasNext={linkedAccounts.length > paramsLinked.max - 1}
+            />
+            <DataList id="linked-idps" aria-label={t("linkedLoginProviders")}>
+              {linkedAccounts.length > 0 ? (
+                linkedAccounts
+                  .slice(0, paramsLinked.max - 1)
+                  .map((account) => (
                     <AccountRow
                       key={account.providerName}
                       account={account}
                       isLinked
                       refresh={refresh}
                     />
-                  ),
-              )
-            ) : (
-              <EmptyRow message={t("linkedEmpty")} />
-            )}
-          </DataList>
+                  ))
+              ) : (
+                <EmptyRow message={t("linkedEmpty")} />
+              )}
+            </DataList>
+          </AccountPageSection>
         </StackItem>
         <StackItem>
-          <Title
-            headingLevel="h2"
-            className="pf-v5-u-mt-xl pf-v5-u-mb-lg"
-            size="xl"
-          >
-            {t("unlinkedLoginProviders")}
-          </Title>
-          <LinkedAccountsToolbar
-            onFilter={(search) =>
-              setParamsUnlinked({ ...paramsUnlinked, first: 0, search })
-            }
-            count={unlinkedAccounts.length}
-            first={paramsUnlinked["first"]}
-            max={paramsUnlinked["max"]}
-            onNextClick={() => {
-              setParamsUnlinked({
-                ...paramsUnlinked,
-                first: paramsUnlinked.first + paramsUnlinked.max - 1,
-              });
-            }}
-            onPreviousClick={() =>
-              setParamsUnlinked({
-                ...paramsUnlinked,
-                first: paramsUnlinked.first - paramsUnlinked.max + 1,
-              })
-            }
-            onPerPageSelect={(first, max) =>
-              setParamsUnlinked({
-                ...paramsUnlinked,
-                first,
-                max,
-              })
-            }
-            hasNext={unlinkedAccounts.length > paramsUnlinked.max - 1}
-          />
-          <DataList id="unlinked-idps" aria-label={t("unlinkedLoginProviders")}>
-            {unlinkedAccounts.length > 0 ? (
-              unlinkedAccounts.map(
-                (account, index) =>
-                  index !== paramsUnlinked.max - 1 && (
+          <AccountPageSection title={t("unlinkedLoginProviders")}>
+            <LinkedAccountsToolbar
+              id="unlinked-idps"
+              ariaLabel={t("unlinkedLoginProviders")}
+              onFilter={(search) =>
+                setParamsUnlinked((currentParams) => ({
+                  ...currentParams,
+                  first: 0,
+                  search,
+                }))
+              }
+              count={Math.min(unlinkedAccounts.length, paramsUnlinked.max - 1)}
+              first={paramsUnlinked.first}
+              max={paramsUnlinked.max - 1}
+              onNextClick={() => {
+                setParamsUnlinked((currentParams) => ({
+                  ...currentParams,
+                  first: currentParams.first + currentParams.max - 1,
+                }));
+              }}
+              onPreviousClick={() =>
+                setParamsUnlinked((currentParams) => ({
+                  ...currentParams,
+                  first: Math.max(
+                    0,
+                    currentParams.first - currentParams.max + 1,
+                  ),
+                }))
+              }
+              onPerPageSelect={(first, pageSize) =>
+                setParamsUnlinked((currentParams) => ({
+                  ...currentParams,
+                  first,
+                  max: pageSize + 1,
+                }))
+              }
+              hasNext={unlinkedAccounts.length > paramsUnlinked.max - 1}
+            />
+            <DataList
+              id="unlinked-idps"
+              aria-label={t("unlinkedLoginProviders")}
+            >
+              {unlinkedAccounts.length > 0 ? (
+                unlinkedAccounts
+                  .slice(0, paramsUnlinked.max - 1)
+                  .map((account) => (
                     <AccountRow
                       key={account.providerName}
                       account={account}
                       refresh={refresh}
                     />
-                  ),
-              )
-            ) : (
-              <EmptyRow message={t("unlinkedEmpty")} />
-            )}
-          </DataList>
+                  ))
+              ) : (
+                <EmptyRow message={t("unlinkedEmpty")} />
+              )}
+            </DataList>
+          </AccountPageSection>
         </StackItem>
       </Stack>
     </Page>

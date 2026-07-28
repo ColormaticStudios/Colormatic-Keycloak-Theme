@@ -1,5 +1,7 @@
 .kc-spinner-wrapper {
-  font-family: "Noto Sans", sans-serif;
+  font-family: var(--cm-font-sans, ui-sans-serif, system-ui, sans-serif);
+  background-color: var(--cm-canvas, #f1f5f9);
+  color: var(--cm-text, #020617);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,8 +13,14 @@
   bottom: 0;
 }
 
+.kc-spinner-label {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
 /* spinner from https://projects.lukehaas.me/css-loaders/ */
 .kc-spinner-loader {
+  color: currentColor;
   font-size: 10px;
   margin: 3rem auto 0;
   width: 1em;
@@ -25,16 +33,6 @@
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
-}
-
-@media (prefers-color-scheme: dark) {
-  .kc-spinner-wrapper {
-    background-color: black;
-    color: white;
-  }
-  .kc-spinner-loader {
-    color: white;
-  }
 }
 
 @-webkit-keyframes load4 {

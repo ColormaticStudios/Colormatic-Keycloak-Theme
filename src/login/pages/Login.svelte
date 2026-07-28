@@ -1,5 +1,9 @@
 <script lang="ts">
   import PasswordWrapper from "../components/PasswordWrapper.svelte";
+  import FormActions from "../components/FormActions.svelte";
+  import FormField from "../components/FormField.svelte";
+  import { Button } from "../../lib/components/ui/button";
+  import { Input } from "../../lib/components/ui/input";
   import type { PageProps } from "./PageProps";
   import { useState } from "@keycloakify/svelte/tools/useState";
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
@@ -27,8 +31,6 @@
   );
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
-
   const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
 </script>
 
@@ -104,6 +106,7 @@
     <div id="kc-form-wrapper">
       {#if realm.password}
         <form
+          class="cm-login-form"
           id="kc-form-login"
           onsubmit={() => {
             setIsLoginButtonDisabled(true);
@@ -113,73 +116,79 @@
           method="post"
         >
           {#if !usernameHidden}
-            <div class="kcFormGroupClass">
-              <label for="username" class="kcLabelClass">
+            <FormField
+              inputId="username"
+              hasError={messagesPerField.existsError("username", "password")}
+            >
+              {#snippet label()}
                 {@render (!realm.loginWithEmailAllowed
                   ? msg("username")
                   : !realm.registrationEmailAsUsername
                     ? msg("usernameOrEmail")
                     : msg("email"))()}
-              </label>
-              <!-- svelte-ignore a11y_autofocus -->
-              <input
-                id="username"
-                class="kcInputClass"
-                name="username"
-                value={login.username ?? ""}
-                type="text"
-                autofocus
-                autocomplete={enableWebAuthnConditionalUI
-                  ? "username webauthn"
-                  : "username"}
-                aria-invalid={messagesPerField.existsError(
-                  "username",
-                  "password",
-                )}
-              />
-              {#if messagesPerField.existsError("username", "password")}
-                <span
-                  id="input-error"
-                  class="kcInputErrorMessageClass"
-                  aria-live="polite"
-                >
+              {/snippet}
+              {#snippet control()}
+                <Input
+                  id="username"
+                  class="kcInputClass cm-login-input"
+                  name="username"
+                  value={login.username ?? ""}
+                  type="text"
+                  autofocus
+                  autocomplete={enableWebAuthnConditionalUI
+                    ? "username webauthn"
+                    : "username"}
+                  aria-invalid={messagesPerField.existsError(
+                    "username",
+                    "password",
+                  )}
+                />
+              {/snippet}
+              {#snippet error()}
+                {#if messagesPerField.existsError("username", "password")}
+                  <span id="input-error">
+                    {@html kcSanitize(
+                      messagesPerField.getFirstError("username", "password"),
+                    )}
+                  </span>
+                {/if}
+              {/snippet}
+            </FormField>
+          {/if}
+
+          <FormField
+            inputId="password"
+            hasError={usernameHidden &&
+              messagesPerField.existsError("username", "password")}
+          >
+            {#snippet label()}
+              {@render msg("password")()}
+            {/snippet}
+            {#snippet control()}
+              <PasswordWrapper {i18n} passwordInputId="password">
+                <Input
+                  id="password"
+                  class="kcInputClass cm-login-input"
+                  name="password"
+                  type="password"
+                  autocomplete="current-password"
+                  aria-invalid={messagesPerField.existsError(
+                    "username",
+                    "password",
+                  )}
+                />
+              </PasswordWrapper>
+            {/snippet}
+            {#snippet error()}
+              {#if usernameHidden && messagesPerField.existsError("username", "password")}
+                <span id="input-error">
                   {@html kcSanitize(
                     messagesPerField.getFirstError("username", "password"),
                   )}
                 </span>
               {/if}
-            </div>
-          {/if}
-
-          <div class="kcFormGroupClass">
-            <label for="password" class="kcLabelClass">
-              {@render msg("password")()}
-            </label>
-            <PasswordWrapper {i18n} passwordInputId="password">
-              <input
-                id="password"
-                class="kcInputClass"
-                name="password"
-                type="password"
-                autocomplete="current-password"
-                aria-invalid={messagesPerField.existsError(
-                  "username",
-                  "password",
-                )}
-              />
-            </PasswordWrapper>
-            {#if usernameHidden && messagesPerField.existsError("username", "password")}
-              <span
-                id="input-error"
-                class="kcInputErrorMessageClass"
-                aria-live="polite"
-              >
-                {@html kcSanitize(
-                  messagesPerField.getFirstError("username", "password"),
-                )}
-              </span>
-            {/if}
-          </div>
+            {/snippet}
+          </FormField>
 
           <div class="kcFormGroupClass kcFormSettingClass">
             <div id="kc-form-options">
@@ -209,27 +218,23 @@
             </div>
           </div>
 
-          <div id="kc-form-buttons" class="kcFormGroupClass">
+          <FormActions>
             <input
               type="hidden"
               id="id-hidden-input"
               name="credentialId"
               value={auth.selectedCredential}
             />
-            <input
+            <Button
               disabled={$isLoginButtonDisabled}
-              class="
-                kcButtonClass
-                kcButtonPrimaryClass
-                kcButtonBlockClass
-                kcButtonLargeClass
-              "
+              class="cm-login-action--block"
               name="login"
               id="kc-login"
               type="submit"
-              value={msgStr("doLogIn")}
-            />
-          </div>
+            >
+              {@render msg("doLogIn")()}
+            </Button>
+          </FormActions>
         </form>
       {/if}
     </div>

@@ -44,10 +44,10 @@
   <form
     bind:this={form}
     action={url.loginAction}
-    class="form-vertical"
+    class="form-vertical cm-login-form"
     method="post"
   >
-    <div id="kc-user-organizations" class="kcFormGroupClass">
+    <div id="kc-user-organizations" class="kcFormGroupClass cm-login-field">
       <h2>{@render msg("organization.select")()}</h2>
       <ul
         class="kcFormSocialAccountListClass {shouldDisplayGrid

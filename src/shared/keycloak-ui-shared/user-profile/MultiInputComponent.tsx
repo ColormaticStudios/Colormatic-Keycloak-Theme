@@ -9,13 +9,14 @@ import {
   TextInput,
   InputGroupItem,
 } from "../../@patternfly/react-core";
-import { MinusCircleIcon, PlusCircleIcon } from "../../@patternfly/react-icons";
 import { type TFunction } from "i18next";
-import { Fragment, useEffect, useMemo } from "react";
+import { get } from "lodash-es";
+import { Fragment, useEffect, useId, useMemo, useRef } from "react";
 import type { FieldPath, UseFormReturn } from "react-hook-form";
 import { useWatch } from "react-hook-form";
 
 import type { InputType, UserProfileFieldProps } from "./UserProfileFields";
+import { BootstrapIcon } from "../icons/BootstrapIcon";
 import { UserProfileGroup } from "./UserProfileGroup";
 import type { UserFormFields } from "./utils";
 import { fieldName, labelAttribute } from "./utils";
@@ -32,6 +33,7 @@ export const MultiInputComponent = ({
       t={t}
       form={form}
       aria-label={labelAttribute(t, attribute)}
+      aria-describedby={`${attribute.name}-error`}
       name={fieldName(attribute.name)!}
       defaultValue={[attribute.defaultValue || ""]}
       addButtonLabel={t("addMultivaluedLabel", {
@@ -65,6 +67,10 @@ const MultiLineInput = ({
   ...rest
 }: MultiLineInputProps) => {
   const { register, setValue, control } = form;
+  const fieldIdPrefix = useId();
+  const nextFieldId = useRef(0);
+  const fieldIds = useRef<string[]>([]);
+  const error = get(form.formState.errors, name);
   const value = useWatch({
     name,
     control,
@@ -76,12 +82,18 @@ const MultiLineInput = ({
       ? value
       : defaultValue || [""];
   }, [value]);
+  while (fieldIds.current.length < fields.length) {
+    fieldIds.current.push(`${fieldIdPrefix}-${nextFieldId.current++}`);
+  }
+  fieldIds.current.length = fields.length;
 
   const remove = (index: number) => {
+    fieldIds.current.splice(index, 1);
     update([...fields.slice(0, index), ...fields.slice(index + 1)]);
   };
 
   const append = () => {
+    fieldIds.current.push(`${fieldIdPrefix}-${nextFieldId.current++}`);
     update([...fields, ""]);
   };
 
@@ -93,6 +105,7 @@ const MultiLineInput = ({
     const fieldValue = values.flatMap((field) => field);
     setValue(name, fieldValue, {
       shouldDirty: true,
+      shouldValidate: true,
     });
   };
 
@@ -102,12 +115,12 @@ const MultiLineInput = ({
 
   useEffect(() => {
     register(name);
-  }, [register]);
+  }, [name, register]);
 
   return (
-    <div id={id}>
+    <div id={id} className="cm-multi-input">
       {fields.map((value, index) => (
-        <Fragment key={index}>
+        <Fragment key={fieldIds.current[index]}>
           <InputGroup>
             <InputGroupItem isFill>
               <TextInput
@@ -118,31 +131,37 @@ const MultiLineInput = ({
                 isDisabled={isDisabled}
                 type={type}
                 {...rest}
+                aria-label={`${rest["aria-label"] ?? name} ${index + 1}`}
+                aria-invalid={Boolean(error)}
+                aria-describedby={error ? rest["aria-describedby"] : undefined}
               />
             </InputGroupItem>
             <InputGroupItem>
               <Button
+                type="button"
                 data-testid={"remove" + index}
                 variant={ButtonVariant.link}
                 onClick={() => remove(index)}
-                tabIndex={-1}
-                aria-label={t("remove")}
+                aria-label={`${t("remove")} ${rest["aria-label"] ?? name} ${
+                  index + 1
+                }`}
                 isDisabled={fields.length === 1 || isDisabled}
               >
-                <MinusCircleIcon />
+                <BootstrapIcon icon="bi-dash-circle" />
               </Button>
             </InputGroupItem>
           </InputGroup>
           {index === fields.length - 1 && (
             <Button
+              type="button"
               variant={ButtonVariant.link}
               onClick={append}
-              tabIndex={-1}
-              aria-label={t("add")}
+              aria-label={addButtonLabel || t("add")}
               data-testid="addValue"
               isDisabled={!value || isDisabled}
             >
-              <PlusCircleIcon /> {t(addButtonLabel || "add")}
+              <BootstrapIcon icon="bi-plus-circle" />{" "}
+              {addButtonLabel || t("add")}
             </Button>
           )}
         </Fragment>

@@ -3,6 +3,10 @@
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import FormActions from "../components/FormActions.svelte";
+  import FormField from "../components/FormField.svelte";
+  import { Button } from "../../lib/components/ui/button";
+  import { Input } from "../../lib/components/ui/input";
 
   const {
     Template,
@@ -22,7 +26,6 @@
   );
 
   const msg = $derived($i18n.msg);
-  const msgStr = $derived($i18n.msgStr);
 </script>
 
 <Template
@@ -37,60 +40,54 @@
   {/snippet}
   <form
     id="kc-recovery-code-login-form"
-    class="kcFormClass"
+    class="kcFormClass cm-login-form"
     action={url.loginAction}
     method="post"
   >
-    <div class="kcFormGroupClass">
-      <div class="kcLabelWrapperClass">
-        <label for="recoveryCodeInput" class="kcLabelClass">
-          {@render msg(
-            "auth-recovery-code-prompt",
-            `${recoveryAuthnCodesInputBean.codeNumber}`,
-          )()}
-        </label>
-      </div>
-      <div class="kcInputWrapperClass">
-        <!-- svelte-ignore a11y_autofocus -->
-        <input
+    <FormField
+      inputId="recoveryCodeInput"
+      hasError={messagesPerField.existsError("recoveryCodeInput")}
+    >
+      {#snippet label()}
+        {@render msg(
+          "auth-recovery-code-prompt",
+          `${recoveryAuthnCodesInputBean.codeNumber}`,
+        )()}
+      {/snippet}
+      {#snippet control()}
+        <Input
           id="recoveryCodeInput"
           name="recoveryCodeInput"
           aria-invalid={messagesPerField.existsError("recoveryCodeInput")}
           autocomplete="off"
           type="text"
-          class="kcInputClass"
+          class="kcInputClass cm-login-input"
           autofocus
         />
+      {/snippet}
+      {#snippet error()}
         {#if messagesPerField.existsError("recoveryCodeInput")}
-          <span
-            id="input-error"
-            class="kcInputErrorMessageClass"
-            aria-live="polite"
-          >
+          <span id="input-error">
             {@html kcSanitize(messagesPerField.get("recoveryCodeInput"))}
           </span>
         {/if}
-      </div>
-    </div>
+      {/snippet}
+    </FormField>
 
-    <div class="kcFormGroupClass">
+    <div class="kcFormGroupClass cm-login-field">
       <div id="kc-form-options" class="kcFormOptionsWrapperClass">
         <div class="kcFormOptionsWrapperClass"></div>
       </div>
-      <div id="kc-form-buttons" class="kcFormButtonsClass">
-        <input
-          class="
-            kcButtonClass
-            kcButtonPrimaryClass
-            kcButtonBlockClass
-            kcButtonLargeClass
-          "
+      <FormActions>
+        <Button
+          class="cm-login-action--block"
           name="login"
           id="kc-login"
           type="submit"
-          value={msgStr("doLogIn")}
-        />
-      </div>
+        >
+          {@render msg("doLogIn")()}
+        </Button>
+      </FormActions>
     </div>
   </form>
 </Template>

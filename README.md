@@ -43,6 +43,24 @@ bun run storybook
 The two Vite commands use local Keycloak-context mocks. Storybook contains the
 login page catalog and is the preferred way to inspect individual login flows.
 
+## Design system
+
+`src/main.css` is the shared visual source of truth. Its `--cm-*` semantic
+tokens use Tailwind's exact color variables (currently the Slate palette), and
+its shadcn-compatible variables are aliases rather than a second palette.
+
+The login theme uses Svelte and shadcn-svelte primitives. The account console
+keeps PatternFly for upstream structure and behavior, while
+`src/account/theme.tokens.css` and `src/account/theme.css` adapt PatternFly's
+component variables to the shared Colormatic tokens. Project-owned icons use
+Bootstrap Icons and both themes use the system font stack.
+
+Light, Dark, and System are one shared preference stored as
+`colormatic-theme`. Both themes render the same bottom-right control and apply
+the `dark`, `pf-v5-theme-dark`, and `data-theme` hooks together. The early
+color-scheme scripts under `public/keycloak-theme` prevent a light flash before
+the application mounts.
+
 ## Build
 
 Build the shared Vite output only:
@@ -68,8 +86,10 @@ bun run build-storybook
 bun audit
 ```
 
-`check` runs Svelte diagnostics, TypeScript, exhaustive login-page coverage,
-Tailwind compilation, and ESLint.
+`check` runs Svelte diagnostics, TypeScript, exhaustive login and account-route
+coverage, tests, Tailwind compilation, and ESLint. Account-route coverage also
+checks that every built-in navigation entry resolves to a page using the shared
+semantic page shell.
 
 ## Maintenance
 

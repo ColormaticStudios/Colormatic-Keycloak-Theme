@@ -1,19 +1,18 @@
 import {
+  BootstrapIcon,
   useEnvironment,
   KeycloakDataTable,
+  ListEmptyState,
+  ErrorBoundaryFallback,
   ErrorBoundaryProvider,
   label,
 } from "../../shared/keycloak-ui-shared";
-import type { Action } from "../../shared/keycloak-ui-shared";
+import type { Action, FallbackProps } from "../../shared/keycloak-ui-shared";
 import {
   Button,
   Modal,
   ModalVariant,
 } from "../../shared/@patternfly/react-core";
-import {
-  ExclamationTriangleIcon,
-  ExternalLinkAltIcon,
-} from "../../shared/@patternfly/react-icons";
 import { cellWidth } from "../../shared/@patternfly/react-table";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -40,6 +39,20 @@ type RevokeDialogProps = {
   t: (key: string) => string;
 };
 
+const IssuedCredentialsError = ({ error }: FallbackProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <ListEmptyState
+      message={t("somethingWentWrong")}
+      instructions={error.message || t("somethingWentWrongDescription")}
+      primaryActionText={t("tryAgain")}
+      onPrimaryAction={() => window.location.reload()}
+      icon="bi-exclamation-triangle"
+    />
+  );
+};
+
 const RevokeDialog = ({
   isOpen,
   credential,
@@ -58,6 +71,7 @@ const RevokeDialog = ({
       actions={[
         <Button
           key="confirm"
+          type="button"
           variant="danger"
           onClick={async () => {
             await onConfirm(credential.id!);
@@ -66,7 +80,12 @@ const RevokeDialog = ({
         >
           {t("doRevoke")}
         </Button>,
-        <Button key="cancel" variant="link" onClick={onClose}>
+        <Button
+          key="cancel"
+          type="button"
+          variant="secondary"
+          onClick={onClose}
+        >
           {t("doCancel")}
         </Button>,
       ]}
@@ -159,101 +178,104 @@ export const IssuedCredentialsModal = ({
         width="90%"
       >
         <ErrorBoundaryProvider>
-          <KeycloakDataTable
-            loader={loader}
-            key={key}
-            ariaLabelKey="issuedCredentials"
-            searchPlaceholderKey=" "
-            columns={[
-              {
-                name: "issuedAt",
-                displayKey: t("issuedCredentialsIssuedAt"),
-                cellRenderer: ({ issuedAt }) =>
-                  issuedAt
-                    ? formatDate(new Date(issuedAt), context.environment.locale)
-                    : "—",
-                transforms: [cellWidth(25)],
-              },
-              {
-                name: "expiresAt",
-                displayKey: t("issuedCredentialsExpiresAt"),
-                cellRenderer: ({ expiresAt }) => {
-                  if (!expiresAt) return "—";
-                  const expirationDate = new Date(expiresAt);
-                  const isExpired = expirationDate < new Date();
-                  return (
-                    <span
-                      style={{
-                        color: isExpired
-                          ? "var(--pf-v5-global--danger-color--100)"
-                          : "inherit",
-                      }}
-                    >
-                      {isExpired && (
-                        <ExclamationTriangleIcon
-                          style={{ marginRight: "0.25rem" }}
-                        />
-                      )}
-                      {formatDate(expirationDate, context.environment.locale)}
-                    </span>
-                  );
+          <ErrorBoundaryFallback fallback={IssuedCredentialsError}>
+            <KeycloakDataTable
+              loader={loader}
+              key={key}
+              ariaLabelKey="issuedCredentials"
+              searchPlaceholderKey=" "
+              columns={[
+                {
+                  name: "issuedAt",
+                  displayKey: t("issuedCredentialsIssuedAt"),
+                  cellRenderer: ({ issuedAt }) =>
+                    issuedAt
+                      ? formatDate(
+                          new Date(issuedAt),
+                          context.environment.locale,
+                        )
+                      : "—",
+                  transforms: [cellWidth(25)],
                 },
-                transforms: [cellWidth(25)],
-              },
-              {
-                name: "clientId",
-                displayKey: t("issuedCredentialsWalletClient"),
-                cellRenderer: (
-                  credential: IssuedUserVerifiableCredentialRepresentation,
-                ) => {
-                  // Backend now provides clientName and clientBaseUrl
-                  const displayName =
-                    credential.clientName || credential.clientId;
-                  if (!displayName) return "—";
-
-                  // If client has a base URL, create a clickable link
-                  if (credential.clientBaseUrl) {
+                {
+                  name: "expiresAt",
+                  displayKey: t("issuedCredentialsExpiresAt"),
+                  cellRenderer: ({ expiresAt }) => {
+                    if (!expiresAt) return "—";
+                    const expirationDate = new Date(expiresAt);
+                    const isExpired = expirationDate < new Date();
                     return (
-                      <Button
-                        className="pf-v5-u-pl-0 title-case"
-                        component="a"
-                        variant="link"
-                        href={credential.clientBaseUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <span
+                        className={
+                          isExpired
+                            ? "cm-expiration cm-expiration--expired"
+                            : "cm-expiration"
+                        }
                       >
-                        {label(t, displayName)} <ExternalLinkAltIcon />
-                      </Button>
+                        {isExpired && (
+                          <BootstrapIcon
+                            icon="bi-exclamation-triangle"
+                            className="cm-expiration__icon"
+                          />
+                        )}
+                        {formatDate(expirationDate, context.environment.locale)}
+                      </span>
                     );
-                  }
-
-                  // No base URL, just display the name/clientId
-                  return <>{label(t, displayName)}</>;
+                  },
+                  transforms: [cellWidth(25)],
                 },
-                transforms: [cellWidth(35)],
-              },
-            ]}
-            actions={
-              hasManageRole()
-                ? [
-                    {
-                      title: t("doRevoke"),
-                      onRowClick: (credential) => {
-                        setSelectedCredential(credential);
-                        toggleRevokeDialog();
-                      },
-                    } as Action<IssuedUserVerifiableCredentialRepresentation>,
-                  ]
-                : []
-            }
-            emptyState={
-              <div className="pf-v5-u-text-align-center pf-v5-u-py-md">
-                <span className="pf-v5-u-color-200">
-                  {t("noIssuedCredentials")}
-                </span>
-              </div>
-            }
-          />
+                {
+                  name: "clientId",
+                  displayKey: t("issuedCredentialsWalletClient"),
+                  cellRenderer: (
+                    credential: IssuedUserVerifiableCredentialRepresentation,
+                  ) => {
+                    // Backend now provides clientName and clientBaseUrl
+                    const displayName =
+                      credential.clientName || credential.clientId;
+                    if (!displayName) return "—";
+
+                    // If client has a base URL, create a clickable link
+                    if (credential.clientBaseUrl) {
+                      return (
+                        <Button
+                          component="a"
+                          variant="link"
+                          href={credential.clientBaseUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          icon={<BootstrapIcon icon="bi-box-arrow-up-right" />}
+                          iconPosition="right"
+                        >
+                          {label(t, displayName)}
+                        </Button>
+                      );
+                    }
+
+                    // No base URL, just display the name/clientId
+                    return <>{label(t, displayName)}</>;
+                  },
+                  transforms: [cellWidth(35)],
+                },
+              ]}
+              actions={
+                hasManageRole()
+                  ? [
+                      {
+                        title: t("doRevoke"),
+                        onRowClick: (credential) => {
+                          setSelectedCredential(credential);
+                          toggleRevokeDialog();
+                        },
+                      } as Action<IssuedUserVerifiableCredentialRepresentation>,
+                    ]
+                  : []
+              }
+              emptyState={
+                <ListEmptyState message={t("noIssuedCredentials")} hasIcon />
+              }
+            />
+          </ErrorBoundaryFallback>
         </ErrorBoundaryProvider>
       </Modal>
     </>

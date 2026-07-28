@@ -39,7 +39,9 @@ export const LocaleSelector = ({
   return (
     <FormProvider {...form}>
       <SelectControl
+        className="cm-locale-menu"
         data-testid="locale-select"
+        maxMenuHeight="12rem"
         name="attributes.locale"
         label={t("selectALocale")}
         controller={{ defaultValue: "" }}

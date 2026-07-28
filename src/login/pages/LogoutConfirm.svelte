@@ -29,9 +29,16 @@
 
   <div id="kc-logout-confirm" class="content-area">
     <p class="instruction">{@render msg("logoutConfirmHeader")()}</p>
-    <form class="form-actions" action={url.logoutConfirmAction} method="POST">
+    <form
+      class="form-actions cm-login-form"
+      action={url.logoutConfirmAction}
+      method="POST"
+    >
       <input type="hidden" name="session_code" value={logoutConfirm.code} />
-      <div id="kc-form-buttons" class="kcFormGroupClass">
+      <div
+        id="kc-form-buttons"
+        class="kcFormGroupClass cm-login-field cm-login-actions"
+      >
         <input
           class="
               kcButtonClass

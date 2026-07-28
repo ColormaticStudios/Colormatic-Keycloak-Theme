@@ -81,15 +81,19 @@
       </h3>
     {/if}
 
-    <form class="form-actions" action={url.oauthAction} method="POST">
+    <form
+      class="form-actions cm-login-form"
+      action={url.oauthAction}
+      method="POST"
+    >
       <input type="hidden" name="code" value={oauth.code} />
-      <div class="kcFormGroupClass">
+      <div class="kcFormGroupClass cm-login-field">
         <div id="kc-form-options">
           <div class="kcFormOptionsWrapperClass"></div>
         </div>
 
         <div id="kc-form-buttons">
-          <div class="kcFormButtonsWrapperClass">
+          <div class="kcFormButtonsWrapperClass cm-login-actions">
             <input
               class="
                 kcButtonClass

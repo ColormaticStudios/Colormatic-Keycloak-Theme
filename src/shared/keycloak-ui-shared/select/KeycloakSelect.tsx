@@ -33,6 +33,7 @@ export type KeycloakSelectProps = Omit<
   selections?: string | string[] | number | number[];
   validated?: "success" | "warning" | "error" | "default";
   typeAheadAriaLabel?: string;
+  inputAriaDescribedBy?: string;
   chipGroupProps?: Omit<ChipGroupProps, "children" | "ref">;
   chipGroupComponent?: React.ReactNode;
   footer?: React.ReactNode;

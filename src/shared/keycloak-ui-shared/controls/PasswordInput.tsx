@@ -5,10 +5,10 @@ import {
   TextInput,
   type TextInputProps,
 } from "../../@patternfly/react-core";
-import { EyeIcon, EyeSlashIcon } from "../../@patternfly/react-icons";
 import type { Ref, RefObject } from "react";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { BootstrapIcon } from "../icons/BootstrapIcon";
 
 export type PasswordInputProps = TextInputProps & {
   hasReveal?: boolean;
@@ -36,11 +36,13 @@ const PasswordInputBase = ({
       </InputGroupItem>
       {hasReveal && (
         <Button
+          type="button"
           variant="control"
-          aria-label={t("showPassword")}
+          aria-label={t(hidePassword ? "showPassword" : "hidePassword")}
+          aria-pressed={!hidePassword}
           onClick={() => setHidePassword(!hidePassword)}
         >
-          {hidePassword ? <EyeIcon /> : <EyeSlashIcon />}
+          <BootstrapIcon icon={hidePassword ? "bi-eye" : "bi-eye-slash"} />
         </Button>
       )}
     </InputGroup>

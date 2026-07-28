@@ -1,30 +1,27 @@
 import {
+  BootstrapIcon,
   ContinueCancelModal,
+  KeycloakSpinner,
   label,
   useEnvironment,
 } from "../../shared/keycloak-ui-shared";
 import {
   Button,
-  DataList,
-  DataListCell,
-  DataListContent,
-  DataListItem,
-  DataListItemCells,
-  DataListItemRow,
-  DataListToggle,
   DescriptionList,
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
-  Grid,
-  GridItem,
-  Spinner,
+  Divider,
 } from "../../shared/@patternfly/react-core";
 import {
-  CheckIcon,
-  ExternalLinkAltIcon,
-  InfoAltIcon,
-} from "../../shared/@patternfly/react-icons";
+  ExpandableRowContent,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "../../shared/@patternfly/react-table";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -48,7 +45,7 @@ export const Applications = () => {
 
   const [applications, setApplications] = useState<Application[]>();
   const [key, setKey] = useState(1);
-  const refresh = () => setKey(key + 1);
+  const refresh = () => setKey((current) => current + 1);
 
   usePromise(
     (signal) => getApplications({ signal, context }),
@@ -57,11 +54,11 @@ export const Applications = () => {
   );
 
   const toggleOpen = (clientId: string) => {
-    setApplications([
-      ...applications!.map((a) =>
+    setApplications((current) =>
+      current?.map((a) =>
         a.clientId === clientId ? { ...a, open: !a.open } : a,
       ),
-    ]);
+    );
   };
 
   const removeConsent = async (id: string) => {
@@ -74,72 +71,45 @@ export const Applications = () => {
     }
   };
 
-  if (!applications) {
-    return <Spinner />;
-  }
-
   return (
-    <Page title={t("application")} description={t("applicationsIntroMessage")}>
-      <DataList id="applications-list" aria-label={t("application")}>
-        <DataListItem
-          id="applications-list-header"
-          aria-labelledby="Columns names"
-        >
-          <DataListItemRow>
-            <span style={{ visibility: "hidden", height: 55 }}>
-              <DataListToggle
-                id="applications-list-header-invisible-toggle"
-                aria-controls="applications-list-content"
-              />
-            </span>
-            <DataListItemCells
-              dataListCells={[
-                <DataListCell
-                  key="applications-list-client-id-header"
-                  width={2}
-                  className="pf-v5-u-pt-md"
-                >
-                  <strong>{t("name")}</strong>
-                </DataListCell>,
-                <DataListCell
-                  key="applications-list-app-type-header"
-                  width={2}
-                  className="pf-v5-u-pt-md"
-                >
-                  <strong>{t("applicationType")}</strong>
-                </DataListCell>,
-                <DataListCell
-                  key="applications-list-status"
-                  width={2}
-                  className="pf-v5-u-pt-md"
-                >
-                  <strong>{t("status")}</strong>
-                </DataListCell>,
-              ]}
-            />
-          </DataListItemRow>
-        </DataListItem>
-        {applications.map((application) => (
-          <DataListItem
-            key={application.clientId}
-            aria-labelledby="applications-list"
-            data-testid="applications-list-item"
-            isExpanded={application.open}
-          >
-            <DataListItemRow className="pf-v5-u-align-items-center">
-              <DataListToggle
-                onClick={() => toggleOpen(application.clientId)}
+    <Page title={t("applications")} description={t("applicationsIntroMessage")}>
+      {!applications ? (
+        <KeycloakSpinner />
+      ) : (
+        <Table id="applications-list" aria-label={t("applications")}>
+          <Thead>
+            <Tr>
+              <Th screenReaderText={t("application")} />
+              <Th>{t("name")}</Th>
+              <Th>{t("applicationType")}</Th>
+              <Th>{t("status")}</Th>
+            </Tr>
+          </Thead>
+          {applications.length === 0 ? (
+            <Tbody>
+              <Tr>
+                <Td colSpan={4}>{t("applicationsIntroMessage")}</Td>
+              </Tr>
+            </Tbody>
+          ) : (
+            applications.map((application, index) => (
+              <Tbody
+                key={application.clientId}
                 isExpanded={application.open}
-                id={`toggle-${application.clientId}`}
-                aria-controls={`content-${application.clientId}`}
-              />
-              <DataListItemCells
-                className="pf-v5-u-align-items-center"
-                dataListCells={[
-                  <DataListCell width={2} key={`client${application.clientId}`}>
+                data-testid="applications-list-item"
+              >
+                <Tr>
+                  <Td
+                    expand={{
+                      isExpanded: application.open,
+                      rowIndex: index,
+                      onToggle: () => toggleOpen(application.clientId),
+                      expandId: `application-${application.clientId}`,
+                    }}
+                  />
+                  <Td dataLabel={t("name")}>
                     {application.effectiveUrl && (
                       <Button
-                        className="pf-v5-u-pl-0 title-case"
                         component="a"
                         variant="link"
                         href={application.effectiveUrl}
@@ -150,146 +120,208 @@ export const Applications = () => {
                           t,
                           application.clientName || application.clientId,
                         )}{" "}
-                        <ExternalLinkAltIcon />
+                        <BootstrapIcon icon="bi-box-arrow-up-right" />
                       </Button>
                     )}
                     {!application.effectiveUrl && (
-                      <>
+                      <span className="cm-account-application-name">
                         {label(
                           t,
                           application.clientName || application.clientId,
                         )}
-                      </>
+                      </span>
                     )}
-                  </DataListCell>,
-                  <DataListCell
-                    width={2}
-                    key={`internal${application.clientId}`}
-                  >
+                  </Td>
+                  <Td dataLabel={t("applicationType")}>
                     {application.userConsentRequired
                       ? t("thirdPartyApp")
                       : t("internalApp")}
                     {application.offlineAccess ? ", " + t("offlineAccess") : ""}
-                  </DataListCell>,
-                  <DataListCell width={2} key={`status${application.clientId}`}>
+                  </Td>
+                  <Td dataLabel={t("status")}>
                     {application.inUse ? t("inUse") : t("notInUse")}
-                  </DataListCell>,
-                ]}
-              />
-            </DataListItemRow>
-
-            <DataListContent
-              id={`content-${application.clientId}`}
-              className="pf-v5-u-pl-4xl"
-              aria-label={t("applicationDetails", {
-                clientId: application.clientId,
-              })}
-              isHidden={!application.open}
-            >
-              <DescriptionList>
-                <DescriptionListGroup>
-                  <DescriptionListTerm>{t("client")}</DescriptionListTerm>
-                  <DescriptionListDescription>
-                    {application.clientId}
-                  </DescriptionListDescription>
-                </DescriptionListGroup>
-                {application.description && (
-                  <DescriptionListGroup>
-                    <DescriptionListTerm>
-                      {t("description")}
-                    </DescriptionListTerm>
-                    <DescriptionListDescription>
-                      {application.description}
-                    </DescriptionListDescription>
-                  </DescriptionListGroup>
-                )}
-                {application.effectiveUrl && (
-                  <DescriptionListGroup>
-                    <DescriptionListTerm>URL</DescriptionListTerm>
-                    <DescriptionListDescription>
-                      {application.effectiveUrl.split('"')}
-                    </DescriptionListDescription>
-                  </DescriptionListGroup>
-                )}
-                {application.consent && (
-                  <>
-                    <DescriptionListGroup>
-                      <DescriptionListTerm>
-                        {t("hasAccessTo")}
-                      </DescriptionListTerm>
-                      {application.consent.grantedScopes.map((scope) => (
-                        <DescriptionListDescription key={`scope${scope.id}`}>
-                          <CheckIcon />{" "}
-                          {t(scope.name as TFuncKey, scope.displayText)}
-                        </DescriptionListDescription>
-                      ))}
-                    </DescriptionListGroup>
-                    {application.tosUri && (
-                      <DescriptionListGroup>
-                        <DescriptionListTerm>
-                          {t("termsOfService")}
-                        </DescriptionListTerm>
-                        <DescriptionListDescription>
-                          {application.tosUri}
-                        </DescriptionListDescription>
-                      </DescriptionListGroup>
-                    )}
-                    {application.policyUri && (
-                      <DescriptionListGroup>
-                        <DescriptionListTerm>
-                          {t("privacyPolicy")}
-                        </DescriptionListTerm>
-                        <DescriptionListDescription>
-                          {application.policyUri}
-                        </DescriptionListDescription>
-                      </DescriptionListGroup>
-                    )}
-                    {application.logoUri && (
-                      <DescriptionListGroup>
-                        <DescriptionListTerm>{t("logo")}</DescriptionListTerm>
-                        <DescriptionListDescription>
-                          <img src={application.logoUri} />
-                        </DescriptionListDescription>
-                      </DescriptionListGroup>
-                    )}
-                    <DescriptionListGroup>
-                      <DescriptionListTerm>
-                        {t("accessGrantedOn")}
-                      </DescriptionListTerm>
-                      <DescriptionListDescription>
-                        {formatDate(
-                          new Date(application.consent.createdDate),
-                          context.environment.locale,
+                  </Td>
+                </Tr>
+                <Tr isExpanded={application.open}>
+                  <Td />
+                  <Td
+                    colSpan={3}
+                    id={`content-${application.clientId}`}
+                    aria-label={t("applicationDetails", {
+                      clientId: application.clientId,
+                    })}
+                  >
+                    <ExpandableRowContent>
+                      <DescriptionList>
+                        <DescriptionListGroup>
+                          <DescriptionListTerm>
+                            {t("client")}
+                          </DescriptionListTerm>
+                          <DescriptionListDescription>
+                            {application.clientId}
+                          </DescriptionListDescription>
+                        </DescriptionListGroup>
+                        {application.description && (
+                          <DescriptionListGroup>
+                            <DescriptionListTerm>
+                              {t("description")}
+                            </DescriptionListTerm>
+                            <DescriptionListDescription>
+                              {application.description}
+                            </DescriptionListDescription>
+                          </DescriptionListGroup>
                         )}
-                      </DescriptionListDescription>
-                    </DescriptionListGroup>
-                  </>
-                )}
-              </DescriptionList>
-              {(application.consent || application.offlineAccess) && (
-                <Grid hasGutter>
-                  <hr />
-                  <GridItem>
-                    <ContinueCancelModal
-                      buttonTitle={t("removeAccess")}
-                      modalTitle={t("removeAccess")}
-                      continueLabel={t("confirm")}
-                      cancelLabel={t("cancel")}
-                      buttonVariant="secondary"
-                      onContinue={() => removeConsent(application.clientId)}
-                    >
-                      {t("removeModalMessage", { name: application.clientId })}
-                    </ContinueCancelModal>
-                  </GridItem>
-                  <GridItem>
-                    <InfoAltIcon /> {t("infoMessage")}
-                  </GridItem>
-                </Grid>
-              )}
-            </DataListContent>
-          </DataListItem>
-        ))}
-      </DataList>
+                        {application.effectiveUrl && (
+                          <DescriptionListGroup>
+                            <DescriptionListTerm>URL</DescriptionListTerm>
+                            <DescriptionListDescription>
+                              <Button
+                                component="a"
+                                variant="link"
+                                isInline
+                                href={application.effectiveUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                icon={
+                                  <BootstrapIcon icon="bi-box-arrow-up-right" />
+                                }
+                                iconPosition="right"
+                              >
+                                {application.effectiveUrl}
+                              </Button>
+                            </DescriptionListDescription>
+                          </DescriptionListGroup>
+                        )}
+                        {application.consent && (
+                          <>
+                            <DescriptionListGroup>
+                              <DescriptionListTerm>
+                                {t("hasAccessTo")}
+                              </DescriptionListTerm>
+                              {application.consent.grantedScopes.map(
+                                (scope) => (
+                                  <DescriptionListDescription
+                                    key={`scope${scope.id}`}
+                                  >
+                                    <BootstrapIcon icon="bi-check" />{" "}
+                                    {t(
+                                      scope.name as TFuncKey,
+                                      scope.displayText,
+                                    )}
+                                  </DescriptionListDescription>
+                                ),
+                              )}
+                            </DescriptionListGroup>
+                            {application.tosUri && (
+                              <DescriptionListGroup>
+                                <DescriptionListTerm>
+                                  {t("termsOfService")}
+                                </DescriptionListTerm>
+                                <DescriptionListDescription>
+                                  <Button
+                                    component="a"
+                                    variant="link"
+                                    isInline
+                                    href={application.tosUri}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    icon={
+                                      <BootstrapIcon icon="bi-box-arrow-up-right" />
+                                    }
+                                    iconPosition="right"
+                                  >
+                                    {application.tosUri}
+                                  </Button>
+                                </DescriptionListDescription>
+                              </DescriptionListGroup>
+                            )}
+                            {application.policyUri && (
+                              <DescriptionListGroup>
+                                <DescriptionListTerm>
+                                  {t("privacyPolicy")}
+                                </DescriptionListTerm>
+                                <DescriptionListDescription>
+                                  <Button
+                                    component="a"
+                                    variant="link"
+                                    isInline
+                                    href={application.policyUri}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    icon={
+                                      <BootstrapIcon icon="bi-box-arrow-up-right" />
+                                    }
+                                    iconPosition="right"
+                                  >
+                                    {application.policyUri}
+                                  </Button>
+                                </DescriptionListDescription>
+                              </DescriptionListGroup>
+                            )}
+                            {application.logoUri && (
+                              <DescriptionListGroup>
+                                <DescriptionListTerm>
+                                  {t("logo")}
+                                </DescriptionListTerm>
+                                <DescriptionListDescription>
+                                  <img
+                                    src={application.logoUri}
+                                    alt={label(
+                                      t,
+                                      application.clientName ||
+                                        application.clientId,
+                                    )}
+                                  />
+                                </DescriptionListDescription>
+                              </DescriptionListGroup>
+                            )}
+                            <DescriptionListGroup>
+                              <DescriptionListTerm>
+                                {t("accessGrantedOn")}
+                              </DescriptionListTerm>
+                              <DescriptionListDescription>
+                                {formatDate(
+                                  new Date(application.consent.createdDate),
+                                  context.environment.locale,
+                                )}
+                              </DescriptionListDescription>
+                            </DescriptionListGroup>
+                          </>
+                        )}
+                      </DescriptionList>
+                      {(application.consent || application.offlineAccess) && (
+                        <>
+                          <Divider className="cm-account-application-details-divider" />
+                          <div className="cm-account-application-actions">
+                            <ContinueCancelModal
+                              buttonTitle={t("removeAccess")}
+                              modalTitle={t("removeAccess")}
+                              continueLabel={t("confirm")}
+                              cancelLabel={t("cancel")}
+                              buttonVariant="secondary"
+                              onContinue={() =>
+                                removeConsent(application.clientId)
+                              }
+                            >
+                              {t("removeModalMessage", {
+                                name: application.clientId,
+                              })}
+                            </ContinueCancelModal>
+                            <p>
+                              <BootstrapIcon icon="bi-info-circle" />{" "}
+                              {t("infoMessage")}
+                            </p>
+                          </div>
+                        </>
+                      )}
+                    </ExpandableRowContent>
+                  </Td>
+                </Tr>
+              </Tbody>
+            ))
+          )}
+        </Table>
+      )}
     </Page>
   );
 };

@@ -19,10 +19,11 @@
     "build": "vite build && keycloakify build",
     "build:theme": "vite build",
     "preview": "vite preview",
-    "check": "bun run check:svelte && bun run check:types && bun run check:login-pages && bun run check:tests && bun run check:tailwind && bun run check:lint",
+    "check": "bun run check:svelte && bun run check:types && bun run check:login-pages && bun run check:account-pages && bun run check:tests && bun run check:tailwind && bun run check:lint",
     "check:svelte": "svelte-check --tsconfig ./tsconfig.json",
     "check:types": "tsc -p tsconfig.check.json",
     "check:login-pages": "node scripts/check-login-page-coverage.mjs",
+    "check:account-pages": "node scripts/check-account-page-coverage.mjs",
     "check:tests": "vitest run",
     "check:tailwind": "tailwindcss --input src/main.css --output /tmp/tailwind-check.css --minify",
     "check:lint": "eslint .",
@@ -73,7 +74,6 @@
     "@keycloakify/keycloak-ui-shared": "^260700.0.0",
     "@patternfly/patternfly": "^5.4.2",
     "@patternfly/react-core": "^5.4.14",
-    "@patternfly/react-icons": "^5.4.2",
     "@patternfly/react-styles": "^5.4.1",
     "@patternfly/react-table": "^5.4.16",
     "@types/lodash-es": "^4.17.12",
@@ -83,14 +83,13 @@
     "i18next": "^25.10.10",
     "i18next-fetch-backend": "^7.0.0",
     "lodash-es": "^4.18.1",
-    "mode-watcher": "^1.1.0",
     "oidc-spa": "^10.2.9",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "7.70.0",
     "react-i18next": "^16.6.6",
     "react-router-dom": "^6.30.4",
-    "tsafe": "^1.8.12",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "tsafe": "^1.8.12"
   }
 }

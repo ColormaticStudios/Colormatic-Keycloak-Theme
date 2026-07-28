@@ -31,30 +31,46 @@ export const FileUploadControl = <
 >(
   props: FileUploadControlProps<T, P>,
 ) => {
-  const { labelIcon, ...rest } = props;
-  const required = !!getRuleValue(props.rules?.required);
-  const defaultValue = props.defaultValue ?? ("" as PathValue<T, P>);
+  const {
+    control,
+    defaultValue: providedDefaultValue,
+    id: providedId,
+    label,
+    labelIcon,
+    name,
+    rules,
+    shouldUnregister,
+    ...uploadProps
+  } = props;
+  const required = !!getRuleValue(rules?.required);
+  const defaultValue = providedDefaultValue ?? ("" as PathValue<T, P>);
 
   const { t } = useTranslation();
 
   const [filename, setFilename] = useState<string>("");
 
   const { field, fieldState } = useController({
-    ...props,
+    control,
     defaultValue,
+    name,
+    rules,
+    shouldUnregister,
   });
 
   return (
     <FormLabel
-      name={props.name}
-      label={props.label}
+      id={providedId}
+      name={name}
+      label={label}
       labelIcon={labelIcon}
       isRequired={required}
       error={fieldState.error}
     >
       <FileUpload
+        id={providedId ?? name}
+        aria-label={label}
         isRequired={required}
-        data-testid={props["data-testid"] || props.name}
+        data-testid={props["data-testid"] || name}
         filename={filename}
         browseButtonText={t("browse")}
         validated={
@@ -71,7 +87,7 @@ export const FileUploadControl = <
           field.onChange(null);
           setFilename("");
         }}
-        {...rest}
+        {...uploadProps}
         {...field}
       />
     </FormLabel>

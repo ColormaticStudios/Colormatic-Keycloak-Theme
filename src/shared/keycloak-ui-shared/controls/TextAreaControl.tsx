@@ -8,6 +8,7 @@ import type {
 } from "react-hook-form";
 import { useController } from "react-hook-form";
 
+import { getRuleValue } from "../utils/getRuleValue";
 import { FormLabel } from "./FormLabel";
 
 export type TextAreaControlProps<
@@ -26,31 +27,46 @@ export const TextAreaControl = <
 >(
   props: TextAreaControlProps<T, P>,
 ) => {
-  const required = !!props.rules?.required;
-  const defaultValue = props.defaultValue ?? ("" as PathValue<T, P>);
+  const {
+    control,
+    defaultValue: providedDefaultValue,
+    label,
+    labelIcon,
+    name,
+    rules,
+    shouldUnregister,
+    ...textAreaProps
+  } = props;
+  const required = !!getRuleValue(rules?.required);
+  const defaultValue = providedDefaultValue ?? ("" as PathValue<T, P>);
 
   const { field, fieldState } = useController({
-    ...props,
+    control,
     defaultValue,
+    name,
+    rules,
+    shouldUnregister,
   });
 
   return (
     <FormLabel
       isRequired={required}
-      label={props.label}
-      labelIcon={props.labelIcon}
-      name={props.name}
+      label={label}
+      labelIcon={labelIcon}
+      name={name}
       error={fieldState.error}
     >
       <TextArea
         isRequired={required}
-        id={props.name}
-        data-testid={props.name}
+        id={name}
+        data-testid={name}
         validated={
           fieldState.error ? ValidatedOptions.error : ValidatedOptions.default
         }
+        aria-describedby={fieldState.error ? `${name}-error` : undefined}
+        aria-invalid={fieldState.invalid}
         isDisabled={props.isDisabled}
-        {...props}
+        {...textAreaProps}
         {...field}
       />
     </FormLabel>

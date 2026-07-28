@@ -41,6 +41,12 @@ export async function parseResponse<T>(response: Response): Promise<T> {
 	return data as T;
 }
 
+export async function throwIfResponseNotOk(response: Response): Promise<void> {
+	if (!response.ok) {
+		await parseResponse<never>(response);
+	}
+}
+
 async function parseJSON(response: Response): Promise<unknown> {
 	try {
 		return await response.json();

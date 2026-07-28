@@ -46,7 +46,8 @@
   id={attribute.name}
   name={attribute.name}
   bind:value
-  class="kcInputClass"
+  class="kcInputClass cm-login-input"
+  data-slot="input"
   aria-invalid={displayableErrors.find(
     (error) => error.fieldIndex === fieldIndex,
   ) !== undefined}

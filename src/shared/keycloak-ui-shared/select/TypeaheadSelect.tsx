@@ -12,10 +12,11 @@ import {
   TextInputGroupMain,
   TextInputGroupUtilities,
 } from "../../@patternfly/react-core";
-import { TimesIcon } from "../../@patternfly/react-icons";
-import { Children, useRef, useState } from "react";
+import { Children, useId, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { KeycloakSelectProps } from "./KeycloakSelect";
 import { SelectVariant, propertyToString } from "./KeycloakSelect";
+import { BootstrapIcon } from "../icons/BootstrapIcon";
 
 export const TypeaheadSelect = ({
   toggleId,
@@ -31,6 +32,7 @@ export const TypeaheadSelect = ({
   direction,
   selections,
   typeAheadAriaLabel,
+  inputAriaDescribedBy,
   chipGroupComponent,
   chipGroupProps,
   footer,
@@ -38,9 +40,11 @@ export const TypeaheadSelect = ({
   children,
   ...rest
 }: KeycloakSelectProps) => {
+  const { t } = useTranslation();
   const [filterValue, setFilterValue] = useState("");
   const [focusedItemIndex, setFocusedItemIndex] = useState<number>(0);
   const textInputRef = useRef<HTMLInputElement>();
+  const listboxId = useId();
 
   const childArray = Children.toArray(
     children,
@@ -54,6 +58,10 @@ export const TypeaheadSelect = ({
           const text = typeof label === "string" ? label : String(value ?? "");
           return text.toLowerCase().includes(filterValue.toLowerCase());
         });
+  const getOptionLabel = (value: string | number) => {
+    const option = childArray.find((child) => child.props.value === value);
+    return option?.props.children ?? value;
+  };
 
   const toggle = () => {
     onToggle?.(!rest.isOpen);
@@ -121,7 +129,6 @@ export const TypeaheadSelect = ({
   return (
     <Select
       {...rest}
-      onClick={toggle}
       onOpenChange={(isOpen) => onToggle?.(isOpen)}
       onSelect={(_, value) => {
         onSelect?.(value || "");
@@ -135,7 +142,7 @@ export const TypeaheadSelect = ({
           ref={ref}
           id={toggleId}
           variant="typeahead"
-          onClick={() => onToggle?.(true)}
+          onClick={toggle}
           icon={toggleIcon}
           isDisabled={isDisabled}
           isExpanded={rest.isOpen}
@@ -147,13 +154,17 @@ export const TypeaheadSelect = ({
               placeholder={placeholderText}
               value={
                 variant === SelectVariant.typeahead && selections
-                  ? (selections as string)
+                  ? String(getOptionLabel(selections as string | number))
                   : filterValue
               }
-              onClick={toggle}
+              onClick={(event) => {
+                event.stopPropagation();
+                onToggle?.(true);
+              }}
               onChange={(_, value) => {
                 setFilterValue(value);
                 setFocusedItemIndex(0);
+                onToggle?.(true);
                 onFilter?.(value);
               }}
               onKeyDown={(event) => onInputKeyDown(event)}
@@ -161,8 +172,9 @@ export const TypeaheadSelect = ({
               innerRef={textInputRef}
               role="combobox"
               isExpanded={rest.isOpen}
-              aria-controls="select-typeahead-listbox"
+              aria-controls={listboxId}
               aria-label={typeAheadAriaLabel}
+              aria-describedby={inputAriaDescribedBy}
             >
               {variant === SelectVariant.typeaheadMulti &&
                 Array.isArray(selections) &&
@@ -170,15 +182,15 @@ export const TypeaheadSelect = ({
                   chipGroupComponent
                 ) : (
                   <ChipGroup {...chipGroupProps}>
-                    {selections.map((selection, index: number) => (
+                    {selections.map((selection) => (
                       <Chip
-                        key={index}
+                        key={selection}
                         onClick={(ev) => {
                           ev.stopPropagation();
                           onSelect?.(selection);
                         }}
                       >
-                        {selection}
+                        {getOptionLabel(selection)}
                       </Chip>
                     ))}
                   </ChipGroup>
@@ -194,9 +206,9 @@ export const TypeaheadSelect = ({
                     onFilter?.("");
                     textInputRef.current?.focus();
                   }}
-                  aria-label="Clear input value"
+                  aria-label={t("clearInputValue", "Clear input value")}
                 >
-                  <TimesIcon aria-hidden />
+                  <BootstrapIcon icon="bi-x-lg" />
                 </Button>
               )}
             </TextInputGroupUtilities>
@@ -204,7 +216,7 @@ export const TypeaheadSelect = ({
         </MenuToggle>
       )}
     >
-      <SelectList>{visibleChildren}</SelectList>
+      <SelectList id={listboxId}>{visibleChildren}</SelectList>
       {footer && <MenuFooter>{footer}</MenuFooter>}
     </Select>
   );

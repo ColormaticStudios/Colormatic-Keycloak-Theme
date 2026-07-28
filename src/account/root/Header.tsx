@@ -1,10 +1,10 @@
 import {
+  BootstrapIcon,
   KeycloakMasthead,
   label,
   useEnvironment,
 } from "../../shared/keycloak-ui-shared";
 import { Button } from "../../shared/@patternfly/react-core";
-import { ExternalLinkSquareAltIcon } from "../../shared/@patternfly/react-icons";
 import { useTranslation } from "react-i18next";
 import { useHref } from "react-router-dom";
 
@@ -23,7 +23,7 @@ const ReferrerLink = () => {
       component="a"
       href={environment.referrerUrl.replace("_hash_", "#")}
       variant="link"
-      icon={<ExternalLinkSquareAltIcon />}
+      icon={<BootstrapIcon icon="bi-box-arrow-up-right" />}
       iconPosition="right"
       isInline
     >

@@ -14,9 +14,12 @@ const upstreamContextPath = path.join(
   "KcContext.d.ts",
 );
 const localRouterPath = path.join(projectRoot, "src/login/KcPage.svelte");
+const templatePath = path.join(projectRoot, "src/login/Template.svelte");
+const pagesPath = path.join(projectRoot, "src/login/pages");
 
 const upstreamContext = fs.readFileSync(upstreamContextPath, "utf8");
 const localRouter = fs.readFileSync(localRouterPath, "utf8");
+const template = fs.readFileSync(templatePath, "utf8");
 
 const collect = (source, pattern) =>
   new Set(Array.from(source.matchAll(pattern), (match) => match[1]));
@@ -46,6 +49,60 @@ if (missing.length > 0 || unknown.length > 0) {
   throw new Error(details);
 }
 
+const structuralErrors = [];
+const requiredTemplateMarkers = [
+  ["semantic page landmark", "<main"],
+  ["semantic authentication card", "<article"],
+  ["labelled content region", "<section"],
+  ["shared locale menu", "<LocaleMenu"],
+  ["shared alert", "<LoginAlert"],
+];
+
+for (const [description, marker] of requiredTemplateMarkers) {
+  if (!template.includes(marker)) {
+    structuralErrors.push(
+      `Template is missing its ${description} (${marker}).`,
+    );
+  }
+}
+
+for (const fileName of fs
+  .readdirSync(pagesPath)
+  .filter(
+    (fileName) =>
+      fileName.endsWith(".svelte") && !fileName.endsWith(".stories.svelte"),
+  )) {
+  const source = fs.readFileSync(path.join(pagesPath, fileName), "utf8");
+
+  for (const form of source.matchAll(/<form\b[\s\S]*?>/g)) {
+    if (!/\bclass=/.test(form[0]) || !/cm-login-form/.test(form[0])) {
+      structuralErrors.push(
+        `${fileName} contains a form without the shared cm-login-form contract.`,
+      );
+    }
+  }
+
+  if (
+    /(?:slate|blue|indigo|green|red)-\d{2,3}|bg-white|text-white/.test(source)
+  ) {
+    structuralErrors.push(
+      `${fileName} contains a raw palette utility instead of a semantic theme token.`,
+    );
+  }
+
+  if (/<label\b[^>]*\bid=/.test(source)) {
+    structuralErrors.push(
+      `${fileName} uses a label as non-control display markup.`,
+    );
+  }
+}
+
+if (structuralErrors.length > 0) {
+  throw new Error(
+    `Login markup contract failed:\n- ${structuralErrors.join("\n- ")}`,
+  );
+}
+
 console.log(
-  `Login page coverage is complete (${supportedPageIds.size} pages).`,
+  `Login page coverage and markup contracts are complete (${supportedPageIds.size} pages).`,
 );

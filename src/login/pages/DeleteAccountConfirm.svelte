@@ -26,20 +26,27 @@
     {@render msg("deleteAccountConfirm")()}
   {/snippet}
 
-  <form action={url.loginAction} class="form-vertical" method="post">
+  <form
+    action={url.loginAction}
+    class="form-vertical cm-login-form"
+    method="post"
+  >
     <div class="alert alert-warning pb-2">
       <i class="bi bi-exclamation-triangle-fill"></i>
       {@render msg("irreversibleAction")()}
     </div>
     <p>{@render msg("deletingImplies")()}</p>
-    <ul class="text-slate-500">
+    <ul class="cm-login-muted">
       <li>{@render msg("loggingOutImmediately")()}</li>
       <li>{@render msg("errasingData")()}</li>
     </ul>
     <p class="delete-account-text">
       {@render msg("finalDeletionConfirmation")()}
     </p>
-    <div id="kc-form-buttons" class="kcFormButtonsWrapperClass">
+    <div
+      id="kc-form-buttons"
+      class="kcFormButtonsWrapperClass cm-login-actions"
+    >
       <input
         class="
           kcButtonClass

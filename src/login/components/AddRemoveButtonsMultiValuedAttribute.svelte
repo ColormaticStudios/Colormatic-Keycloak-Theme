@@ -7,6 +7,7 @@
   import type { EventDispatcher } from "svelte";
   import type { Readable } from "svelte/store";
   import type { I18n } from "../i18n";
+  import { Button } from "../../lib/components/ui/button";
 
   type AddRemoveButtonsMultiValuedAttributeProps = {
     attribute: Attribute;
@@ -40,10 +41,11 @@
 </script>
 
 {#if hasRemove}
-  <button
+  <Button
     id={`kc-remove${idPostfix}`}
     type="button"
-    class="pf-c-button pf-m-inline pf-m-link"
+    variant="ghost"
+    size="sm"
     onclick={() =>
       dispatchFormAction("formAction", {
         action: "update",
@@ -52,14 +54,15 @@
       })}
   >
     {@render msg("remove")()}
-  </button>
+  </Button>
   {#if hasAdd}&nbsp;|&nbsp;{/if}
 {/if}
 {#if hasAdd}
-  <button
+  <Button
     id={`kc-add${idPostfix}`}
     type="button"
-    class="kcButtonClass kcButtonDefaultClass"
+    variant="outline"
+    size="sm"
     onclick={() =>
       dispatchFormAction("formAction", {
         action: "update",
@@ -68,5 +71,5 @@
       })}
   >
     {@render msg("addValue")()}
-  </button>
+  </Button>
 {/if}

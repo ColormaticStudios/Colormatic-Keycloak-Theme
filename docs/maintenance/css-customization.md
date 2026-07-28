@@ -1,99 +1,62 @@
-# CSS Customization Strategy
+# CSS and Design-System Architecture
 
-This document records how to make the login and account themes maintainable
-without changing their current visual design. It is intentionally tied to the
-actual upstream architecture rather than to an aspirational PatternFly upgrade.
+This project deliberately shares a visual language across two different UI
+frameworks: Svelte/shadcn-svelte for login and React/PatternFly 5 for the
+account console. PatternFly remains the account console's compatibility layer;
+it is not the source of truth for Colormatic design decisions.
 
-## Current Constraint
+## Source of truth
 
-Keycloak's account console still uses PatternFly 5. The Keycloak `main` branch
-at commit `33695405ea86a5741dbe07f406b10a02aacb5a4b` (July 17, 2026) declares
-PatternFly 5.4 dependencies and continues to emit `pf-v5-*` classes. There is no
-Keycloak 27 release tag yet, and the account-console changes between the 26.7.0
-tag and that commit contain no PatternFly migration.
+`src/main.css` owns the cross-theme system:
 
-Primary sources:
+- `--cm-*` variables are semantic Colormatic tokens;
+- their current values use Tailwind's exact palette variables, primarily Slate;
+- shadcn variables such as `--background`, `--primary`, and `--ring` alias the
+  semantic tokens instead of defining another palette;
+- `--cm-font-sans` and `--cm-font-mono` define the system font stacks; and
+- Bootstrap Icons are loaded once for project-owned iconography.
 
-- [Keycloak account UI package on current `main`](https://github.com/keycloak/keycloak/blob/33695405ea86a5741dbe07f406b10a02aacb5a4b/js/apps/account-ui/package.json)
-- [Keycloak account UI source](https://github.com/keycloak/keycloak/tree/33695405ea86a5741dbe07f406b10a02aacb5a4b/js/apps/account-ui/src)
-- [Keycloak 26.7.0 tag](https://github.com/keycloak/keycloak/tree/26.7.0/js/apps/account-ui)
+Use purpose-based tokens such as `--cm-text-muted` or `--cm-control-hover` in
+new shared styles. Do not hard-code a Slate shade when a semantic token already
+describes the role. This keeps a future palette change local to `src/main.css`.
 
-PatternFly 6 design tokens are materially better than the PatternFly 5 variable
-system, but they require PatternFly 6. Moving this fork to PatternFly 6 before
-Keycloak does would turn routine upstream merges into a permanent compatibility
-port. Do not do that as part of the Keycloak 26.7/27 preparation work.
+## Login theme
 
-Primary sources:
+Login markup lives under `src/login`. New project-owned UI should use local
+Svelte components and the shadcn-svelte primitives under `src/lib/components`.
+Tailwind utilities are appropriate for component layout and variants because
+they resolve through the shared tokens.
 
-- [PatternFly theming guidance](https://www.patternfly.org/design-foundations/theming/)
-- [PatternFly design-token development guidance](https://www.patternfly.org/foundations-and-styles/design-tokens/develop/)
-- [PatternFly 5 CSS-variable guidance](https://pf5.patternfly.org/developer-resources/global-css-variables/)
+Keycloakify's `kc*` class contract remains useful at the template boundary, but
+new components should not reproduce upstream pages' arbitrary element nesting.
+Prefer a clear hierarchy of page, section, field group, control, help/error
+text, and actions. Refactor pages incrementally so behavior and accessibility
+can be checked per flow.
 
-## Recommended Architecture While Account UI Uses PatternFly 5
+## Account console
 
-Use three distinct customization mechanisms for three distinct jobs.
+The account console remains a fork of Keycloak's React application and still
+uses PatternFly 5 for structure, keyboard behavior, and upstream alignment.
+There are two account-specific adapter files:
 
-### 1. Colormatic semantic tokens
+- `src/account/theme.tokens.css` gives account concepts stable names and aliases
+  them to the shared `--cm-*` tokens;
+- `src/account/theme.css` maps those concepts onto PatternFly component custom
+  properties and contains the remaining structural exceptions.
 
-Define a small set of project-owned semantic custom properties for the visual
-decisions shared by components in `src/account/theme.tokens.css`. Use names
-based on purpose, not on a particular Tailwind shade:
+Built-in pages use `src/account/components/page/Page.tsx` as their semantic
+shell. It owns the `article`, page `header`, single `h1`, description, and body
+regions. Repeated page areas use `AccountPageSection`, which supplies a
+labelled `section`, `h2`, optional description, and action region. Do not style
+PatternFly's root `<main>` as an individual page card or recreate page headings
+with utility-class stacks.
 
-```css
-:root {
-  --cm-account-canvas: var(--color-slate-100);
-  --cm-account-surface: var(--color-slate-200);
-  --cm-account-control-surface: var(--color-slate-300);
-  --cm-account-border: var(--color-slate-400);
-  --cm-account-text: var(--color-black);
-}
-
-.pf-v5-theme-dark {
-  --cm-account-canvas: var(--color-slate-950);
-  --cm-account-surface: var(--color-slate-900);
-  --cm-account-control-surface: var(--color-slate-800);
-  --cm-account-border: var(--color-slate-700);
-  --cm-account-text: var(--color-slate-100);
-}
-```
-
-Keep these in an account-specific token file. Do not repurpose the generic
-`--background`, `--card`, or `--primary` variables in `src/main.css`: those are
-shared with the Svelte login theme and do not have the same semantics as the
-account-console surfaces.
-
-The account bootstrap currently adds both `pf-v5-theme-dark` and `dark` to the
-document root. Account design tokens should use the canonical PatternFly dark
-class. The Tailwind `dark` variant remains appropriate for login-theme and local
-utility styling.
-
-### 2. PatternFly component variables
-
-Map the Colormatic tokens onto PatternFly component custom properties at the
-top-level component selector. This is PatternFly 5's supported customization
-mechanism and is less coupled to internal pseudo-elements than direct property
-overrides.
-
-Examples of existing direct overrides that have a component-variable equivalent:
-
-| Current target          | Prefer these PatternFly 5 variables                                                                                                                               |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `.pf-v5-c-page`         | `--pf-v5-c-page--BackgroundColor`                                                                                                                                 |
-| `.pf-v5-c-masthead`     | `--pf-v5-c-masthead--BackgroundColor`                                                                                                                             |
-| `.pf-v5-c-toolbar`      | `--pf-v5-c-toolbar--BackgroundColor`                                                                                                                              |
-| `.pf-v5-c-form-control` | `--pf-v5-c-form-control--BackgroundColor`, `--pf-v5-c-form-control--Color`, and its `before`/`after` border variables                                             |
-| `.pf-v5-c-menu-toggle`  | `--pf-v5-c-menu-toggle--BackgroundColor`, `--pf-v5-c-menu-toggle--Color`, state background variables, border variables, and `--pf-v5-c-menu-toggle--BorderRadius` |
-| `.pf-v5-c-menu`         | `--pf-v5-c-menu--BackgroundColor`, `--pf-v5-c-menu--BoxShadow`, and list-item state variables                                                                     |
-| `.pf-v5-c-button`       | `--pf-v5-c-button--BorderRadius` and the `m-primary`, `m-secondary`, and `m-link` state variables                                                                 |
-| `.pf-v5-c-alert`        | `--pf-v5-c-alert--BackgroundColor`, `--pf-v5-c-alert--BoxShadow`, and border variables                                                                            |
-| `.pf-v5-c-data-list`    | `--pf-v5-c-data-list--BorderTopColor` and item background/border variables                                                                                        |
-
-For example, prefer:
+Prefer a PatternFly component custom property over a direct declaration. For
+example:
 
 ```css
-.pf-v5-c-button {
+.cm-account .pf-v5-c-button {
   --pf-v5-c-button--BorderRadius: var(--radius-md);
-  --pf-v5-c-button--after--BorderRadius: var(--radius-md);
   --pf-v5-c-button--m-primary--BackgroundColor: var(--cm-account-action);
   --pf-v5-c-button--m-primary--hover--BackgroundColor: var(
     --cm-account-action-hover
@@ -101,106 +64,81 @@ For example, prefer:
 }
 ```
 
-over assigning `background-color` directly to `.pf-v5-c-button.pf-m-primary`
-with `!important`. Keep direct declarations only when PatternFly exposes no
-component variable, such as an intentionally different layout or max width.
+Keep direct declarations only when PatternFly exposes no suitable component
+variable, especially for intentional layout and sizing changes. Avoid broad
+`--pf-v5-global-*` overrides: they can silently alter new upstream components
+that this theme has not reviewed.
 
-Avoid broad overrides of `--pf-v5-global-*`. A global replacement can alter a
-new upstream component that this theme has never reviewed. Component variables
-give roughly the same maintenance benefit while containing the blast radius.
+Use CSS modules or project-owned classes for project-owned React markup. Do not
+increase specificity with `#root .pf-v5-*`; that recreates the override
+escalation this adapter is intended to prevent.
 
-### 3. Local component classes and CSS modules
+Keep PatternFly adapter selectors under the single `.cm-account` mount class.
+React's PatternFly styles are injected after the static theme stylesheet in
+development and may also load later through code-split chunks. The mount class
+provides one predictable specificity step so component variables continue to
+win without per-component `!important` rules or progressively deeper
+selectors.
 
-Use project-owned classes for project-owned markup. CSS modules are already in
-use for the account header and shared scroll-form components; they are the right
-default for new local account UI. The login theme should continue to style the
-stable `kc*` class contract supplied through Keycloakify rather than reaching
-into element structure.
+## Theme preference
 
-Tailwind `@apply` is reasonable for project-owned layout classes. It is less
-useful as a PatternFly theming API because it emits direct declarations and has
-encouraged the current `!important` overrides.
+`src/shared/theme/theme.ts` owns the Light, Dark, and System preference. It:
 
-## Scoping
+- persists `colormatic-theme` in local storage;
+- migrates the former `mode-watcher-mode` value when present;
+- follows `prefers-color-scheme` only for the System preference;
+- synchronizes changes across same-origin tabs; and
+- applies `.dark`, `.pf-v5-theme-dark`, `data-theme`, and native
+  `color-scheme` together.
 
-The eventual single Vite graph should retain CSS chunking so the account theme
-does not load its PatternFly override sheet on login pages. That is the strongest
-and simplest scope boundary.
+`src/shared/theme/ThemeSwitcher.svelte` is the one control rendered by both
+themes. Do not create framework-specific theme controls. The account realm's
+`darkMode` setting may force the effective theme to Light, but the saved user
+preference is retained for realms where dark mode is allowed.
 
-As defense in depth, add a stable project-owned class such as `.cm-account` to
-the account application root, then scope overrides with zero extra specificity:
+Keycloakify copies the early scripts in `public/keycloak-theme/login` and
+`public/keycloak-theme/account` into the corresponding theme resources. Keep
+their small, dependency-free bootstrap logic equivalent to the controller so
+the first paint matches the saved preference.
 
-```css
-:where(.cm-account) .pf-v5-c-button {
-  /* component variable mappings */
-}
-```
+## Icons and typography
 
-Do not use `#root .pf-v5-*` as the standard scope. The ID adds specificity and
-recreates the same override escalation this migration is intended to remove.
-Do not depend on `.pf-v5-c-page` itself as the scope marker; it is an upstream
-implementation detail rather than a Colormatic contract.
+Project-owned React icon markup goes through
+`src/shared/keycloak-ui-shared/icons/BootstrapIcon.tsx`; Svelte markup uses the
+same `bi` classes directly. PatternFly may use its own icons inside unmodified
+internals, but do not introduce new `@patternfly/react-icons` imports.
 
-Adding the root class requires a small React/bootstrap change, so it should be
-done together with the single-build architecture rather than as a CSS-only edit.
+Both themes inherit the shared system font stack. Component-specific font
+families should only be added for a deliberate design requirement.
 
-## Cascade Layers
+## Cascade and scoping
 
-Cascade layers would make the intended order explicit:
+The single Vite graph code-splits the account bridge, so login pages do not
+eagerly load account code. The account stylesheet is imported only by the
+account entry path, which is the bundle scope boundary. The `.cm-account`
+React mount is the selector scope and deliberate specificity boundary for the
+PatternFly adapter.
 
-```css
-@layer reset, patternfly, colormatic;
-```
+Cascade layers are not currently used. PatternFly CSS is unlayered, and normal
+declarations outside a layer outrank normal declarations inside one. Introducing
+layers is only safe if PatternFly and Colormatic styles are placed into named
+layers as one coordinated pipeline change.
 
-They cannot safely be added only around `theme.css`. Normal declarations outside
-a layer outrank normal declarations inside a layer, regardless of source order.
-PatternFly is currently imported as unlayered CSS from the account entry point,
-so putting only Colormatic overrides into a layer would make those overrides
-weaker.
+## Maintenance checklist
 
-Layers become useful only after the PatternFly stylesheets are imported into a
-named `patternfly` layer as part of the same stylesheet pipeline. Treat that as
-a build/integration migration and verify it in every supported browser; do not
-apply layers as a standalone cleanup.
+When changing a component family:
 
-## Migration Sequence
+1. Add or reuse a semantic token in `src/main.css`.
+2. Add an account alias only when the account concept needs a stable adapter
+   name.
+3. Map PatternFly component variables before adding direct declarations.
+4. Use the shared theme control, Bootstrap Icon primitive, and system fonts.
+5. Check light, dark, and system behavior, including an operating-system scheme
+   change while System is selected.
+6. Check keyboard focus, disabled, error, and hover states.
+7. Compare desktop and mobile layouts; include right-to-left locales when a
+   change affects directional layout.
 
-Migrate incrementally, one visual component family at a time:
-
-1. Add account semantic tokens with light and dark values that exactly reproduce
-   the current generated Tailwind colors.
-2. Add the stable `.cm-account` root scope during the single-build integration.
-3. Migrate page, masthead, and toolbar background variables.
-4. Migrate form control, menu toggle, and menu state variables.
-5. Migrate button, alert, and data-list variables.
-6. Replace remaining direct structural overrides only where upstream exposes a
-   suitable component variable.
-7. Consider cascade layers only after all PatternFly CSS imports can be placed in
-   an explicit layer.
-8. When Keycloak itself moves the account console to PatternFly 6, replace the
-   PF5 mappings with PF6 semantic design tokens and component variables. Do not
-   mechanically rename variables; PatternFly explicitly recommends choosing the
-   semantic token appropriate to each use.
-
-For every step, capture account-console screenshots before and after at desktop
-and mobile widths, in light and dark mode, and for both left-to-right and
-right-to-left locales. The migration is complete only when visual changes are
-intentional and keyboard focus/error states remain visible.
-
-## Keycloak 27-Facing Watch List
-
-At the time of this review, no Keycloak 27 tag exists. The current `main` branch
-has no material post-26.7 account UI feature or styling change. The only relevant
-post-tag account-theme content is localization maintenance; the account UI and
-shared UI package versions are reset to the development snapshot.
-
-Before adopting a future Keycloak 27 account-console baseline:
-
-- diff `js/apps/account-ui`, `js/libs/ui-shared`, and the `keycloak.v3` account
-  messages from the 26.7.0 tag to the final 27.0.0 tag;
-- check the account UI package for a PatternFly major change before updating any
-  `pf-v5-*` selectors;
-- preserve the new 26.7 Verifiable Credentials route and issued-credential UI;
-- refresh all checked-in account translations, not only English; and
-- run the CSS migration screenshot matrix because even patch-level React
-  component changes can alter emitted PatternFly markup.
+When Keycloak upgrades PatternFly, review the emitted markup and supported
+component variables before changing the adapter. Do not mechanically rename
+PatternFly variables across major versions.

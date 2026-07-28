@@ -10,24 +10,22 @@ import {
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
-  Dropdown,
-  DropdownItem,
-  MenuToggle,
-  PageSection,
+  Flex,
+  FlexItem,
   Spinner,
   Split,
   SplitItem,
+  Stack,
+  StackItem,
   Title,
 } from "../../shared/@patternfly/react-core";
-import {
-  EllipsisVIcon,
-  ExclamationTriangleIcon,
-  InfoAltIcon,
-} from "../../shared/@patternfly/react-icons";
-import type { CSSProperties } from "react";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { useEnvironment } from "../../shared/keycloak-ui-shared";
+import {
+  BootstrapIcon,
+  ListEmptyState,
+  useEnvironment,
+} from "../../shared/keycloak-ui-shared";
 import type { Environment } from "../environment";
 import { getCredentials } from "../api/methods";
 import type {
@@ -35,7 +33,7 @@ import type {
   CredentialMetadataRepresentation,
 } from "../api/representations";
 import { EmptyRow } from "../components/datalist/EmptyRow";
-import { Page } from "../components/page/Page";
+import { AccountPageSection, Page } from "../components/page/Page";
 import faviconUrl from "../assets/favicon.svg?url";
 import type { TFuncKey } from "../i18n-type";
 import { formatDate } from "../utils/formatDate";
@@ -46,50 +44,6 @@ const passkeyIconUrls = import.meta.glob<string>("../assets/passkeys/*", {
   import: "default",
   query: "?url",
 });
-
-type MobileLinkProps = {
-  title: string;
-  onClick: () => void;
-  testid?: string;
-};
-
-const MobileLink = ({ title, onClick, testid }: MobileLinkProps) => {
-  const [open, setOpen] = useState(false);
-  return (
-    <>
-      <Dropdown
-        popperProps={{
-          position: "right",
-        }}
-        onOpenChange={(isOpen) => setOpen(isOpen)}
-        toggle={(toggleRef) => (
-          <MenuToggle
-            className="pf-v5-u-display-none-on-lg"
-            ref={toggleRef}
-            variant="plain"
-            onClick={() => setOpen(!open)}
-            isExpanded={open}
-          >
-            <EllipsisVIcon />
-          </MenuToggle>
-        )}
-        isOpen={open}
-      >
-        <DropdownItem key="1" onClick={onClick}>
-          {title}
-        </DropdownItem>
-      </Dropdown>
-      <Button
-        variant="link"
-        onClick={onClick}
-        className="pf-v5-u-display-none pf-v5-u-display-inline-flex-on-lg"
-        data-testid={testid}
-      >
-        {title}
-      </Button>
-    </>
-  );
-};
 
 export const SigningIn = () => {
   const { t } = useTranslation();
@@ -113,9 +67,6 @@ export const SigningIn = () => {
     showIcon: boolean,
   ) => {
     const credential = credMetadata.credential;
-    const maxWidth = {
-      "--pf-v5-u-max-width--MaxWidth": "300px",
-    } as CSSProperties;
     const icon = credMetadata.iconLight || credMetadata.iconDark;
     const authenticatorProvider = credMetadata.infoProperties?.find(
       (property) => property.key === "webauthn-authenticator-provider",
@@ -130,39 +81,38 @@ export const SigningIn = () => {
             <DataListCell
               key="icon"
               data-testrole="icon"
-              className="pf-v5-c-data-list__cell pf-m-icon pf-v5-u-display-flex pf-v5-u-align-items-center pf-v5-u-pt-0"
+              className="cm-credential-icon"
             >
-              <div className="pf-v5-c-icon pf-m-xl">
-                <picture>
-                  {iconDarkSrc && (
-                    <source
-                      srcSet={iconDarkSrc}
-                      media="(prefers-color-scheme: dark)"
-                    />
-                  )}
+              <div className="cm-credential-icon__frame">
+                {iconDarkSrc && (
                   <img
-                    src={iconSrc}
+                    src={iconDarkSrc}
                     alt=""
                     width="40"
                     height="40"
-                    style={{ maxWidth: "none" }}
+                    className="hidden dark:block"
                   />
-                </picture>
+                )}
+                <img
+                  src={iconSrc}
+                  alt=""
+                  width="40"
+                  height="40"
+                  className={iconDarkSrc ? "block dark:hidden" : undefined}
+                />
               </div>
             </DataListCell>,
           ]
         : []),
       <DataListCell
         key="title"
+        id={`credential-${credential.id}-label`}
         data-testrole="label"
-        className="pf-v5-u-max-width pf-v5-u-pt-0"
-        style={maxWidth}
+        className="cm-credential-label"
       >
         <div>{t(credential.userLabel) || t(credential.type as TFuncKey)}</div>
         {authenticatorProvider && (
-          <div className="pf-v5-u-color-200 pf-v5-u-font-size-sm">
-            {authenticatorProvider}
-          </div>
+          <div className="cm-credential-provider">{authenticatorProvider}</div>
         )}
       </DataListCell>,
     ];
@@ -172,7 +122,6 @@ export const SigningIn = () => {
         <DataListCell
           key={"created" + credential.id}
           data-testrole="created-at"
-          className="pf-v5-u-pt-0"
         >
           <Trans
             i18nKey="credentialCreatedAt"
@@ -183,7 +132,7 @@ export const SigningIn = () => {
               ),
             }}
           >
-            <strong className="pf-v5-u-mr-md"></strong>
+            <strong />
           </Trans>
         </DataListCell>,
       );
@@ -202,7 +151,7 @@ export const SigningIn = () => {
           <>
             {credMetadata.infoMessage && (
               <p>
-                <InfoAltIcon />{" "}
+                <BootstrapIcon icon="bi-info-circle" />{" "}
                 {t(
                   credMetadata.infoMessage.key,
                   credMetadata.infoMessage.parameters?.reduce(
@@ -213,11 +162,11 @@ export const SigningIn = () => {
               </p>
             )}
             {credMetadata.infoProperties && (
-              <Split className="pf-v5-u-mb-lg">
+              <Split hasGutter className="cm-credential-details">
                 <SplitItem>
-                  <InfoAltIcon />
+                  <BootstrapIcon icon="bi-info-circle" />
                 </SplitItem>
-                <SplitItem isFilled className="pf-v5-u-ml-xs">
+                <SplitItem isFilled>
                   <DescriptionList
                     isHorizontal
                     horizontalTermWidthModifier={{
@@ -247,7 +196,7 @@ export const SigningIn = () => {
               credMetadata.warningMessageDescription && (
                 <>
                   <p>
-                    <ExclamationTriangleIcon />{" "}
+                    <BootstrapIcon icon="bi-exclamation-triangle" />{" "}
                     {t(
                       credMetadata.warningMessageTitle.key,
                       credMetadata.warningMessageTitle.parameters?.reduce(
@@ -275,7 +224,11 @@ export const SigningIn = () => {
   };
 
   if (!credentials) {
-    return <Spinner />;
+    return (
+      <Page title={t("signingIn")} description={t("signingInDescription")}>
+        <Spinner aria-label={t("signingIn")} />
+      </Page>
+    );
   }
 
   const credentialUniqueCategories = [
@@ -284,124 +237,154 @@ export const SigningIn = () => {
 
   return (
     <Page title={t("signingIn")} description={t("signingInDescription")}>
-      {credentialUniqueCategories.map((category) => (
-        <PageSection key={category} variant="light" className="pf-v5-u-px-0">
-          <Title headingLevel="h2" size="xl" id={`${category}-categ-title`}>
-            {t(category as TFuncKey)}
-          </Title>
-          {credentials
-            .filter((cred) => cred.category == category)
-            .map((container) => (
-              <Fragment key={container.type}>
-                <Split className="pf-v5-u-mt-lg pf-v5-u-mb-lg">
-                  <SplitItem>
-                    <Title
-                      headingLevel="h3"
-                      size="md"
-                      className="pf-v5-u-mb-md"
-                      data-testid={`${container.type}/help`}
-                    >
-                      <span
-                        className="cred-title pf-v5-u-display-block"
-                        data-testid={`${container.type}/title`}
-                      >
-                        {t(container.displayName as TFuncKey)}
-                      </span>
-                    </Title>
-                    <span data-testid={`${container.type}/help-text`}>
-                      {t(container.helptext as TFuncKey)}
-                    </span>
-                  </SplitItem>
-                  {container.createAction && (
-                    <SplitItem isFilled>
-                      <div className="pf-v5-u-float-right">
-                        <MobileLink
-                          onClick={() =>
-                            login({
-                              action: container.createAction,
-                            })
-                          }
-                          title={t("setUpNew", {
-                            name: t(
-                              `${container.type}-display-name` as TFuncKey,
-                            ),
-                          })}
-                          testid={`${container.type}/create`}
-                        />
-                      </div>
-                    </SplitItem>
-                  )}
-                </Split>
+      {credentialUniqueCategories.length === 0 ? (
+        <ListEmptyState
+          message={t("notSetUp", { name: t("signingIn") })}
+          instructions={t("signingInDescription")}
+          hasIcon={false}
+        />
+      ) : (
+        <Stack hasGutter>
+          {credentialUniqueCategories.map((category) => (
+            <StackItem key={category}>
+              <AccountPageSection title={t(category as TFuncKey)}>
+                <Stack hasGutter>
+                  {credentials
+                    .filter((credential) => credential.category === category)
+                    .map((container) => {
+                      const titleId = `${container.type}-credential-title`;
+                      const setupLabel = t("setUpNew", {
+                        name: t(`${container.type}-display-name` as TFuncKey),
+                      });
 
-                <DataList
-                  aria-label="credential list"
-                  className="pf-v5-u-mb-xl"
-                  data-testid={`${container.type}/credential-list`}
-                >
-                  {container.userCredentialMetadatas.length === 0 && (
-                    <EmptyRow
-                      message={t("notSetUp", {
-                        name: t(container.displayName as TFuncKey),
-                      })}
-                      data-testid={`${container.type}/not-set-up`}
-                    />
-                  )}
-
-                  {container.userCredentialMetadatas.map((meta) => (
-                    <DataListItem key={meta.credential.id}>
-                      <DataListItemRow id={`cred-${meta.credential.id}`}>
-                        <DataListItemCells
-                          className="pf-v5-u-py-0 pf-v5-u-align-items-center"
-                          dataListCells={[
-                            ...credentialRowCells(
-                              meta,
-                              container.type.startsWith("webauthn"),
-                            ),
-                            <DataListAction
-                              key="action"
-                              id={`action-${meta.credential.id}`}
-                              aria-label={t("updateCredAriaLabel")}
-                              aria-labelledby={`cred-${meta.credential.id}`}
+                      return (
+                        <StackItem key={container.type}>
+                          <section aria-labelledby={titleId}>
+                            <Flex
+                              alignItems={{ default: "alignItemsFlexStart" }}
+                              justifyContent={{
+                                default: "justifyContentSpaceBetween",
+                              }}
+                              flexWrap={{ default: "wrap" }}
+                              gap={{ default: "gapMd" }}
+                              className="cm-credential-method__header"
                             >
-                              {container.removeable && (
-                                <Button
-                                  variant="danger"
-                                  data-testrole="remove"
-                                  onClick={async () => {
-                                    await login({
-                                      action:
-                                        "delete_credential:" +
-                                        meta.credential.id,
-                                    });
-                                  }}
+                              <FlexItem grow={{ default: "grow" }}>
+                                <Title
+                                  headingLevel="h3"
+                                  size="md"
+                                  id={titleId}
+                                  className="cred-title cm-credential-method__title"
+                                  data-testid={`${container.type}/help`}
                                 >
-                                  {t("delete")}
-                                </Button>
+                                  <span data-testid={`${container.type}/title`}>
+                                    {t(container.displayName as TFuncKey)}
+                                  </span>
+                                </Title>
+                                <p data-testid={`${container.type}/help-text`}>
+                                  {t(container.helptext as TFuncKey)}
+                                </p>
+                              </FlexItem>
+                              {container.createAction && (
+                                <FlexItem>
+                                  <Button
+                                    type="button"
+                                    variant="secondary"
+                                    icon={<BootstrapIcon icon="bi-plus-lg" />}
+                                    onClick={() =>
+                                      login({
+                                        action: container.createAction,
+                                      })
+                                    }
+                                    data-testid={`${container.type}/create`}
+                                  >
+                                    {setupLabel}
+                                  </Button>
+                                </FlexItem>
                               )}
-                              {container.updateAction && (
-                                <Button
-                                  variant="secondary"
-                                  onClick={async () => {
-                                    await login({
-                                      action: container.updateAction,
-                                    });
-                                  }}
-                                  data-testrole="update"
-                                >
-                                  {t("update")}
-                                </Button>
+                            </Flex>
+
+                            <DataList
+                              aria-label={t(container.displayName as TFuncKey)}
+                              aria-labelledby={titleId}
+                              className="cm-credential-list"
+                              data-testid={`${container.type}/credential-list`}
+                            >
+                              {container.userCredentialMetadatas.length ===
+                                0 && (
+                                <EmptyRow
+                                  message={t("notSetUp", {
+                                    name: t(container.displayName as TFuncKey),
+                                  })}
+                                  data-testid={`${container.type}/not-set-up`}
+                                />
                               )}
-                            </DataListAction>,
-                          ]}
-                        />
-                      </DataListItemRow>
-                    </DataListItem>
-                  ))}
-                </DataList>
-              </Fragment>
-            ))}
-        </PageSection>
-      ))}
+
+                              {container.userCredentialMetadatas.map((meta) => (
+                                <DataListItem key={meta.credential.id}>
+                                  <DataListItemRow
+                                    id={`cred-${meta.credential.id}`}
+                                  >
+                                    <DataListItemCells
+                                      className="cm-credential-row"
+                                      dataListCells={credentialRowCells(
+                                        meta,
+                                        container.type.startsWith("webauthn"),
+                                      )}
+                                    />
+                                    {(container.removeable ||
+                                      container.updateAction) && (
+                                      <DataListAction
+                                        id={`action-${meta.credential.id}`}
+                                        aria-label={t("updateCredAriaLabel")}
+                                        aria-labelledby={`credential-${meta.credential.id}-label`}
+                                      >
+                                        {container.removeable && (
+                                          <Button
+                                            type="button"
+                                            variant="danger"
+                                            data-testrole="remove"
+                                            onClick={() =>
+                                              login({
+                                                action:
+                                                  "delete_credential:" +
+                                                  meta.credential.id,
+                                              })
+                                            }
+                                          >
+                                            {t("delete")}
+                                          </Button>
+                                        )}
+                                        {container.updateAction && (
+                                          <Button
+                                            type="button"
+                                            variant="secondary"
+                                            onClick={() =>
+                                              login({
+                                                action: container.updateAction,
+                                              })
+                                            }
+                                            data-testrole="update"
+                                          >
+                                            {t("update")}
+                                          </Button>
+                                        )}
+                                      </DataListAction>
+                                    )}
+                                  </DataListItemRow>
+                                </DataListItem>
+                              ))}
+                            </DataList>
+                          </section>
+                        </StackItem>
+                      );
+                    })}
+                </Stack>
+              </AccountPageSection>
+            </StackItem>
+          ))}
+        </Stack>
+      )}
     </Page>
   );
 };

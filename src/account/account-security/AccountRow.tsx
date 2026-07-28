@@ -1,4 +1,5 @@
 import {
+  BootstrapIcon,
   IconMapper,
   label,
   useEnvironment,
@@ -10,12 +11,10 @@ import {
   DataListItem,
   DataListItemCells,
   DataListItemRow,
-  Icon,
+  Flex,
+  FlexItem,
   Label,
-  Split,
-  SplitItem,
 } from "../../shared/@patternfly/react-core";
-import { LinkIcon, UnlinkIcon } from "../../shared/@patternfly/react-icons";
 import { useTranslation } from "react-i18next";
 
 import { unLinkAccount } from "../api/methods";
@@ -37,6 +36,7 @@ export const AccountRow = ({
   const context = useEnvironment();
   const { login } = context.keycloak;
   const { addAlert, addError } = useAccountAlerts();
+  const providerNameId = `${account.providerAlias}-idp-name`;
 
   const unLink = async (account: LinkedAccountRepresentation) => {
     try {
@@ -52,7 +52,7 @@ export const AccountRow = ({
     <DataListItem
       id={`${account.providerAlias}-idp`}
       key={account.providerName}
-      aria-label={t("linkedAccounts")}
+      aria-labelledby={providerNameId}
     >
       <DataListItemRow
         key={account.providerName}
@@ -61,69 +61,63 @@ export const AccountRow = ({
         <DataListItemCells
           dataListCells={[
             <DataListCell key="idp">
-              <Split>
-                <SplitItem className="pf-v5-u-mr-sm">
+              <Flex
+                alignItems={{ default: "alignItemsCenter" }}
+                gap={{ default: "gapSm" }}
+              >
+                <FlexItem>
                   <IconMapper icon={account.providerName} />
-                </SplitItem>
-                <SplitItem className="pf-v5-u-my-xs" isFilled>
-                  <span id={`${account.providerAlias}-idp-name`}>
+                </FlexItem>
+                <FlexItem grow={{ default: "grow" }}>
+                  <strong id={providerNameId}>
                     {label(t, account.displayName)}
-                  </span>
-                </SplitItem>
-              </Split>
+                  </strong>
+                </FlexItem>
+              </Flex>
             </DataListCell>,
             <DataListCell key="label">
-              <Split>
-                <SplitItem className="pf-v5-u-my-xs" isFilled>
-                  <span id={`${account.providerAlias}-idp-label`}>
-                    <Label color={account.social ? "blue" : "green"}>
-                      {t(account.social ? "socialLogin" : "systemDefined")}
-                    </Label>
-                  </span>
-                </SplitItem>
-              </Split>
+              <Label
+                id={`${account.providerAlias}-idp-label`}
+                color={account.social ? "blue" : "green"}
+              >
+                {t(account.social ? "socialLogin" : "systemDefined")}
+              </Label>
             </DataListCell>,
             <DataListCell key="username" width={5}>
-              <Split>
-                <SplitItem className="pf-v5-u-my-xs" isFilled>
-                  <span id={`${account.providerAlias}-idp-username`}>
-                    {account.linkedUsername}
-                  </span>
-                </SplitItem>
-              </Split>
+              <span id={`${account.providerAlias}-idp-username`}>
+                {account.linkedUsername}
+              </span>
             </DataListCell>,
           ]}
         />
         <DataListAction
-          aria-labelledby={t("link")}
-          aria-label={t("unLink")}
-          id="setPasswordAction"
+          aria-label={t(isLinked ? "unLink" : "link")}
+          aria-labelledby={providerNameId}
+          id={`${account.providerAlias}-idp-action`}
         >
           {isLinked && (
             <Button
+              type="button"
               id={`${account.providerAlias}-idp-unlink`}
-              variant="link"
+              variant="secondary"
+              icon={<BootstrapIcon icon="bi-link-45deg" />}
               onClick={() => unLink(account)}
             >
-              <Icon size="sm">
-                <UnlinkIcon />
-              </Icon>{" "}
               {t("unLink")}
             </Button>
           )}
           {!isLinked && (
             <Button
+              type="button"
               id={`${account.providerAlias}-idp-link`}
-              variant="link"
-              onClick={async () => {
-                await login({
+              variant="secondary"
+              icon={<BootstrapIcon icon="bi-link" />}
+              onClick={() => {
+                void login({
                   action: "idp_link:" + account.providerAlias,
                 });
               }}
             >
-              <Icon size="sm">
-                <LinkIcon />
-              </Icon>{" "}
               {t("link")}
             </Button>
           )}

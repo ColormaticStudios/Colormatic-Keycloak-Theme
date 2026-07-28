@@ -1,10 +1,7 @@
 import { Icon, Popover } from "../../@patternfly/react-core";
-import {
-  ExclamationTriangleIcon,
-  HelpIcon,
-} from "../../@patternfly/react-icons";
 import type { ReactNode } from "react";
 import { useHelp } from "../context/HelpContext";
+import { BootstrapIcon } from "../icons/BootstrapIcon";
 
 type HelpItemProps = {
   helpText: string | ReactNode;
@@ -22,7 +19,9 @@ export const HelpItem = ({
   isRecommendation = false,
 }: HelpItemProps) => {
   const { enabled } = useHelp();
-  const IconComponent = isRecommendation ? ExclamationTriangleIcon : HelpIcon;
+  const icon = isRecommendation
+    ? "bi-exclamation-triangle"
+    : "bi-question-circle";
 
   return enabled ? (
     <Popover bodyContent={helpText}>
@@ -39,7 +38,7 @@ export const HelpItem = ({
               isInline={noVerticalAlign}
               status={isRecommendation ? "warning" : undefined}
             >
-              <IconComponent />
+              <BootstrapIcon icon={icon} />
             </Icon>
           </button>
         )}
@@ -48,7 +47,7 @@ export const HelpItem = ({
             isInline={noVerticalAlign}
             status={isRecommendation ? "warning" : undefined}
           >
-            <IconComponent />
+            <BootstrapIcon icon={icon} />
           </Icon>
         )}
       </>

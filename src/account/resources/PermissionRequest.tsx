@@ -1,14 +1,15 @@
-import { useEnvironment } from "../../shared/keycloak-ui-shared";
+import { BootstrapIcon, useEnvironment } from "../../shared/keycloak-ui-shared";
 import {
+  ActionList,
+  ActionListItem,
   Badge,
   Button,
   Chip,
-  Icon,
+  ChipGroup,
   Modal,
   ModalVariant,
   Text,
 } from "../../shared/@patternfly/react-core";
-import { UserCheckIcon } from "../../shared/@patternfly/react-icons";
 import {
   Table,
   Tbody,
@@ -28,6 +29,9 @@ type PermissionRequestProps = {
   resource: Resource;
   refresh: () => void;
 };
+
+const scopeName = (scope: Permission["scopes"][number]) =>
+  typeof scope === "string" ? scope : scope.name;
 
 export const PermissionRequest = ({
   resource,
@@ -56,8 +60,13 @@ export const PermissionRequest = ({
         resource._id,
         username,
         approve
-          ? [...(scopes as string[]), ...(shareRequest.scopes as string[])]
-          : scopes,
+          ? [
+              ...new Set([
+                ...scopes.map(scopeName),
+                ...shareRequest.scopes.map(scopeName),
+              ]),
+            ]
+          : scopes.map(scopeName),
       );
       addAlert(t("shareSuccess"));
       toggle();
@@ -69,10 +78,16 @@ export const PermissionRequest = ({
 
   return (
     <>
-      <Button variant="link" onClick={toggle}>
-        <Icon size="lg">
-          <UserCheckIcon />
-        </Icon>
+      <Button
+        variant="plain"
+        aria-label={t("permissionRequests")}
+        title={t("permissionRequests")}
+        onClick={toggle}
+      >
+        <BootstrapIcon
+          icon="bi-person-check"
+          className="cm-account-permission-request-icon"
+        />
         <Badge>{resource.shareRequests?.length}</Badge>
       </Button>
       <Modal
@@ -91,42 +106,61 @@ export const PermissionRequest = ({
             <Tr>
               <Th>{t("requestor")}</Th>
               <Th>{t("permissionRequests")}</Th>
-              <Th aria-hidden="true"></Th>
+              <Th screenReaderText={t("actions")} />
             </Tr>
           </Thead>
           <Tbody>
             {resource.shareRequests?.map((shareRequest) => (
               <Tr key={shareRequest.username}>
                 <Td>
-                  {shareRequest.firstName} {shareRequest.lastName}{" "}
-                  {shareRequest.lastName ? "" : shareRequest.username}
-                  <br />
+                  <strong>
+                    {[shareRequest.firstName, shareRequest.lastName]
+                      .filter(Boolean)
+                      .join(" ") || shareRequest.username}
+                  </strong>
+                  <br aria-hidden="true" />
                   <Text component="small">{shareRequest.email}</Text>
                 </Td>
                 <Td>
-                  {shareRequest.scopes.map((scope) => (
-                    <Chip key={scope.toString()} isReadOnly>
-                      {scope as string}
-                    </Chip>
-                  ))}
+                  <ChipGroup>
+                    {shareRequest.scopes.map((scope) => {
+                      const displayName =
+                        typeof scope === "string"
+                          ? scope
+                          : (scope.displayName ?? scope.name);
+
+                      return (
+                        <Chip key={scopeName(scope)} isReadOnly>
+                          {displayName}
+                        </Chip>
+                      );
+                    })}
+                  </ChipGroup>
                 </Td>
-                <Td>
-                  <Button
-                    onClick={async () => {
-                      await approveDeny(shareRequest, true);
-                    }}
-                  >
-                    {t("accept")}
-                  </Button>
-                  <Button
-                    onClick={async () => {
-                      await approveDeny(shareRequest);
-                    }}
-                    className="pf-v5-u-ml-sm"
-                    variant="danger"
-                  >
-                    {t("deny")}
-                  </Button>
+                <Td dataLabel={t("actions")}>
+                  <ActionList>
+                    <ActionListItem>
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          void approveDeny(shareRequest, true);
+                        }}
+                      >
+                        {t("accept")}
+                      </Button>
+                    </ActionListItem>
+                    <ActionListItem>
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          void approveDeny(shareRequest);
+                        }}
+                        variant="danger"
+                      >
+                        {t("deny")}
+                      </Button>
+                    </ActionListItem>
+                  </ActionList>
                 </Td>
               </Tr>
             ))}

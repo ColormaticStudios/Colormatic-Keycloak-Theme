@@ -24,7 +24,7 @@ const OrgDetailLink = ({ link, organization }: OrgDetailLinkProps) => {
           <Badge
             key={`${organization.id}-disabled`}
             isRead
-            className="pf-v5-u-ml-sm"
+            className="cm-status-badge"
           >
             {t("disabled")}
           </Badge>

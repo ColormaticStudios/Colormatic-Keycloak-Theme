@@ -7,235 +7,1241 @@
  * prefer the component's --pf-v5-c-* custom properties when it exposes them.
  */
 
-body {
-  @apply text-black dark:text-white;
+.cm-account {
+  color: var(--cm-account-text);
+  font-family: var(--cm-font-sans);
 }
 
-.pf-v5-c-page {
+.cm-account .pf-v5-c-page {
   --pf-v5-c-page--BackgroundColor: var(--cm-account-canvas);
 
-  @apply overflow-scroll;
+  overflow: clip;
 }
 
 /* Masthead */
-.pf-v5-c-masthead {
+.cm-account .pf-v5-c-masthead {
   --pf-v5-c-masthead--BackgroundColor: var(--cm-account-chrome);
 
-  @apply border-b border-slate-200 dark:border-slate-800;
-  @apply flex! shadow-none;
+  display: flex;
+  border-bottom: 1px solid var(--cm-account-border);
+  box-shadow: none;
 }
 
-.pf-v5-c-toolbar {
+.cm-account .pf-v5-c-masthead .pf-v5-c-toolbar {
   --pf-v5-c-toolbar--BackgroundColor: transparent;
 
-  @apply w-fit!;
+  width: fit-content;
+  background-color: transparent;
 }
 
-#nav-toggle {
-  @apply text-black dark:text-white;
+.cm-account #nav-toggle {
+  color: var(--cm-account-text);
 }
 
-.pf-v5-c-masthead__content {
-  @apply justify-end;
+.cm-account .pf-v5-c-masthead__content {
+  justify-content: flex-end;
 }
 
-.kc-masthead-title {
-  @apply ml-3 text-2xl tracking-wide text-slate-700 dark:text-slate-100;
+.cm-account .pf-v5-c-masthead .cm-masthead-menu-toggle {
+  --pf-v5-c-menu-toggle--BackgroundColor: transparent;
+}
+
+.cm-account .pf-v5-c-masthead .cm-masthead-menu-toggle:hover,
+.cm-account .pf-v5-c-masthead .cm-masthead-menu-toggle:focus-visible,
+.cm-account .pf-v5-c-masthead .cm-masthead-menu-toggle:active,
+.cm-account .pf-v5-c-masthead .cm-masthead-menu-toggle.pf-m-expanded {
+  background-color: var(--cm-account-surface);
+}
+
+.cm-account .pf-v5-c-masthead .cm-masthead-menu-toggle::before,
+.cm-account .pf-v5-c-masthead .cm-masthead-menu-toggle::after {
+  border: 0;
+}
+
+.cm-account .pf-v5-c-masthead .cm-masthead-menu-toggle:focus-visible {
+  outline: 2px solid var(--cm-account-focus);
+  outline-offset: 2px;
+}
+
+.cm-account .kc-masthead-title {
+  margin-inline-start: 0.75rem;
+  font-size: 1.5rem;
+  letter-spacing: 0.025em;
+  color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-masthead__brand,
+.cm-account .pf-v5-c-masthead__brand:hover,
+.cm-account .pf-v5-c-masthead__brand:focus,
+.cm-account .pf-v5-c-masthead__brand:active {
+  text-decoration: none;
 }
 
 /* Sidebar */
-.pf-v5-c-page__sidebar {
-  border-inline-end: none !important;
+.cm-account .pf-v5-c-page__sidebar {
+  --pf-v5-c-page__sidebar--m-light--BorderRightWidth: 0;
 }
 
-.pf-v5-c-page__sidebar-body {
-  @apply border-r border-slate-300 bg-slate-100;
-  @apply dark:border-slate-800 dark:bg-slate-950;
+.cm-account .pf-v5-c-page__sidebar-body {
+  border-right: 1px solid var(--cm-account-border);
+  background-color: var(--cm-account-canvas);
 }
 
-.pf-v5-c-nav__link {
-  @apply text-black! dark:text-white!;
+.cm-account .pf-v5-c-nav {
+  --pf-v5-c-nav__link--Color: var(--cm-account-text);
+  --pf-v5-c-nav__link--hover--Color: var(--cm-account-text);
+  --pf-v5-c-nav__link--focus--Color: var(--cm-account-text);
+  --pf-v5-c-nav__link--active--Color: var(--cm-account-text);
+  --pf-v5-c-nav__link--m-current--Color: var(--cm-account-text);
+  --pf-v5-c-nav__link--hover--BackgroundColor: var(--cm-account-surface);
+  --pf-v5-c-nav__link--focus--BackgroundColor: var(--cm-account-surface);
+  --pf-v5-c-nav__link--active--BackgroundColor: var(--cm-account-selection);
+  --pf-v5-c-nav__link--m-current--BackgroundColor: var(--cm-account-selection);
+  --pf-v5-c-nav__link--m-current--after--BorderColor: var(--cm-account-focus);
+  --pf-v5-c-nav__link--after--BorderColor: var(--cm-account-focus);
+  --pf-v5-c-nav__link--before--BorderColor: var(--cm-account-border);
+  --pf-v5-c-nav__item--before--BorderColor: var(--cm-account-border);
+  --pf-v5-c-nav--m-light__link--Color: var(--cm-account-text);
+  --pf-v5-c-nav--m-light__link--hover--Color: var(--cm-account-text);
+  --pf-v5-c-nav--m-light__link--focus--Color: var(--cm-account-text);
+  --pf-v5-c-nav--m-light__link--active--Color: var(--cm-account-text);
+  --pf-v5-c-nav--m-light__link--m-current--Color: var(--cm-account-text);
+  --pf-v5-c-nav--m-light__link--hover--BackgroundColor: var(
+    --cm-account-surface
+  );
+  --pf-v5-c-nav--m-light__link--focus--BackgroundColor: var(
+    --cm-account-surface
+  );
+  --pf-v5-c-nav--m-light__link--active--BackgroundColor: var(
+    --cm-account-selection
+  );
+  --pf-v5-c-nav--m-light__link--m-current--BackgroundColor: var(
+    --cm-account-selection
+  );
+  --pf-v5-c-nav--m-light__link--m-current--after--BorderColor: var(
+    --cm-account-focus
+  );
+  --pf-v5-c-nav--m-light__link--before--BorderColor: var(--cm-account-border);
 }
 
-.pf-v5-c-nav__link:hover {
-  @apply bg-slate-200! dark:bg-slate-800!;
+.cm-account .pf-v5-c-nav__link,
+.cm-account .pf-v5-c-nav__link:hover,
+.cm-account .pf-v5-c-nav__link:focus,
+.cm-account .pf-v5-c-nav__link.pf-m-current,
+.cm-account .pf-v5-c-nav__toggle {
+  color: var(--cm-account-text);
 }
 
-.pf-v5-c-nav__link:focus {
-  @apply bg-slate-200! dark:bg-slate-800!;
-}
-
-.pf-v5-c-nav__link.pf-m-current {
-  @apply bg-slate-300!;
-  @apply dark:bg-slate-700! dark:text-white;
-}
-
-.pf-v5-c-nav__link::after {
-  @apply border-blue-500!;
-}
-
-.pf-v5-c-nav__link::before {
-  @apply border-b border-slate-300! dark:border-slate-800!;
-}
-
-.pf-v5-c-nav__item.pf-m-expandable::before {
-  @apply border-b border-slate-300! dark:border-slate-800!;
+.cm-account .pf-v5-c-nav__list,
+.cm-account .pf-v5-c-nav__subnav {
+  margin: 0;
+  padding-inline: 0;
+  list-style: none;
 }
 
 /* Main layout */
-.pf-v5-c-page__main {
-  @apply mx-auto mt-8 h-fit w-fit rounded-2xl;
-  @apply border border-slate-300 bg-slate-200;
-  @apply p-6 dark:border-slate-800 dark:bg-slate-900;
+.cm-account .pf-v5-c-page__main {
+  min-width: 0;
+  background-color: var(--cm-account-canvas);
 }
 
-.pf-v5-c-page__main-section {
-  @apply bg-transparent!;
-  @apply lg:max-w-4xl;
+.cm-account .pf-v5-c-page__main-section {
+  --pf-v5-c-page__main-section--m-light--BackgroundColor: transparent;
+
+  min-width: 0;
+  background-color: transparent;
 }
 
-.pf-v5-c-title {
-  @apply dark:text-slate-100;
+.cm-account-page {
+  box-sizing: border-box;
+  width: min(64rem, calc(100% - 2rem));
+  margin: 2rem auto;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--cm-account-border);
+  border-radius: var(--radius-xl);
+  background-color: var(--cm-account-card);
+}
+
+.cm-account-page__header {
+  display: grid;
+  gap: 0.375rem;
+  margin-block-end: 2rem;
+}
+
+.cm-account-page__description,
+.cm-account-section__description {
+  color: var(--cm-account-text-muted);
+}
+
+.cm-account-page__body {
+  display: grid;
+  gap: 2rem;
+  min-width: 0;
+}
+
+.cm-account-section {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.cm-account-section__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cm-account-section__heading {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.cm-account-section__actions {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.cm-account-section__body {
+  min-width: 0;
+}
+
+.cm-account-application-name {
+  text-transform: capitalize;
+}
+
+.cm-account-application-details-divider {
+  margin-block: 1rem;
+}
+
+.cm-account-application-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cm-account-permission-request-icon {
+  font-size: 1.25rem;
+}
+
+.cm-identity-provider-icon {
+  font-size: 1.25rem;
+}
+
+.cm-alert {
+  white-space: pre-wrap;
+}
+
+.cm-account-empty-row .pf-v5-c-data-list__item-row {
+  align-items: center;
+}
+
+.cm-form-section__description {
+  margin-block-end: 1rem;
+  color: var(--cm-account-text-muted);
+}
+
+.cm-status-badge {
+  margin-inline-start: 0.5rem;
+}
+
+.cm-multi-input {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.cm-expiration--expired {
+  color: var(--cm-danger);
+}
+
+.cm-expiration__icon {
+  margin-inline-end: 0.25rem;
+}
+
+.cm-scroll-panel {
+  margin-block-start: 1.5rem;
+}
+
+.cm-account-list-toolbar {
+  margin-block-end: 1rem;
+}
+
+.cm-account-list-toolbar .pf-v5-c-toolbar__content {
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cm-account-search {
+  width: min(100%, 22rem);
+}
+
+.cm-account .cm-account-search {
+  overflow: hidden;
+  border: 1px solid var(--cm-account-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--cm-account-control);
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.cm-account .cm-account-search:focus-within {
+  border-color: var(--cm-account-focus);
+  outline: 2px solid var(--cm-account-focus);
+  outline-offset: 2px;
+}
+
+.cm-account .cm-account-search .pf-v5-c-input-group__item,
+.cm-account .cm-account-search .pf-v5-c-text-input-group {
+  width: 100%;
+}
+
+.cm-account .cm-account-search .pf-v5-c-text-input-group {
+  overflow: visible;
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+}
+
+.cm-account .cm-account-search .pf-v5-c-text-input-group:focus-within {
+  outline: none;
+}
+
+.cm-account .cm-account-search .pf-v5-c-input-group__item:not(.pf-m-fill) {
+  width: 2.5rem;
+  flex: 0 0 2.5rem;
+}
+
+.cm-account .cm-account-search .pf-v5-c-button.pf-m-control {
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+}
+
+.cm-account .cm-account-search .pf-v5-c-button.pf-m-control::after {
+  border: 0;
+}
+
+.cm-account .cm-account-search .pf-v5-c-button.pf-m-control:hover,
+.cm-account .cm-account-search .pf-v5-c-button.pf-m-control:focus-visible,
+.cm-account .cm-account-search .pf-v5-c-button.pf-m-control:active {
+  background-color: var(--cm-account-control-hover);
+}
+
+.cm-credential-method__header {
+  margin-block-end: 1rem;
+}
+
+.cm-credential-method__title {
+  margin-block-end: 0.375rem;
+}
+
+.cm-credential-list {
+  margin-block-end: 1.5rem;
+}
+
+.cm-credential-row {
+  align-items: center;
+}
+
+.cm-credential-icon {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.cm-credential-icon__frame {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+}
+
+.cm-credential-icon__frame img {
+  max-width: none;
+  max-height: 2.5rem;
+}
+
+.cm-credential-label {
+  width: min(100%, 18.75rem);
+}
+
+.cm-credential-provider {
+  margin-block-start: 0.125rem;
+  color: var(--cm-account-text-muted);
+  font-size: 0.875rem;
+}
+
+.cm-credential-details {
+  margin-block-end: 1rem;
+}
+
+@media (max-width: 40rem) {
+  .cm-account-page {
+    width: calc(100% - 1rem);
+    margin-block: 0.5rem 1rem;
+    padding: 1rem;
+  }
+
+  .cm-account-page__header {
+    margin-block-end: 1.5rem;
+  }
+
+  .cm-account-section__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .cm-account-section__actions {
+    justify-content: flex-start;
+  }
+}
+
+.cm-account .pf-v5-c-title {
+  color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-page__main a:not(.pf-v5-c-button) {
+  color: var(--cm-account-text);
+  text-decoration-line: underline;
+  text-decoration-color: var(--cm-account-border-strong);
+  text-underline-offset: 0.2em;
+}
+
+.cm-account .pf-v5-c-page__main a:not(.pf-v5-c-button):hover {
+  text-decoration-color: currentcolor;
+}
+
+.cm-account .pf-v5-c-page__main a:not(.pf-v5-c-button):focus-visible {
+  border-radius: var(--radius-sm);
+  outline: 2px solid var(--cm-account-focus);
+  outline-offset: 2px;
 }
 
 /* Forms */
-.pf-v5-c-form__label-text {
-  @apply dark:text-slate-200;
+.cm-account .pf-v5-c-form,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-form {
+  color: var(--cm-account-text);
 }
 
-.pf-v5-c-form__label-required {
-  @apply text-red-500!;
+.cm-account .pf-v5-c-form__group,
+.cm-account .pf-v5-c-form__group-control,
+.cm-account .pf-v5-c-input-group,
+.cm-account .pf-v5-c-input-group__item,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-form__group,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-form__group-control,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-input-group,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-input-group__item {
+  min-width: 0;
 }
 
-.pf-v5-c-form-control {
-  @apply rounded-md border;
-  @apply border-slate-400 bg-slate-300!;
-  @apply dark:border-slate-700 dark:bg-slate-800! dark:text-slate-100;
+.cm-account .pf-v5-c-form__label-text,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-form__label-text {
+  color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-form__label-required,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-form__label-required {
+  color: var(--cm-danger);
+}
+
+.cm-account .pf-v5-c-form__helper-text,
+.cm-account .pf-v5-c-helper-text__item,
+.cm-account .pf-v5-c-form__group-label-help,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-form__helper-text,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-helper-text__item,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-form__group-label-help {
+  color: var(--cm-account-text-muted);
+}
+
+.cm-account .pf-v5-c-helper-text__item.pf-m-error,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-helper-text__item.pf-m-error {
+  color: var(--cm-danger);
+}
+
+.cm-account .pf-v5-c-form-control,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-form-control {
+  --pf-v5-c-form-control--BackgroundColor: var(--cm-account-control);
+  --pf-v5-c-form-control--Color: var(--cm-account-text);
+  --pf-v5-c-form-control--before--BorderTopColor: var(
+    --cm-account-border-strong
+  );
+  --pf-v5-c-form-control--before--BorderRightColor: var(
+    --cm-account-border-strong
+  );
+  --pf-v5-c-form-control--before--BorderBottomColor: var(
+    --cm-account-border-strong
+  );
+  --pf-v5-c-form-control--before--BorderLeftColor: var(
+    --cm-account-border-strong
+  );
+  --pf-v5-c-form-control--before--BorderTopWidth: 1px;
+  --pf-v5-c-form-control--before--BorderRightWidth: 1px;
+  --pf-v5-c-form-control--before--BorderBottomWidth: 1px;
+  --pf-v5-c-form-control--before--BorderLeftWidth: 1px;
+  --pf-v5-c-form-control--after--BorderBottomWidth: 0;
+  --pf-v5-c-form-control--hover--after--BorderBottomColor: transparent;
+  --pf-v5-c-form-control--focus--after--BorderBottomColor: transparent;
+  --pf-v5-c-form-control--focus--after--BorderBottomWidth: 0;
+  --pf-v5-c-form-control--m-expanded--after--BorderBottomColor: transparent;
+  --pf-v5-c-form-control--m-expanded--after--BorderBottomWidth: 0;
+  --pf-v5-c-form-control--m-disabled--BackgroundColor: color-mix(
+    in srgb,
+    var(--cm-account-control) 40%,
+    transparent
+  );
+  --pf-v5-c-form-control--m-disabled--Color: var(--cm-account-text-muted);
+
+  border-radius: var(--radius-md);
   box-shadow: none;
   background-image: none;
 }
 
-.pf-v5-c-form-control:disabled,
-.pf-v5-c-form-control.pf-m-disabled {
-  @apply bg-slate-300/40! text-black/40 dark:border-slate-400/40!;
-  @apply dark:border-slate-700/40! dark:bg-slate-800/40! dark:text-slate-400;
+.cm-account .pf-v5-c-page .pf-v5-c-form-control,
+.cm-account .pf-v5-c-page .pf-v5-c-form-control::before,
+.cm-account .pf-v5-c-page .pf-v5-c-form-control::after,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-form-control,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-form-control::before,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-form-control::after {
+  border-radius: var(--radius-md);
+}
+
+.cm-account .pf-v5-c-page .pf-v5-c-form-control::after,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-form-control::after {
+  border: 0;
+}
+
+.cm-account .pf-v5-c-page .pf-v5-c-form-control:focus-within,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-form-control:focus-within {
+  outline: 2px solid var(--cm-account-focus);
+  outline-offset: 2px;
+}
+
+.cm-account
+  .pf-v5-c-page
+  .pf-v5-c-form-control
+  > :is(input, select, textarea):focus,
+.cm-account-theme
+  .pf-v5-c-modal-box
+  .pf-v5-c-form-control
+  > :is(input, select, textarea):focus {
+  outline: none;
+}
+
+.cm-account .pf-v5-c-form-control:disabled,
+.cm-account .pf-v5-c-form-control.pf-m-disabled,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-form-control:disabled,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-form-control.pf-m-disabled {
   opacity: 0.7;
 }
 
-.pf-v5-c-form-control::before,
-.pf-v5-c-form-control::after {
-  @apply border-none!;
+.cm-account .pf-v5-c-menu-toggle,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-menu-toggle {
+  --pf-v5-c-menu-toggle--BackgroundColor: var(--cm-account-control);
+  --pf-v5-c-menu-toggle--Color: var(--cm-account-text);
+  --pf-v5-c-menu-toggle--BorderRadius: var(--radius-md);
+  --pf-v5-c-menu-toggle--hover--BackgroundColor: var(
+    --cm-account-control-hover
+  );
+  --pf-v5-c-menu-toggle--focus--BackgroundColor: var(
+    --cm-account-control-hover
+  );
+  --pf-v5-c-menu-toggle--active--BackgroundColor: var(
+    --cm-account-control-hover
+  );
+  --pf-v5-c-menu-toggle--m-expanded--BackgroundColor: var(
+    --cm-account-control-hover
+  );
+  --pf-v5-c-menu-toggle--disabled--BackgroundColor: color-mix(
+    in srgb,
+    var(--cm-account-control) 40%,
+    transparent
+  );
+  --pf-v5-c-menu-toggle--disabled--Color: var(--cm-account-text-muted);
+  --pf-v5-c-menu-toggle--before--BorderTopColor: var(
+    --cm-account-border-strong
+  );
+  --pf-v5-c-menu-toggle--before--BorderRightColor: var(
+    --cm-account-border-strong
+  );
+  --pf-v5-c-menu-toggle--before--BorderBottomColor: var(
+    --cm-account-border-strong
+  );
+  --pf-v5-c-menu-toggle--before--BorderLeftColor: var(
+    --cm-account-border-strong
+  );
+  --pf-v5-c-menu-toggle--before--BorderTopWidth: 1px;
+  --pf-v5-c-menu-toggle--before--BorderRightWidth: 1px;
+  --pf-v5-c-menu-toggle--before--BorderBottomWidth: 1px;
+  --pf-v5-c-menu-toggle--before--BorderLeftWidth: 1px;
+  --pf-v5-c-menu-toggle--after--BorderBottomWidth: 0;
+  --pf-v5-c-menu-toggle--hover--after--BorderBottomWidth: 0;
+  --pf-v5-c-menu-toggle--focus--after--BorderBottomWidth: 0;
+  --pf-v5-c-menu-toggle--active--after--BorderBottomWidth: 0;
+  --pf-v5-c-menu-toggle--m-expanded--after--BorderBottomWidth: 0;
+
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
 }
 
-.pf-v5-c-menu-toggle {
-  @apply rounded-md! border!;
-  @apply border-slate-400! bg-slate-300! text-black!;
-  @apply dark:border-slate-700! dark:bg-slate-800! dark:text-slate-100!;
-  @apply max-w-md! duration-150;
+.cm-account .pf-v5-c-page .pf-v5-c-menu-toggle,
+.cm-account .pf-v5-c-page .pf-v5-c-menu-toggle::before,
+.cm-account .pf-v5-c-page .pf-v5-c-menu-toggle::after,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-menu-toggle,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-menu-toggle::before,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-menu-toggle::after {
+  border-radius: var(--radius-md);
 }
 
-.pf-v5-c-menu-toggle:disabled,
-.pf-v5-c-menu-toggle.pf-m-disabled {
-  @apply border-slate-400/40! bg-slate-300/40! text-black/40;
-  @apply dark:border-slate-700/40! dark:bg-slate-800/40! dark:text-slate-400;
+.cm-account .pf-v5-c-page .pf-v5-c-menu-toggle::after,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-menu-toggle::after {
+  border: 0;
 }
 
-.pf-v5-c-menu-toggle:hover {
-  @apply border-slate-500! bg-slate-400!;
-  @apply dark:border-slate-600! dark:bg-slate-700!;
+.cm-account .pf-v5-c-page .pf-v5-c-menu-toggle:focus-within,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-menu-toggle:focus-within {
+  outline: 2px solid var(--cm-account-focus);
+  outline-offset: 2px;
 }
 
-.pf-v5-c-menu-toggle::after,
-.pf-v5-c-menu-toggle::before {
-  @apply border-none!;
+.cm-account .pf-v5-c-menu-toggle.pf-m-typeahead > .pf-v5-c-text-input-group,
+.cm-account-theme
+  .pf-v5-c-modal-box
+  .pf-v5-c-menu-toggle.pf-m-typeahead
+  > .pf-v5-c-text-input-group {
+  overflow: visible;
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
 }
 
-.pf-v5-c-menu {
-  @apply mt-1 rounded-lg bg-slate-300!;
-  @apply dark:bg-slate-800!;
-  @apply max-h-48 overflow-y-scroll;
+.cm-account
+  .pf-v5-c-menu-toggle.pf-m-typeahead
+  > .pf-v5-c-text-input-group:focus-within,
+.cm-account-theme
+  .pf-v5-c-modal-box
+  .pf-v5-c-menu-toggle.pf-m-typeahead
+  > .pf-v5-c-text-input-group:focus-within {
+  outline: none;
 }
 
-.pf-v5-c-menu__item:focus,
-.pf-v5-c-menu__list-item.pf-m-focus {
-  @apply bg-slate-400/40!;
-  @apply dark:bg-slate-700/40!;
+.cm-account .pf-v5-c-menu,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-menu {
+  --pf-v5-c-menu--BackgroundColor: var(--cm-account-control);
+
+  overflow: hidden;
+  border: 1px solid var(--cm-account-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 32px
+    color-mix(in srgb, var(--color-slate-950) 20%, transparent);
+  margin-block-start: 0.25rem;
 }
 
-.pf-v5-c-menu__item:hover {
-  @apply bg-slate-200!;
-  @apply dark:bg-slate-700!;
+/*
+ * Select menus can contain many locales. Keep those bounded, but do not put
+ * scroll containers around short menus such as the account/sign-out menu.
+ */
+.cm-locale-menu .pf-v5-c-menu__content {
+  overscroll-behavior: contain;
+  scrollbar-color: var(--cm-account-border-strong) transparent;
+  scrollbar-width: thin;
 }
 
-.pf-v5-c-form__actions {
-  @apply flex justify-end;
+.cm-locale-menu .pf-v5-c-menu__content::-webkit-scrollbar {
+  width: 8px;
 }
 
-.pf-v5-c-expandable-section__content {
-  @apply flex justify-center;
+.cm-locale-menu .pf-v5-c-menu__content::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.pf-v5-c-data-list__item-row {
-  @apply w-full! p-0!;
+.cm-locale-menu .pf-v5-c-menu__content::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: var(--cm-account-border-strong);
+  background-clip: padding-box;
 }
 
-.pf-v5-u-float-right {
-  @apply ml-auto justify-self-end;
+.cm-account .pf-v5-c-menu__list,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-menu__list {
+  margin: 0;
+  padding-inline: 0;
+  list-style: none;
+}
+
+.cm-account .pf-v5-c-menu__item,
+.cm-account .pf-v5-c-menu__item-text,
+.cm-account .pf-v5-c-menu__item-icon,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-menu__item,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-menu__item-text,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-menu__item-icon {
+  color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-menu__item:focus,
+.cm-account .pf-v5-c-menu__list-item.pf-m-focus,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-menu__item:focus,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-menu__list-item.pf-m-focus {
+  background-color: color-mix(
+    in srgb,
+    var(--cm-account-control-hover) 40%,
+    transparent
+  );
+}
+
+.cm-account .pf-v5-c-menu__item:hover,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-menu__item:hover {
+  background-color: var(--cm-account-control-hover);
+}
+
+.cm-account .pf-v5-c-text-input-group,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-text-input-group {
+  --pf-v5-c-text-input-group--BackgroundColor: var(--cm-account-control);
+  --pf-v5-c-text-input-group--Color: var(--cm-account-text);
+  --pf-v5-c-text-input-group__text-input--BackgroundColor: transparent;
+  --pf-v5-c-text-input-group__text-input--placeholder--Color: var(
+    --cm-account-text-muted
+  );
+  --pf-v5-c-text-input-group__text--before--BorderColor: var(
+    --cm-account-border-strong
+  );
+  --pf-v5-c-text-input-group__text--after--BorderBottomColor: transparent;
+  --pf-v5-c-text-input-group--hover__text--after--BorderBottomColor: transparent;
+  --pf-v5-c-text-input-group__text--focus-within--after--BorderBottomColor: transparent;
+
+  min-width: min(100%, 20rem);
+  overflow: hidden;
+  border: 1px solid var(--cm-account-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--cm-account-control);
+  color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-text-input-group::before,
+.cm-account .pf-v5-c-text-input-group::after,
+.cm-account .pf-v5-c-text-input-group__text::before,
+.cm-account .pf-v5-c-text-input-group__text::after,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-text-input-group::before,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-text-input-group::after,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-text-input-group__text::before,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-text-input-group__text::after {
+  border: 0;
+}
+
+.cm-account .pf-v5-c-text-input-group:focus-within,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-text-input-group:focus-within {
+  outline: 2px solid var(--cm-account-focus);
+  outline-offset: 2px;
+}
+
+.cm-account .pf-v5-c-text-input-group__text-input,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-text-input-group__text-input {
+  min-width: 0;
+  outline: none;
+  color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.cm-account .pf-v5-c-expandable-section__content {
+  margin-block-start: 1rem;
+  color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-expandable-section__toggle-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.cm-account .pf-v5-c-data-list__item-row {
+  width: 100%;
 }
 
 /* Buttons */
-.pf-v5-c-button {
-  @apply inline-flex! items-center gap-2 rounded-md!;
+.cm-account .pf-v5-c-button,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-button {
+  --pf-v5-c-button--BorderRadius: var(--radius-md);
+  --pf-v5-c-button--after--BorderRadius: var(--radius-md);
+  --pf-v5-c-button--m-primary--BackgroundColor: var(--cm-account-action);
+  --pf-v5-c-button--m-primary--Color: var(--cm-account-action-text);
+  --pf-v5-c-button--m-primary--hover--BackgroundColor: var(
+    --cm-account-action-hover
+  );
+  --pf-v5-c-button--m-primary--focus--BackgroundColor: var(
+    --cm-account-action-hover
+  );
+  --pf-v5-c-button--m-primary--active--BackgroundColor: var(
+    --cm-account-action-hover
+  );
+  --pf-v5-c-button--m-primary--hover--Color: var(--cm-account-action-text);
+  --pf-v5-c-button--m-primary--focus--Color: var(--cm-account-action-text);
+  --pf-v5-c-button--m-primary--active--Color: var(--cm-account-action-text);
+  --pf-v5-c-button--m-secondary--Color: var(--cm-account-text);
+  --pf-v5-c-button--m-secondary--after--BorderColor: var(--cm-account-action);
+  --pf-v5-c-button--m-secondary--BackgroundColor: transparent;
+  --pf-v5-c-button--m-secondary--hover--BackgroundColor: var(
+    --cm-account-control-hover
+  );
+  --pf-v5-c-button--m-tertiary--Color: var(--cm-account-text);
+  --pf-v5-c-button--m-tertiary--BackgroundColor: var(--cm-account-control);
+  --pf-v5-c-button--m-tertiary--hover--BackgroundColor: var(
+    --cm-account-control-hover
+  );
+  --pf-v5-c-button--m-danger--BackgroundColor: var(--cm-danger);
+  --pf-v5-c-button--m-danger--Color: var(--color-white);
+  --pf-v5-c-button--m-danger--hover--BackgroundColor: color-mix(
+    in srgb,
+    var(--cm-danger) 85%,
+    var(--color-slate-950)
+  );
+  --pf-v5-c-button--m-link--Color: var(--cm-account-text);
+  --pf-v5-c-button--m-link--hover--Color: var(--cm-account-text);
+  --pf-v5-c-button--m-control--BackgroundColor: var(--cm-account-control);
+  --pf-v5-c-button--m-control--Color: var(--cm-account-text);
+  --pf-v5-c-button--m-control--after--BorderColor: var(
+    --cm-account-border-strong
+  );
+  --pf-v5-c-button--m-control--hover--BackgroundColor: var(
+    --cm-account-control-hover
+  );
+  --pf-v5-c-button--m-control--hover--Color: var(--cm-account-text);
+  --pf-v5-c-button--m-control--focus--BackgroundColor: var(
+    --cm-account-control-hover
+  );
+  --pf-v5-c-button--m-control--focus--Color: var(--cm-account-text);
+  --pf-v5-c-button--m-control--active--BackgroundColor: var(
+    --cm-account-control-hover
+  );
+  --pf-v5-c-button--m-control--active--Color: var(--cm-account-text);
+  --pf-v5-c-button--m-control--m-expanded--BackgroundColor: var(
+    --cm-account-control-hover
+  );
+  --pf-v5-c-button--m-control--m-expanded--Color: var(--cm-account-text);
+  --pf-v5-c-button--disabled--BackgroundColor: var(--cm-account-text-muted);
+  --pf-v5-c-button--disabled--Color: var(--cm-account-surface);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease;
 }
 
-.pf-v5-c-button.pf-m-primary {
-  @apply bg-slate-950! text-white!;
-  @apply hover:bg-slate-900!;
-  @apply duration-150;
-  @apply dark:bg-white! dark:text-black!;
-  @apply hover:dark:bg-slate-300!;
-
-  @apply disabled:dark:bg-slate-500!;
+.cm-account .pf-v5-c-button::after,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-button::after {
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
 }
 
-.pf-v5-c-button.pf-m-secondary::after {
-  @apply border-none!;
+.cm-account .pf-v5-c-button:focus-visible,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-button:focus-visible {
+  outline: 2px solid var(--cm-account-focus);
+  outline-offset: 2px;
 }
 
-.pf-v5-c-button.pf-m-secondary,
-.pf-v5-c-button.pf-m-link {
-  @apply border! no-underline!;
-  @apply border-slate-950! text-slate-950!;
-  @apply dark:border-white! dark:text-white!;
+.cm-account .pf-v5-c-button.pf-m-secondary,
+.cm-account .pf-v5-c-button.pf-m-link,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-button.pf-m-secondary,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-button.pf-m-link {
+  text-decoration: none;
 }
 
-.pf-v5-l-split__item {
-  @apply flex gap-2;
+/* Content toolbars */
+.cm-account .pf-v5-c-page__main .pf-v5-c-toolbar {
+  --pf-v5-c-toolbar--BackgroundColor: transparent;
+
+  width: 100%;
+  background-color: transparent;
+  color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-page__main .pf-v5-c-toolbar__content {
+  padding-inline: 0;
+}
+
+.cm-account .pf-v5-c-page__main .pf-v5-c-toolbar__group,
+.cm-account .pf-v5-c-page__main .pf-v5-c-toolbar__item {
+  min-width: 0;
+}
+
+.cm-account
+  .pf-v5-c-page__main
+  .pf-v5-c-toolbar__item:has(.pf-v5-c-text-input-group) {
+  flex: 1 1 16rem;
+  max-width: 24rem;
+}
+
+.cm-account .pf-v5-c-divider {
+  border-color: var(--cm-account-border);
+}
+
+.cm-account .pf-v5-c-pagination {
+  --pf-v5-c-pagination--m-bottom--BackgroundColor: transparent;
+  --pf-v5-c-pagination--m-sticky--BackgroundColor: var(--cm-account-card);
+
+  color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-pagination__total-items,
+.cm-account .pf-v5-c-pagination__nav-page-select {
+  color: var(--cm-account-text-muted);
 }
 
 /* Alerts */
-.pf-v5-c-alert {
-  @apply rounded-md border;
-  @apply border-slate-400! bg-slate-300!;
-  @apply dark:border-slate-700! dark:bg-slate-800!;
-  @apply max-w-md;
+.cm-account .pf-v5-c-alert {
+  --pf-v5-c-alert--BackgroundColor: var(--cm-account-control);
+  --pf-v5-c-alert--BoxShadow: 0 0 0 1px var(--cm-account-border-strong);
+
+  border-radius: var(--radius-md);
 }
 
 /* Data */
-.pf-v5-c-data-list {
-  @apply border-t;
-  @apply border-slate-400!;
-  @apply dark:border-slate-700!;
+.cm-account .pf-v5-c-data-list {
+  --pf-v5-c-data-list--BorderTopWidth: 0;
+  --pf-v5-c-data-list--BorderTopColor: var(--cm-account-border-strong);
+
+  margin-inline: 0;
+  padding-inline: 0;
+  overflow: visible;
+  border: 1px solid var(--cm-account-border-strong);
+  border-radius: var(--radius-lg);
+  background-color: var(--cm-account-control);
+  list-style: none;
 }
 
-.pf-v5-c-data-list__item {
-  @apply border-none!;
-  @apply bg-slate-300!;
-  @apply dark:bg-slate-900!;
+.cm-account .pf-v5-c-data-list__cell,
+.cm-account .pf-v5-c-data-list__action,
+.cm-account .pf-v5-c-data-list__expand {
+  color: var(--cm-account-text);
 }
 
-.pf-v5-c-data-list__item-row {
-  @apply border-b;
-  @apply border-slate-400!;
-  @apply dark:border-slate-700!;
+.cm-account .pf-v5-c-data-list__item {
+  --pf-v5-c-data-list__item--BackgroundColor: var(--cm-account-control);
+  --pf-v5-c-data-list__item--BorderBottomColor: var(--cm-account-border-strong);
+  --pf-v5-c-data-list__item--BorderBottomWidth: 0;
+
+  background-color: var(--cm-account-control);
+}
+
+.cm-account .pf-v5-c-data-list__item-row {
+  border-bottom: 1px solid var(--cm-account-border-strong);
+}
+
+.cm-account .pf-v5-c-data-list__item:last-child .pf-v5-c-data-list__item-row {
+  border-bottom: 0;
+}
+
+.cm-account .pf-v5-c-data-list > .pf-v5-c-data-list__item:first-child {
+  border-start-start-radius: calc(var(--radius-lg) - 1px);
+  border-start-end-radius: calc(var(--radius-lg) - 1px);
+}
+
+.cm-account .pf-v5-c-data-list > .pf-v5-c-data-list__item:last-child {
+  border-end-start-radius: calc(var(--radius-lg) - 1px);
+  border-end-end-radius: calc(var(--radius-lg) - 1px);
+}
+
+.cm-account
+  .pf-v5-c-data-list
+  > .pf-v5-c-data-list__item:first-child
+  > .pf-v5-c-data-list__item-row {
+  border-start-start-radius: calc(var(--radius-lg) - 1px);
+  border-start-end-radius: calc(var(--radius-lg) - 1px);
+}
+
+.cm-account
+  .pf-v5-c-data-list
+  > .pf-v5-c-data-list__item:last-child
+  > .pf-v5-c-data-list__item-row {
+  border-end-start-radius: calc(var(--radius-lg) - 1px);
+  border-end-end-radius: calc(var(--radius-lg) - 1px);
+}
+
+.cm-account .pf-v5-c-data-list__expandable-content {
+  border-block-start: 1px solid var(--cm-account-border);
+  background-color: var(--cm-account-surface);
+  color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-data-list__item-control {
+  align-items: center;
+}
+
+/* Tabs */
+.cm-account .pf-v5-c-tabs {
+  --pf-v5-c-tabs--before--BorderColor: var(--cm-account-border-strong);
+  --pf-v5-c-tabs__link--Color: var(--cm-account-text-muted);
+  --pf-v5-c-tabs__link--hover--Color: var(--cm-account-text);
+  --pf-v5-c-tabs__item--m-current__link--Color: var(--cm-account-text);
+  --pf-v5-c-tabs__item--m-current__link--after--BorderColor: var(
+    --cm-account-focus
+  );
+}
+
+.cm-account .pf-v5-c-tabs__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Tables and descriptions */
+.cm-account .pf-v5-c-table,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-table {
+  --pf-v5-c-table--BackgroundColor: var(--cm-account-control);
+  --pf-v5-c-table--BorderColor: var(--cm-account-border-strong);
+  --pf-v5-c-table--cell--Color: var(--cm-account-text);
+
+  overflow: visible;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--cm-account-border-strong);
+  border-radius: var(--radius-lg);
+}
+
+.cm-account .pf-v5-c-table thead,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-table thead {
+  background-color: transparent;
+}
+
+.cm-account .pf-v5-c-table > thead > tr > *,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-table > thead > tr > * {
+  background-color: var(--cm-account-surface);
+}
+
+.cm-account .pf-v5-c-table th,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-table th {
+  color: var(--cm-account-text-muted);
+}
+
+.cm-account .pf-v5-c-table tr,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-table tr {
+  border: 0;
+  border-color: var(--cm-account-border-strong);
+}
+
+.cm-account .pf-v5-c-table > thead > tr > *,
+.cm-account
+  .pf-v5-c-table
+  > tbody
+  > tr:not([hidden]):has(~ tr:not([hidden]))
+  > *,
+.cm-account
+  .pf-v5-c-table
+  > tbody:not(:last-of-type)
+  > tr:not([hidden]):not(:has(~ tr:not([hidden])))
+  > *,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-table > thead > tr > *,
+.cm-account-theme
+  .pf-v5-c-modal-box
+  .pf-v5-c-table
+  > tbody
+  > tr:not([hidden]):has(~ tr:not([hidden]))
+  > *,
+.cm-account-theme
+  .pf-v5-c-modal-box
+  .pf-v5-c-table
+  > tbody:not(:last-of-type)
+  > tr:not([hidden]):not(:has(~ tr:not([hidden])))
+  > * {
+  border-bottom: 1px solid var(--cm-account-border-strong);
+}
+
+.cm-account .pf-v5-c-table tbody tr:hover,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-table tbody tr:hover {
+  background-color: transparent;
+}
+
+.cm-account .pf-v5-c-table tbody tr:hover > *,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-table tbody tr:hover > * {
+  background-color: color-mix(
+    in srgb,
+    var(--cm-account-control-hover) 40%,
+    transparent
+  );
+}
+
+.cm-account .pf-v5-c-table > thead:first-child > tr:first-child > :first-child,
+.cm-account-theme
+  .pf-v5-c-modal-box
+  .pf-v5-c-table
+  > thead:first-child
+  > tr:first-child
+  > :first-child {
+  border-start-start-radius: calc(var(--radius-lg) - 1px);
+}
+
+.cm-account .pf-v5-c-table > thead:first-child > tr:first-child > :last-child,
+.cm-account-theme
+  .pf-v5-c-modal-box
+  .pf-v5-c-table
+  > thead:first-child
+  > tr:first-child
+  > :last-child {
+  border-start-end-radius: calc(var(--radius-lg) - 1px);
+}
+
+.cm-account
+  .pf-v5-c-table
+  > tbody:last-of-type
+  > tr:not([hidden]):not(:has(~ tr:not([hidden])))
+  > :first-child,
+.cm-account-theme
+  .pf-v5-c-modal-box
+  .pf-v5-c-table
+  > tbody:last-of-type
+  > tr:not([hidden]):not(:has(~ tr:not([hidden])))
+  > :first-child {
+  border-end-start-radius: calc(var(--radius-lg) - 1px);
+}
+
+.cm-account
+  .pf-v5-c-table
+  > tbody:last-of-type
+  > tr:not([hidden]):not(:has(~ tr:not([hidden])))
+  > :last-child,
+.cm-account-theme
+  .pf-v5-c-modal-box
+  .pf-v5-c-table
+  > tbody:last-of-type
+  > tr:not([hidden]):not(:has(~ tr:not([hidden])))
+  > :last-child {
+  border-end-end-radius: calc(var(--radius-lg) - 1px);
+}
+
+.cm-account .pf-v5-c-description-list__term,
+.cm-account .pf-v5-c-description-list__description,
+.cm-account .pf-v5-c-content {
+  color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-description-list__term {
+  color: var(--cm-account-text-muted);
+}
+
+/* Cards and empty states emitted by shared Keycloak components */
+.cm-account .pf-v5-c-card {
+  --pf-v5-c-card--BackgroundColor: var(--cm-account-control);
+  --pf-v5-c-card--BorderColor: var(--cm-account-border-strong);
+  --pf-v5-c-card--BoxShadow: none;
+  --pf-v5-c-card--m-flat--BorderColor: var(--cm-account-border-strong);
+
+  border-radius: var(--radius-lg);
+  color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-empty-state {
+  color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-empty-state__icon,
+.cm-account .pf-v5-c-empty-state__body {
+  color: var(--cm-account-text-muted);
+}
+
+.cm-account .pf-v5-c-empty-state__footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Compact status and selection components */
+.cm-account .pf-v5-c-check {
+  --pf-v5-c-check__label--Color: var(--cm-account-text);
+  --pf-v5-c-check__description--Color: var(--cm-account-text-muted);
+  --pf-v5-c-check__label--disabled--Color: var(--cm-account-text-muted);
+  --pf-v5-c-check__label-required--Color: var(--cm-danger);
+}
+
+.cm-account .pf-v5-c-check__input {
+  accent-color: var(--cm-account-action);
+}
+
+.cm-account .pf-v5-c-badge,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-badge {
+  --pf-v5-c-badge--BackgroundColor: var(--cm-account-surface);
+  --pf-v5-c-badge--Color: var(--cm-account-text);
+  --pf-v5-c-badge--m-read--BackgroundColor: var(--cm-account-surface);
+  --pf-v5-c-badge--m-read--Color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-label,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-label {
+  --pf-v5-c-label--BackgroundColor: var(--cm-account-surface);
+  --pf-v5-c-label--Color: var(--cm-account-text);
+  --pf-v5-c-label--BorderRadius: var(--radius-md);
+}
+
+.cm-account .pf-v5-c-chip,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-chip {
+  --pf-v5-c-chip--BackgroundColor: var(--cm-account-control);
+  --pf-v5-c-chip--before--BorderColor: var(--cm-account-border-strong);
+  --pf-v5-c-chip--BorderRadius: var(--radius-md);
+  --pf-v5-c-chip--before--BorderRadius: var(--radius-md);
+  --pf-v5-c-chip__text--Color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-chip-group__list,
+.cm-account-theme .pf-v5-c-modal-box .pf-v5-c-chip-group__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cm-account .pf-v5-c-switch {
+  color: var(--cm-account-text);
+}
+
+.cm-account .pf-v5-c-switch__toggle {
+  border-color: var(--cm-account-border-strong);
+  background-color: var(--cm-account-control);
+}
+
+.cm-account .pf-v5-c-switch__input:checked ~ .pf-v5-c-switch__toggle {
+  background-color: var(--cm-account-action);
+}
+
+.cm-account :is(.pf-v5-c-check__input, .pf-v5-c-radio__input):focus-visible {
+  outline: 2px solid var(--cm-account-focus);
+  outline-offset: 2px;
+}
+
+/* Dialogs */
+.cm-account-theme .pf-v5-c-backdrop {
+  --pf-v5-c-backdrop--BackgroundColor: color-mix(
+    in srgb,
+    var(--color-slate-950) 70%,
+    transparent
+  );
+}
+
+.cm-account-theme .pf-v5-c-modal-box {
+  --pf-v5-c-modal-box--BackgroundColor: var(--cm-account-card);
+  --pf-v5-c-modal-box--BoxShadow: 0 24px 60px
+    color-mix(in srgb, var(--color-slate-950) 35%, transparent);
+
+  border: 1px solid var(--cm-account-border);
+  border-radius: var(--radius-xl);
+  color: var(--cm-account-text);
 }
