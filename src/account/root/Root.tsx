@@ -24,7 +24,7 @@ import { usePromise } from "../utils/usePromise";
 import { Header } from "./Header";
 import type { MenuItem } from "./PageNav";
 import { PageNav } from "./PageNav";
-import { routes } from "../routes";
+import { ContentRoute, routes } from "../routes";
 
 function mapRoutes(
   context: KeycloakContext<Environment>,
@@ -38,6 +38,13 @@ function mapRoutes(
 
       // Do not add route disabled via feature flags
       if (item.isVisible && !context.environment.features[item.isVisible]) {
+        return null;
+      }
+
+      // Custom content is rendered by ContentRoute. Adding an exact route for
+      // every custom item here would shadow the generic content/:componentId
+      // route with an element that cannot be resolved from the built-in routes.
+      if (item.modulePath) {
         return null;
       }
 
@@ -61,7 +68,7 @@ function CatchAllRedirect() {
     addAlert(t("pageNotFound"), AlertVariant.warning);
   }, [addAlert, t]);
 
-  return <Navigate to="." replace />;
+  return <Navigate to=".." replace />;
 }
 
 export const Root = () => {
@@ -86,6 +93,7 @@ export const Root = () => {
           errorElement: <ErrorPage />,
           children: [
             ...mapRoutes(context, content),
+            ContentRoute,
             { path: "*", element: <CatchAllRedirect /> },
           ],
         },

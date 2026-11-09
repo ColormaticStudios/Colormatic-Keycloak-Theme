@@ -13,6 +13,21 @@
 
 <Story name="Default" />
 
+<Story
+  name="WithPasskeyConditionalUI"
+  args={{
+    ...args,
+    kcContext: {
+      enableWebAuthnConditionalUI: true,
+      isUserIdentified: "false",
+      challenge: "P9OnaFRxQv-PJxt9CUPwbg",
+      userVerification: "preferred",
+      rpId: "localhost",
+      createTimeout: 0,
+    },
+  }}
+/>
+
 <!--
   Keycloak shows this control when another authenticator, such as a passkey,
   is available alongside the regular combined username/password form.

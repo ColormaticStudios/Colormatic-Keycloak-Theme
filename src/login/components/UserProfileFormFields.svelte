@@ -30,7 +30,6 @@
     return () => unsubscribe();
   });
 
-  const groupNameRef = { current: "" };
   const formFieldStates = derived(
     formState,
     ($formState) => $formState.formFieldStates,
@@ -38,13 +37,31 @@
   const displayableErrors = derived(formFieldStates, ($formFieldStates) =>
     $formFieldStates.map((f) => f.displayableErrors),
   );
+  const groupStartFlags = $derived.by(() => {
+    const flags: boolean[] = [];
+    let currentGroupName = "";
+
+    for (const { attribute } of $formFieldStates) {
+      const groupName = attribute.group?.name ?? "";
+
+      if (groupName !== currentGroupName) {
+        currentGroupName = groupName;
+        flags.push(groupName !== "");
+        continue;
+      }
+
+      flags.push(false);
+    }
+
+    return flags;
+  });
 </script>
 
 {#each $formFieldStates as formFieldState, i (i)}
   {@const { attribute, valueOrValues } = formFieldState}
   {@const helperTextBefore = attribute.annotations.inputHelperTextBefore}
   {@const helperTextAfter = attribute.annotations.inputHelperTextAfter}
-  <GroupLabel {attribute} {groupNameRef} i18n={props.i18n} />
+  <GroupLabel {attribute} isGroupStart={groupStartFlags[i]} i18n={props.i18n} />
   {#if props.beforeField}
     {@render props.beforeField({
       attribute,

@@ -36,13 +36,13 @@
       return valueOrValues;
     })(),
   );
-  const html5DataAnnotations = {
+  const html5DataAnnotations = $derived({
     ...Object.fromEntries(
-      Object.entries(getAttribute().group?.html5DataAnnotations ?? {}).map(
+      Object.entries(getAttribute().html5DataAnnotations ?? {}).map(
         ([key, value]) => [`data-${key}`, value],
       ),
     ),
-  };
+  });
   const InputComponent = $derived(withinInputGroup ? InputGroup.Input : Input);
 </script>
 
@@ -75,7 +75,7 @@
   min={attribute.annotations.inputTypeMin}
   step={attribute.annotations.inputTypeStep}
   {...html5DataAnnotations}
-  onchange={(event) =>
+  oninput={(event) =>
     dispatchFormAction("formAction", {
       action: "update",
       name: attribute.name,

@@ -14,7 +14,7 @@ merge step is required.
 
 ## Compatibility
 
-The maintained account-console baseline is Keycloak 26.7 or newer. Older
+The maintained account-console baseline is Keycloak 26.8.2 or newer. Older
 Keycloak artifacts are deliberately not generated. Review upstream account UI
 changes before each Keycloak major upgrade, especially API endpoints, injected
 feature flags, translations, and PatternFly versions.
@@ -76,7 +76,7 @@ bun run build
 ```
 
 The JAR is written to `dist_keycloak/` as
-`colormatic-keycloak-theme-kc-26.7-and-newer.jar`.
+`colormatic-keycloak-theme-kc-26.8-and-newer.jar`.
 
 ## Verification
 

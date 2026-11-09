@@ -12,12 +12,7 @@
 <div id="kc-form-options" class="kcFormOptionsClass">
   <div class="kcFormOptionsWrapperClass">
     <div class="checkbox cm-login-check">
-      <Checkbox
-        id="logout-sessions"
-        name="logout-sessions"
-        value="on"
-        checked={true}
-      />
+      <Checkbox id="logout-sessions" name="logout-sessions" value="on" />
       <Label for="logout-sessions">
         {@render msg("logoutOtherSessions")()}
       </Label>

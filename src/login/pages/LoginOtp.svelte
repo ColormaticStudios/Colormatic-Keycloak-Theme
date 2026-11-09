@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { PageProps } from "./PageProps";
+  import { useState } from "@keycloakify/svelte/tools/useState";
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
   import type { KcContext } from "../KcContext";
   import { untrack } from "svelte";
@@ -31,6 +32,7 @@
   let selectedCredentialId = $state(
     untrack(() => otpLogin.selectedCredentialId ?? ""),
   );
+  const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
 </script>
 
 <Template
@@ -48,6 +50,10 @@
     class="kcFormClass cm-login-form"
     action={url.loginAction}
     method="post"
+    onsubmit={() => {
+      setIsLoginButtonDisabled(true);
+      return true;
+    }}
   >
     {#if otpLogin.userOtpCredentials.length > 1}
       <div class="kcFormGroupClass cm-login-field">
@@ -124,6 +130,7 @@
           name="login"
           id="kc-login"
           type="submit"
+          disabled={$isLoginButtonDisabled}
         >
           {@render msg("doLogIn")()}
         </Button>

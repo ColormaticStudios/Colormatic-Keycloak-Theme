@@ -56,9 +56,11 @@ The most useful historical anchor for future diffs is the original import baseli
   - `@keycloakify/keycloak-account-ui`
   - `@keycloakify/keycloak-ui-shared`
 
-The maintained runtime baseline is now Keycloak 26.7 or newer. The historical
+The maintained runtime baseline is now Keycloak 26.8.2 or newer. The historical
 26.5.2 import remains useful for separating Colormatic changes from upstream,
-but it is not a supported deployment target.
+but it is not a supported deployment target. The published Keycloakify account
+package family is still on the 260700.x line; use the Keycloak 26.8.2 sources,
+not that package version number, as the vendored behavior baseline.
 
 For account upgrades, compare local code against:
 

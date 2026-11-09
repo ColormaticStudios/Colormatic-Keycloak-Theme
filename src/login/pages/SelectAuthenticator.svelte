@@ -21,7 +21,7 @@
   const advancedMsg = $derived($i18n.advancedMsg);
 </script>
 
-<Template {kcContext} {i18n} {doUseDefaultCss} {classes} displayMessage={false}>
+<Template {kcContext} {i18n} {doUseDefaultCss} {classes} displayInfo={false}>
   {#snippet headerNode()}
     {@render msg("loginChooseAuthenticator")()}
   {/snippet}

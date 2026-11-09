@@ -109,6 +109,19 @@ export async function deleteSession(
 	await throwIfResponseNotOk(response);
 }
 
+export async function deleteApplicationSessions(
+	context: KeycloakContext<BaseEnvironment>,
+	clientId: string,
+) {
+	const response = await request(
+		`/applications/${encodeURIComponent(clientId)}/sessions`,
+		context,
+		{ method: "DELETE" },
+	);
+	await throwIfResponseNotOk(response);
+	return response;
+}
+
 export async function getCredentials({ signal, context }: CallOptions) {
 	const response = await request("/credentials", context, {
 		signal,

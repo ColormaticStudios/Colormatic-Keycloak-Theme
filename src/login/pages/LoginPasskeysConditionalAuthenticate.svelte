@@ -92,7 +92,7 @@
       {#if shouldDisplayAuthenticators}
         {#if authenticators.authenticators.length > 1}
           <p class="kcSelectAuthListItemTitle">
-            {msg("passkey-available-authenticators")}
+            {@render msg("passkey-available-authenticators")()}
           </p>
         {/if}
         <div class="kcFormClass cm-login-form">
@@ -117,7 +117,7 @@
                     id={`kc-webauthn-authenticator-label-${i}`}
                     class="font-medium"
                   >
-                    {advancedMsg(authenticator.label)}
+                    {@render advancedMsg(authenticator.label)()}
                   </div>
                   {#if authenticator.transports !== undefined && authenticator.transports.displayNameProperties !== undefined && authenticator.transports.displayNameProperties.length !== 0}
                     <div
@@ -125,7 +125,7 @@
                       class="text-muted-foreground text-sm"
                     >
                       {#each authenticator.transports.displayNameProperties as nameProperty, i (i)}
-                        <span>{advancedMsg(nameProperty)}</span>
+                        <span>{@render advancedMsg(nameProperty)()}</span>
                         {#if i !== authenticator.transports.displayNameProperties.length - 1}
                           <span>,</span>{/if}
                       {/each}
@@ -133,7 +133,7 @@
                   {/if}
                   <div class="text-muted-foreground text-sm">
                     <span id={`kc-webauthn-authenticator-createdlabel-${i}`}>
-                      {msg("passkey-createdAt-label")}
+                      {@render msg("passkey-createdAt-label")()}
                     </span>
                     <span id={`kc-webauthn-authenticator-created-${i}`}>
                       {authenticator.createdAt}
@@ -168,7 +168,7 @@
             {#if !usernameHidden}
               <div class="kcFormGroupClass cm-login-field">
                 <label for="username" class="kcLabelClass cm-login-label">
-                  {msg("passkey-autofill-select")}
+                  {@render msg("passkey-autofill-select")()}
                 </label>
                 <Input
                   id="username"

@@ -23,7 +23,7 @@ export default defineConfig({
 			accountThemeImplementation: "Single-Page",
 			keycloakVersionTargets: {
 				"22-to-25": false,
-				"all-other-versions": "colormatic-keycloak-theme-kc-26.7-and-newer.jar",
+				"all-other-versions": "colormatic-keycloak-theme-kc-26.8-and-newer.jar",
 			},
 			extraThemeProperties: ["realmDisplayName=Colormatic ID"],
 		}),

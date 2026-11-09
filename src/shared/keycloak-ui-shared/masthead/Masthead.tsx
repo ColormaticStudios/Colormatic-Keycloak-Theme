@@ -94,7 +94,11 @@ const KeycloakMasthead = ({
   return (
     <Masthead {...rest}>
       <MastheadToggle>
-        <PageToggleButton variant="plain" aria-label={t("navigation")}>
+        <PageToggleButton
+          data-testid="nav-toggle"
+          variant="plain"
+          aria-label={t("navigation")}
+        >
           <BootstrapIcon icon="bi-list" />
         </PageToggleButton>
       </MastheadToggle>

@@ -30,6 +30,7 @@
   const getBodyClassName = () => bodyClassName;
   const getDoUseDefaultCss = () => doUseDefaultCss;
 
+  const msg = $derived($i18n.msg);
   const msgStr = $derived($i18n.msgStr);
   const currentLanguage = $derived($i18n.currentLanguage);
   const enabledLanguages = $derived($i18n.enabledLanguages);
@@ -41,7 +42,8 @@
   const isAppInitiatedAction = $derived(kcContext.isAppInitiatedAction);
 
   $effect(() => {
-    document.title = documentTitle ?? msgStr("loginTitle", realm.displayName);
+    document.title =
+      documentTitle ?? msgStr("loginTitle", realm.displayName || realm.name);
   });
   useSetClassName({
     qualifiedName: "html",
@@ -67,7 +69,7 @@
         id="kc-header-wrapper"
         class="kcHeaderWrapperClass cm-login-brand__title"
       >
-        {msgStr("loginTitleHtml", realm.displayNameHtml)}
+        {@render msg("loginTitleHtml", realm.displayNameHtml || realm.name)()}
       </div>
     </header>
 
@@ -94,7 +96,7 @@
           {#if displayRequiredFields}
             <p class="cm-login-required-note">
               <span class="required" aria-hidden="true">*</span>
-              {msgStr("requiredFields")}
+              {@render msg("requiredFields")()}
             </p>
           {/if}
           {#if auth !== undefined && auth.showUsername && !auth.showResetCredentials}
@@ -113,7 +115,7 @@
                     aria-hidden="true"
                   ></i>
                   <span class="kc-tooltip-text">
-                    {msgStr("restartLoginTooltip")}
+                    {@render msg("restartLoginTooltip")()}
                   </span>
                 </span>
               </Button>
@@ -142,7 +144,7 @@
                     variant="outline"
                     class="cm-login-action cm-login-action--block"
                   >
-                    {msgStr("doTryAnotherWay")}
+                    {@render msg("doTryAnotherWay")()}
                   </Button>
                 </form>
               {/if}

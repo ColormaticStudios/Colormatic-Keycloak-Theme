@@ -4,12 +4,13 @@ import {
   NavExpandable,
   NavItem,
   NavList,
+  PageContext,
   PageSidebar,
   PageSidebarBody,
   Spinner,
 } from "../../shared/@patternfly/react-core";
 import type { PropsWithChildren, MouseEvent as ReactMouseEvent } from "react";
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useContext, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   matchPath,
@@ -132,6 +133,11 @@ type NavLinkProps = {
   isActive: boolean;
 };
 
+// Matches PatternFly's own "--pf-v5-global--breakpoint--xl" token, which is
+// the width below which its Page component switches the sidebar from a
+// persistent panel to a slide-over that must be closed after navigating.
+const PAGE_SIDEBAR_OVERLAY_BREAKPOINT_PX = 1200;
+
 export const NavLink = ({
   path,
   isActive,
@@ -141,16 +147,21 @@ export const NavLink = ({
   const menuItemPath = getFullUrl(path, environment.baseUrl) + location.search;
   const href = useHref(menuItemPath);
   const handleClick = useLinkClickHandler(menuItemPath);
+  const { isSidebarOpen, onSidebarToggle, width } = useContext(PageContext);
+  const isOverlayView = width < PAGE_SIDEBAR_OVERLAY_BREAKPOINT_PX;
 
   return (
     <NavItem
       data-testid={path}
       to={href}
       isActive={isActive}
-      onClick={(event) =>
+      onClick={(event) => {
         // PatternFly does not have the correct type for this event, so we need to cast it.
-        handleClick(event as unknown as ReactMouseEvent<HTMLAnchorElement>)
-      }
+        handleClick(event as unknown as ReactMouseEvent<HTMLAnchorElement>);
+        if (isOverlayView && isSidebarOpen) {
+          onSidebarToggle();
+        }
+      }}
     >
       {children}
     </NavItem>

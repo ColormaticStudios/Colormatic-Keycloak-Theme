@@ -1,7 +1,12 @@
 import type OrganizationRepresentation from "@keycloak/keycloak-admin-client/lib/defs/organizationRepresentation";
 import { Badge, Chip, ChipGroup } from "../../@patternfly/react-core";
-import { TableText } from "../../@patternfly/react-table";
-import type { FunctionComponent, PropsWithChildren, ReactNode } from "react";
+import { TableText, cellWidth } from "../../@patternfly/react-table";
+import type {
+  FunctionComponent,
+  PropsWithChildren,
+  ReactElement,
+  ReactNode,
+} from "react";
 import { useTranslation } from "react-i18next";
 import type { LoaderFunction } from "./table/KeycloakDataTable";
 import { KeycloakDataTable } from "./table/KeycloakDataTable";
@@ -67,6 +72,10 @@ export type OrganizationTableProps = PropsWithChildren & {
   onSelect?: (orgs: OrganizationRepresentation[]) => void;
   onDelete?: (org: OrganizationRepresentation) => void;
   deleteLabel?: string;
+  /** Renders the membership type cell, plain text when not given. */
+  membershipTypeRenderer?: (
+    org: OrganizationRepresentation & { membershipType?: string },
+  ) => ReactElement | string;
 };
 
 export const OrganizationTable = ({
@@ -80,6 +89,7 @@ export const OrganizationTable = ({
   deleteLabel = "delete",
   link,
   children,
+  membershipTypeRenderer,
 }: OrganizationTableProps) => {
   const { t } = useTranslation();
 
@@ -120,10 +130,16 @@ export const OrganizationTable = ({
           name: "description",
           displayKey: "description",
         },
-        {
-          name: "membershipType",
-          displayKey: "membershipType",
-        },
+        ...(membershipTypeRenderer
+          ? [
+              {
+                name: "membershipType",
+                displayKey: "membershipType",
+                transforms: [cellWidth(20)],
+                cellRenderer: membershipTypeRenderer,
+              },
+            ]
+          : []),
       ]}
       emptyState={children}
     />

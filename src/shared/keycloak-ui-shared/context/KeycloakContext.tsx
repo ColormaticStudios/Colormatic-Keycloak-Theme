@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 import { AlertProvider } from "../alerts/Alerts";
+import { stripForeignAuthResponse } from "../utils/stripForeignAuthResponse";
 import { ErrorPage } from "./ErrorPage";
 import { Help } from "./HelpContext";
 import type { BaseEnvironment } from "./environment";
@@ -94,6 +95,15 @@ export const KeycloakProvider = <T extends BaseEnvironment>({
       setInit(true);
       calledOnce.current = true;
       return;
+    }
+
+    // Discard an authorization response that was not requested by this application before the
+    // adapter reads the current URL, so that it cannot end up in the `redirect_uri` of the login
+    // we are about to start.
+    const cleanedUrl = stripForeignAuthResponse(window.location.href);
+
+    if (cleanedUrl) {
+      window.history.replaceState(window.history.state, "", cleanedUrl);
     }
 
     const init = () =>

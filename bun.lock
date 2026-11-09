@@ -4,9 +4,9 @@
     "": {
       "name": "keycloakify-starter-svelte",
       "dependencies": {
-        "@keycloak/keycloak-admin-client": "^26.7.0",
-        "@keycloakify/keycloak-account-ui": "^260700.0.0",
-        "@keycloakify/keycloak-ui-shared": "^260700.0.0",
+        "@keycloak/keycloak-admin-client": "^26.8.2",
+        "@keycloakify/keycloak-account-ui": "^260700.0.4",
+        "@keycloakify/keycloak-ui-shared": "^260700.0.3",
         "@patternfly/patternfly": "^5.4.2",
         "@patternfly/react-core": "^5.4.14",
         "@patternfly/react-styles": "^5.4.1",
@@ -18,7 +18,7 @@
         "i18next": "^25.10.10",
         "i18next-fetch-backend": "^7.0.0",
         "lodash-es": "^4.18.1",
-        "oidc-spa": "^10.2.9",
+        "oidc-spa": "^10.2.17",
         "react": "18.3.1",
         "react-dom": "18.3.1",
         "react-hook-form": "7.70.0",
@@ -30,7 +30,7 @@
       "devDependencies": {
         "@eslint/js": "^10.0.1",
         "@internationalized/date": "^3.12.0",
-        "@keycloakify/svelte": "^1.0.0",
+        "@keycloakify/svelte": "^2.0.0",
         "@lucide/svelte": "^1.27.0",
         "@storybook/addon-docs": "^10.5.2",
         "@storybook/addon-svelte-csf": "5.1.2",
@@ -48,7 +48,7 @@
         "eslint-plugin-svelte": "^3.20.0",
         "eslint-plugin-unused-imports": "^4.4.1",
         "globals": "^17.7.0",
-        "keycloakify": "^11.15.11",
+        "keycloakify": "^11.16.4",
         "prettier": "^3.9.5",
         "prettier-plugin-svelte": "^3.5.2",
         "prettier-plugin-tailwindcss": "^0.7.4",
@@ -184,13 +184,13 @@
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
-    "@keycloak/keycloak-admin-client": ["@keycloak/keycloak-admin-client@26.7.0", "", { "dependencies": { "@microsoft/kiota-abstractions": "1.0.0-preview.103", "@microsoft/kiota-http-fetchlibrary": "1.0.0-preview.103", "@microsoft/kiota-serialization-form": "1.0.0-preview.103", "@microsoft/kiota-serialization-json": "1.0.0-preview.103", "@microsoft/kiota-serialization-multipart": "1.0.0-preview.103", "@microsoft/kiota-serialization-text": "1.0.0-preview.103", "camelize-ts": "^3.0.0", "url-template": "^3.1.1" } }, "sha512-QEsX19sFCvknBzV2zelEkZ7waglCqzayY1zDtoRQinHuUiAe2f7q+xXT6R8XNukn+rShB41TOlG4QR2Bt6hxhw=="],
+    "@keycloak/keycloak-admin-client": ["@keycloak/keycloak-admin-client@26.8.2", "", { "dependencies": { "@microsoft/kiota-abstractions": "1.0.0-preview.103", "@microsoft/kiota-http-fetchlibrary": "1.0.0-preview.103", "@microsoft/kiota-serialization-form": "1.0.0-preview.103", "@microsoft/kiota-serialization-json": "1.0.0-preview.103", "@microsoft/kiota-serialization-multipart": "1.0.0-preview.103", "@microsoft/kiota-serialization-text": "1.0.0-preview.103", "camelize-ts": "^3.0.0", "url-template": "^3.1.1" } }, "sha512-+DCQwK0u4owm3aKg5tSVJPrw96lIJFT+EJ613FKu6g0KldkrCF2eCL3x4jpmcxe/+lbyitzUGxXkQO9YZ9vQSQ=="],
 
-    "@keycloakify/keycloak-account-ui": ["@keycloakify/keycloak-account-ui@260700.0.0", "", { "dependencies": { "tsafe": "^1.8.5" }, "peerDependencies": { "@keycloakify/keycloak-ui-shared": "~260700.0.0", "@patternfly/patternfly": "^5.4.2", "@patternfly/react-core": "^5.4.14", "@patternfly/react-icons": "^5.4.2", "@patternfly/react-table": "^5.4.16", "@types/lodash-es": "^4.17.12", "@types/react": "^18.3.18", "i18next": "^25.7.3", "i18next-fetch-backend": "^7.0.0", "lodash-es": "^4.18.1", "react": "^18.3.1", "react-hook-form": "^7.70.0", "react-i18next": "^16.5.1", "react-router-dom": "^6.30.4" } }, "sha512-jdBeYS4f64C/t2Us8u1Qtvvi0zV/oHsGAAqt4UrDUT9G2qc2T3RGoKti0yJC97axBftg6PBxWGrLwTtE4fhnnQ=="],
+    "@keycloakify/keycloak-account-ui": ["@keycloakify/keycloak-account-ui@260700.0.4", "", { "dependencies": { "tsafe": "^1.8.5" }, "peerDependencies": { "@keycloakify/keycloak-ui-shared": "~260700.0.3", "@patternfly/patternfly": "^5.4.2", "@patternfly/react-core": "^5.4.14", "@patternfly/react-icons": "^5.4.2", "@patternfly/react-table": "^5.4.16", "@types/lodash-es": "^4.17.12", "@types/react": "^18.3.18", "i18next": "^25.7.3", "i18next-fetch-backend": "^7.0.0", "lodash-es": "^4.18.1", "react": "^18.3.1", "react-hook-form": "^7.70.0", "react-i18next": "^16.5.1", "react-router-dom": "^6.30.4" } }, "sha512-VVsc9fFYsZ5bMIz7RD7NV8T2rjTFPU5tFfqb/7bBkoJOnRxQ6ziqRBvf+gFLJ+wC4CWaz3ppIxcszlroOK3hiA=="],
 
-    "@keycloakify/keycloak-ui-shared": ["@keycloakify/keycloak-ui-shared@260700.0.0", "", { "peerDependencies": { "@keycloak/keycloak-admin-client": "26.7.0", "@patternfly/react-core": "^5.4.14", "@patternfly/react-icons": "^5.4.2", "@patternfly/react-styles": "^5.4.1", "@patternfly/react-table": "^5.4.16", "@types/lodash-es": "^4.17.12", "@types/react": "^18.3.18", "i18next": "^25.7.3", "lodash-es": "^4.18.1", "oidc-spa": "~10.0.5", "react": "^18.3.1", "react-hook-form": "7.70.0", "react-i18next": "^16.5.1" } }, "sha512-oRLUsB5WBj+eXNUWrixoBFit+7kScw4JfTDxIpEhX1pub9V/dThKgIjtnuq5ew2CSpaQPoU9SaWUuTVvw0XmoQ=="],
+    "@keycloakify/keycloak-ui-shared": ["@keycloakify/keycloak-ui-shared@260700.0.3", "", { "peerDependencies": { "@keycloak/keycloak-admin-client": "26.7.0", "@patternfly/react-core": "^5.4.14", "@patternfly/react-icons": "^5.4.2", "@patternfly/react-styles": "^5.4.1", "@patternfly/react-table": "^5.4.16", "@types/lodash-es": "^4.17.12", "@types/react": "^18.3.18", "i18next": "^25.7.3", "lodash-es": "^4.18.1", "oidc-spa": "~10.2.17", "react": "^18.3.1", "react-hook-form": "7.70.0", "react-i18next": "^16.5.1" } }, "sha512-hUEk5hPbhRmNj7vrEu1CepJ/1n1WTnvpZchX24ynkpj4nSTJNq3YGooLoOsKOJSZpA6RY0Dg2jsMX0o2qC7XdQ=="],
 
-    "@keycloakify/svelte": ["@keycloakify/svelte@1.0.0", "", { "peerDependencies": { "keycloakify": "^11.15.1", "svelte": "^5.0.0" }, "bin": { "_keycloakify-custom-handler": "keycloakify-svelte/bin/index.js" } }, "sha512-Qkca7ka8phFNaKaNbDrppgPM1CTRkaBbEUQfyH0RIX9RRVlp3SiVq+ndeIy6IRFtB0ZhvRqGOfKV/JwBEhRgpA=="],
+    "@keycloakify/svelte": ["@keycloakify/svelte@2.0.0", "", { "peerDependencies": { "keycloakify": "^11.16.1", "svelte": "^5.0.0" }, "bin": { "_keycloakify-custom-handler": "keycloakify-svelte/bin/index.js" } }, "sha512-ep3KfFAz7eHHAoaGjYKOTsvrEqXuorHIG0syWzTdTGUV4XynhLYibGKctX7As9IqlpZJn7XZGYxFrH8abWGl5A=="],
 
     "@lucide/svelte": ["@lucide/svelte@1.27.0", "", { "peerDependencies": { "svelte": "^5" } }, "sha512-qzNBHdqy/MKp2qxuy/DcYELuep6h19fjo+4ech8fZsS4GtZeBtg5jgCTRQvLvwhppt0mhRN6qt8Nt8rPb/J4Ag=="],
 
@@ -702,7 +702,7 @@
 
     "jsonc-parser": ["jsonc-parser@3.3.1", "", {}, "sha512-HUgH65KyejrUFPvHFPbqOY0rsFip3Bo5wb4ngvdi1EpCYWUQDC5V+Y7mZws+DLkr4M//zQJoanu1SP+87Dv1oQ=="],
 
-    "keycloakify": ["keycloakify@11.15.11", "", { "dependencies": { "tsafe": "^1.8.5" }, "bin": { "keycloakify": "bin/main.js" } }, "sha512-owrnvNVW8Kf0AzLYHzYy4U624NhyLp5vYBryoY5yNYOUo/Xud4r4jniTYvXXZeJjLzHpvJfco1iRPX5qmbnK+g=="],
+    "keycloakify": ["keycloakify@11.16.4", "", { "dependencies": { "tsafe": "^1.8.5" }, "bin": { "keycloakify": "bin/main.js" } }, "sha512-WZbV+U0Ai4hrftPCuSy2y4YpQ9G755fSQS8ibakCdQFedY7BLFCyvzXxaKfzti5Gj754WJrG8rbS1gK15yhnCg=="],
 
     "keyv": ["keyv@4.5.4", "", { "dependencies": { "json-buffer": "3.0.1" } }, "sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw=="],
 
@@ -772,7 +772,7 @@
 
     "obug": ["obug@2.1.1", "", {}, "sha512-uTqF9MuPraAQ+IsnPf366RG4cP9RtUi7MLO1N3KEc+wb0a6yKpeL0lmk2IB1jY5KHPAlTc6T/JRdC/YqxHNwkQ=="],
 
-    "oidc-spa": ["oidc-spa@10.2.9", "", { "peerDependencies": { "@angular/common": "*", "@angular/core": "*", "@angular/router": "*", "@nuxt/kit": "*", "@tanstack/react-router": "*", "@tanstack/react-start": ">=1.168.25", "@types/react": "*", "react": "*", "rxjs": "*" }, "optionalPeers": ["@angular/common", "@angular/core", "@angular/router", "@nuxt/kit", "@tanstack/react-router", "@tanstack/react-start", "@types/react", "react", "rxjs"] }, "sha512-USHdgqltz8FbgsohQS6JefjbNkHqSZwyaeEi0n7LJ7dTE2xVRBCd0lXd2kXYEcnFIgcxNiCtFkWkGpMAMH1dMA=="],
+    "oidc-spa": ["oidc-spa@10.2.18", "", { "peerDependencies": { "@angular/common": "*", "@angular/core": "*", "@angular/router": "*", "@nuxt/kit": "*", "@tanstack/react-router": "*", "@tanstack/react-start": ">=1.168.25", "@types/react": "*", "react": "*", "rxjs": "*" }, "optionalPeers": ["@angular/common", "@angular/core", "@angular/router", "@nuxt/kit", "@tanstack/react-router", "@tanstack/react-start", "@types/react", "react", "rxjs"] }, "sha512-2Nq9mUHRxoPiCQEy586Xrxmw9o2zamgA5y24q4wbdco5R9WRx0v1qZqFtqEJ/iRJpVaOC9wDy3Gk1bYDDMu1Dg=="],
 
     "open": ["open@10.2.0", "", { "dependencies": { "default-browser": "^5.2.1", "define-lazy-prop": "^3.0.0", "is-inside-container": "^1.0.0", "wsl-utils": "^0.1.0" } }, "sha512-YgBpdJHPyQ2UE5x+hlSXcnejzAvD0b22U2OuAP+8OnlJT+PjWPxtgmGqKKc+RgTM63U9gN0YzrYc71R2WT/hTA=="],
 

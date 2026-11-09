@@ -26,7 +26,11 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { Environment } from "../environment";
-import { deleteConsent, getApplications } from "../api/methods";
+import {
+  deleteApplicationSessions,
+  deleteConsent,
+  getApplications,
+} from "../api/methods";
 import type { ClientRepresentation } from "../api/representations";
 import { Page } from "../components/page/Page";
 import type { TFuncKey } from "../i18n-type";
@@ -49,7 +53,17 @@ export const Applications = () => {
 
   usePromise(
     (signal) => getApplications({ signal, context }),
-    (clients) => setApplications(clients.map((c) => ({ ...c, open: false }))),
+    (clients) =>
+      setApplications(
+        [...clients]
+          .sort((a, b) =>
+            (a.clientName || a.clientId).localeCompare(
+              b.clientName || b.clientId,
+              context.environment.locale,
+            ),
+          )
+          .map((c) => ({ ...c, open: false })),
+      ),
     [key],
   );
 
@@ -71,6 +85,16 @@ export const Applications = () => {
     }
   };
 
+  const endApplicationSession = async (id: string, name: string) => {
+    try {
+      await deleteApplicationSessions(context, id);
+      refresh();
+      addAlert(t("endApplicationSessionSuccess", { name }));
+    } catch (error) {
+      addError("endApplicationSessionError", error);
+    }
+  };
+
   return (
     <Page title={t("applications")} description={t("applicationsIntroMessage")}>
       {!applications ? (
@@ -83,12 +107,13 @@ export const Applications = () => {
               <Th>{t("name")}</Th>
               <Th>{t("applicationType")}</Th>
               <Th>{t("status")}</Th>
+              <Th screenReaderText={t("endApplicationSession")} />
             </Tr>
           </Thead>
           {applications.length === 0 ? (
             <Tbody>
               <Tr>
-                <Td colSpan={4}>{t("applicationsIntroMessage")}</Td>
+                <Td colSpan={5}>{t("applicationsIntroMessage")}</Td>
               </Tr>
             </Tbody>
           ) : (
@@ -139,13 +164,43 @@ export const Applications = () => {
                     {application.offlineAccess ? ", " + t("offlineAccess") : ""}
                   </Td>
                   <Td dataLabel={t("status")}>
-                    {application.inUse ? t("inUse") : t("notInUse")}
+                    {application.inUse || application.offlineAccess
+                      ? t("inUse")
+                      : t("notInUse")}
+                  </Td>
+                  <Td dataLabel={t("endApplicationSession")}>
+                    {(application.inUse || application.offlineAccess) &&
+                      application.clientId !== context.environment.clientId && (
+                        <ContinueCancelModal
+                          buttonTitle={t("endApplicationSession")}
+                          modalTitle={t("endApplicationSession")}
+                          continueLabel={t("confirm")}
+                          cancelLabel={t("cancel")}
+                          buttonVariant="secondary"
+                          onContinue={() =>
+                            endApplicationSession(
+                              application.clientId,
+                              label(
+                                t,
+                                application.clientName || application.clientId,
+                              ),
+                            )
+                          }
+                        >
+                          {t("endApplicationSessionMessage", {
+                            name: label(
+                              t,
+                              application.clientName || application.clientId,
+                            ),
+                          })}
+                        </ContinueCancelModal>
+                      )}
                   </Td>
                 </Tr>
                 <Tr isExpanded={application.open}>
                   <Td />
                   <Td
-                    colSpan={3}
+                    colSpan={4}
                     id={`content-${application.clientId}`}
                     aria-label={t("applicationDetails", {
                       clientId: application.clientId,
