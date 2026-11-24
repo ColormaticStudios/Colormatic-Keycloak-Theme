@@ -40,3 +40,60 @@
 .kcInputErrorMessageClass {
   color: var(--cm-danger);
 }
+
+.cm-breached-password-notice {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--cm-border);
+  border-inline-start: 3px solid var(--cm-warning);
+  border-radius: var(--radius-md);
+  background: var(--cm-surface-subtle);
+  color: var(--cm-text);
+}
+
+.cm-breached-password-notice__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-block-start: 0.125rem;
+  color: var(--cm-warning);
+}
+
+.cm-breached-password-notice__body {
+  display: grid;
+  gap: 0.625rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.cm-breached-password-notice__title {
+  margin: 0;
+  color: var(--cm-text);
+  font-weight: 600;
+}
+
+.cm-breached-password-notice__text {
+  margin: 0;
+  color: var(--cm-text-muted);
+}
+
+.cm-breached-password-notice__actions {
+  display: grid;
+  gap: 0.375rem;
+  padding-block-start: 0.375rem;
+  border-block-start: 1px solid var(--cm-border);
+}
+
+.cm-breached-password-notice__actions-heading {
+  margin: 0;
+  color: var(--cm-text);
+  font-weight: 500;
+}
+
+.cm-breached-password-notice__actions ul {
+  margin: 0;
+  gap: 0.25rem;
+  color: var(--cm-text-muted);
+}

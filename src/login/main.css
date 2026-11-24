@@ -665,6 +665,35 @@
   color: var(--cm-text-muted);
 }
 
+.cm-login-aux-field {
+  position: absolute;
+  inset-inline-start: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cm-cap-widget-container {
+  padding-block-start: 0.25rem;
+}
+
+cap-widget.cm-cap-widget {
+  display: block;
+  width: 100%;
+  --cap-widget-width: 100%;
+  --cap-background: var(--cm-field-background);
+  --cap-border-color: var(--cm-field-border);
+  --cap-border-radius: var(--radius-md);
+  --cap-color: var(--cm-text);
+  --cap-focus-ring: var(--cm-focus);
+  --cap-checkbox-background: var(--cm-control);
+  --cap-checkbox-border: 1px solid var(--cm-field-border);
+  --cap-invalid-border-color: var(--cm-danger);
+  --cap-invalid-ring-color: var(--cm-danger);
+}
+
 .cm-login-description-list {
   display: grid;
   gap: 1rem;

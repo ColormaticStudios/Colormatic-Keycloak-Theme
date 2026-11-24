@@ -299,3 +299,28 @@
     },
   }}
 />
+
+<Story
+  name="WithBreachedPassword"
+  args={{
+    ...args,
+    kcContext: {
+      profile: {
+        attributesByName: {
+          username: { value: "alex" },
+          email: { value: "alex@example.org" },
+          firstName: { value: "Alex" },
+          lastName: { value: "Rivera" },
+        },
+      },
+      messagesPerField: {
+        existsError: (fieldName: string, ...otherFieldNames: string[]) =>
+          [fieldName, ...otherFieldNames].includes("password"),
+        get: (fieldName: string) =>
+          fieldName === "password"
+            ? "This password was found in a known data breach and cannot be used. Choose a unique password you do not use elsewhere; a password manager can help generate one."
+            : undefined,
+      },
+    },
+  }}
+/>

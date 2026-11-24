@@ -4,7 +4,13 @@
   import { Checkbox } from "../../lib/components/ui/checkbox";
   import { Label } from "../../lib/components/ui/label";
 
-  const { i18n }: { i18n: Readable<I18n> } = $props();
+  let {
+    i18n,
+    checked = $bindable(false),
+  }: {
+    i18n: Readable<I18n>;
+    checked?: boolean;
+  } = $props();
 
   const msg = $derived($i18n.msg);
 </script>
@@ -12,7 +18,12 @@
 <div id="kc-form-options" class="kcFormOptionsClass">
   <div class="kcFormOptionsWrapperClass">
     <div class="checkbox cm-login-check">
-      <Checkbox id="logout-sessions" name="logout-sessions" value="on" />
+      <Checkbox
+        id="logout-sessions"
+        name="logout-sessions"
+        value="on"
+        bind:checked
+      />
       <Label for="logout-sessions">
         {@render msg("logoutOtherSessions")()}
       </Label>

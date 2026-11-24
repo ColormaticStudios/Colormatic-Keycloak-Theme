@@ -58,3 +58,41 @@
     },
   }}
 />
+
+<Story
+  name="BreachedPassword"
+  args={{
+    ...args,
+    kcContext: {
+      url: {
+        loginAction: "/mock-login-action",
+      },
+      breachedPassword: true,
+      message: {
+        type: "warning",
+        summary:
+          "The password you signed in with appeared in a public data breach. Choose a new, unique password below before continuing, and change this password anywhere else you reused it.",
+      },
+      isAppInitiatedAction: false,
+    },
+  }}
+/>
+
+<Story
+  name="BreachedPasswordRejectedNewPassword"
+  args={{
+    ...args,
+    kcContext: {
+      url: {
+        loginAction: "/mock-login-action",
+      },
+      breachedPassword: true,
+      messagesPerField: {
+        existsError: (field: string) => field === "password",
+        get: () =>
+          "This password was found in a known data breach and cannot be used. Choose a unique password you do not use elsewhere; a password manager can help generate one.",
+      },
+      isAppInitiatedAction: false,
+    },
+  }}
+/>

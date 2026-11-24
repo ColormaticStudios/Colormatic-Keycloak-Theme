@@ -3,6 +3,8 @@
   import { kcSanitize } from "keycloakify/lib/kcSanitize";
   import type { KcContext } from "../KcContext";
   import type { I18n } from "../i18n";
+  import CapWidget from "../components/CapWidget.svelte";
+  import HoneypotField from "../components/HoneypotField.svelte";
   import FormActions from "../components/FormActions.svelte";
   import FormField from "../components/FormField.svelte";
   import { Button } from "../../lib/components/ui/button";
@@ -23,6 +25,15 @@
   const realm = $derived(kcContext.realm);
   const auth = $derived(kcContext.auth);
   const messagesPerField = $derived(kcContext.messagesPerField);
+  const capRequired = $derived(
+    Boolean(kcContext.capRequired && kcContext.capApiEndpoint),
+  );
+  const capApiEndpoint = $derived(kcContext.capApiEndpoint ?? "");
+  const capWidgetScriptUrl = $derived(kcContext.capWidgetScriptUrl);
+  const capWasmUrl = $derived(kcContext.capWasmUrl);
+  const capHashwxUrl = $derived(kcContext.capHashwxUrl);
+
+  let isCapSolved = $state(false);
 
   const msg = $derived($i18n.msg);
 </script>
@@ -33,7 +44,7 @@
   {doUseDefaultCss}
   {classes}
   displayInfo={true}
-  displayMessage={!messagesPerField.existsError("username")}
+  displayMessage={!messagesPerField.existsError("username", "cap")}
 >
   {#snippet headerNode()}
     {@render msg("emailForgotTitle")()}
@@ -51,6 +62,7 @@
     action={url.loginAction}
     method="post"
   >
+    <HoneypotField />
     <FormField
       inputId="username"
       hasError={messagesPerField.existsError("username")}
@@ -82,6 +94,21 @@
         {/if}
       {/snippet}
     </FormField>
+    {#if capRequired}
+      <CapWidget
+        {i18n}
+        apiEndpoint={capApiEndpoint}
+        widgetScriptUrl={capWidgetScriptUrl}
+        wasmUrl={capWasmUrl}
+        hashwxUrl={capHashwxUrl}
+        errorMessage={messagesPerField.existsError("cap")
+          ? messagesPerField.get("cap")
+          : undefined}
+        onSolvedChange={(solved) => {
+          isCapSolved = solved;
+        }}
+      />
+    {/if}
     <div class="kcFormGroupClass kcFormSettingClass">
       <div id="kc-form-options" class="kcFormOptionsClass">
         <div class="kcFormOptionsWrapperClass pt-3">
@@ -92,7 +119,11 @@
       </div>
 
       <FormActions>
-        <Button class="cm-login-action--block" type="submit">
+        <Button
+          disabled={capRequired && !isCapSolved}
+          class="cm-login-action--block"
+          type="submit"
+        >
           {@render msg("doSubmit")()}
         </Button>
       </FormActions>

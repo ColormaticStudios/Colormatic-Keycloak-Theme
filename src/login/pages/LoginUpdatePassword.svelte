@@ -1,4 +1,5 @@
 <script lang="ts">
+  import BreachedPasswordNotice from "../components/BreachedPasswordNotice.svelte";
   import LogoutOtherSessions from "../components/LogoutOtherSessions.svelte";
   import PasswordWrapper from "../components/PasswordWrapper.svelte";
   import type { PageProps } from "./PageProps";
@@ -22,9 +23,13 @@
   > = $props();
 
   const msg = $derived($i18n.msg);
+  const advancedMsg = $derived($i18n.advancedMsg);
   const url = $derived(kcContext.url);
   const messagesPerField = $derived(kcContext.messagesPerField);
   const isAppInitiatedAction = $derived(kcContext.isAppInitiatedAction);
+  const isBreachedPassword = $derived(kcContext.breachedPassword === true);
+
+  let logoutOtherSessions = $derived(isBreachedPassword);
 </script>
 
 <Template
@@ -32,11 +37,21 @@
   {i18n}
   {doUseDefaultCss}
   {classes}
-  displayMessage={!messagesPerField.existsError("password", "password-confirm")}
+  displayMessage={!messagesPerField.existsError(
+    "password",
+    "password-confirm",
+  ) && !(isBreachedPassword && kcContext.message?.type === "warning")}
 >
   {#snippet headerNode()}
-    {@render msg("updatePasswordTitle")()}
+    {#if isBreachedPassword}
+      {@render advancedMsg("updateBreachedPasswordTitle")()}
+    {:else}
+      {@render msg("updatePasswordTitle")()}
+    {/if}
   {/snippet}
+  {#if isBreachedPassword}
+    <BreachedPasswordNotice {i18n} />
+  {/if}
   <form
     id="kc-passwd-update-form"
     class="kcFormClass cm-login-form"
@@ -100,13 +115,17 @@
       {/snippet}
     </FormField>
     <div class="kcFormGroupClass cm-login-field">
-      <LogoutOtherSessions {i18n} />
+      <LogoutOtherSessions {i18n} bind:checked={logoutOtherSessions} />
       <FormActions>
         <Button
           class={!isAppInitiatedAction ? "cm-login-action--block" : undefined}
           type="submit"
         >
-          {@render msg("doSubmit")()}
+          {#if isBreachedPassword}
+            {@render advancedMsg("breachedPasswordSubmit")()}
+          {:else}
+            {@render msg("doSubmit")()}
+          {/if}
         </Button>
         {#if isAppInitiatedAction}
           <Button

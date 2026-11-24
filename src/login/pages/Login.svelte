@@ -1,5 +1,6 @@
 <script lang="ts">
   import PasswordWrapper from "../components/PasswordWrapper.svelte";
+  import HoneypotField from "../components/HoneypotField.svelte";
   import FormActions from "../components/FormActions.svelte";
   import FormField from "../components/FormField.svelte";
   import { Button } from "../../lib/components/ui/button";
@@ -127,6 +128,7 @@
           action={url.loginAction}
           method="post"
         >
+          <HoneypotField />
           {#if !usernameHidden}
             <FormField
               inputId="username"

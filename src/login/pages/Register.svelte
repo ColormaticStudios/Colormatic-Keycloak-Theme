@@ -4,6 +4,8 @@
   import { useState } from "@keycloakify/svelte/tools/useState";
   import { clsx } from "keycloakify/tools/clsx";
   import { untrack, type Component } from "svelte";
+  import CapWidget from "../components/CapWidget.svelte";
+  import HoneypotField from "../components/HoneypotField.svelte";
   import TermsAcceptance from "../components/TermsAcceptance.svelte";
   import type { I18n } from "../i18n";
   import type { KcContext } from "../KcContext";
@@ -33,6 +35,13 @@
   const recaptchaVisible = $derived(kcContext.recaptchaVisible);
   const recaptchaSiteKey = $derived(kcContext.recaptchaSiteKey);
   const recaptchaAction = $derived(kcContext.recaptchaAction);
+  const capRequired = $derived(
+    Boolean(kcContext.capRequired && kcContext.capApiEndpoint),
+  );
+  const capApiEndpoint = $derived(kcContext.capApiEndpoint ?? "");
+  const capWidgetScriptUrl = $derived(kcContext.capWidgetScriptUrl);
+  const capWasmUrl = $derived(kcContext.capWasmUrl);
+  const capHashwxUrl = $derived(kcContext.capHashwxUrl);
   const termsAcceptanceRequired = $derived(kcContext.termsAcceptanceRequired);
 
   const msg = $derived($i18n.msg);
@@ -40,6 +49,7 @@
 
   const [isFormSubmittable, setIsFormSubmittable] = useState(false);
   const [areTermsAccepted, setAreTermsAccepted] = useState(false);
+  let isCapSolved = $state(false);
   let htmlFormElement: HTMLFormElement | null = $state(null);
 
   $effect(() => {
@@ -81,6 +91,7 @@
     method="post"
     bind:this={htmlFormElement}
   >
+    <HoneypotField />
     <UserProfileFormFields
       {kcContext}
       {i18n}
@@ -93,6 +104,21 @@
         {messagesPerField}
         areTermsAccepted={$areTermsAccepted}
         onAreTermsAcceptedValueChange={setAreTermsAccepted}
+      />
+    {/if}
+    {#if capRequired}
+      <CapWidget
+        {i18n}
+        apiEndpoint={capApiEndpoint}
+        widgetScriptUrl={capWidgetScriptUrl}
+        wasmUrl={capWasmUrl}
+        hashwxUrl={capHashwxUrl}
+        errorMessage={messagesPerField.existsError("cap")
+          ? messagesPerField.get("cap")
+          : undefined}
+        onSolvedChange={(solved) => {
+          isCapSolved = solved;
+        }}
       />
     {/if}
     {#if recaptchaRequired && (recaptchaVisible || recaptchaAction === undefined)}
@@ -124,7 +150,8 @@
         <div id="kc-form-buttons" class="kcFormButtonsClass cm-login-actions">
           <Button
             disabled={!$isFormSubmittable ||
-              (termsAcceptanceRequired && !$areTermsAccepted)}
+              (termsAcceptanceRequired && !$areTermsAccepted) ||
+              (capRequired && !isCapSolved)}
             class="w-full"
             type="submit"
           >

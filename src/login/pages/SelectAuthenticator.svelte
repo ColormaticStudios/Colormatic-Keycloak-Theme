@@ -19,6 +19,17 @@
 
   const msg = $derived($i18n.msg);
   const advancedMsg = $derived($i18n.advancedMsg);
+
+  const AUTH_SELECTION_MESSAGE_ALIASES: Record<string, string> = {
+    "colormatic-pwned-login-form-display-name":
+      "auth-username-password-form-display-name",
+    "colormatic-pwned-login-form-help-text":
+      "auth-username-password-form-help-text",
+  };
+
+  function resolveAuthSelectionMessage(key: string): string {
+    return AUTH_SELECTION_MESSAGE_ALIASES[key] ?? key;
+  }
 </script>
 
 <Template {kcContext} {i18n} {doUseDefaultCss} {classes} displayInfo={false}>
@@ -38,10 +49,14 @@
           value={authenticationSelection.authExecId}
         >
           {#snippet title()}
-            {@render advancedMsg(authenticationSelection.displayName)()}
+            {@render advancedMsg(
+              resolveAuthSelectionMessage(authenticationSelection.displayName),
+            )()}
           {/snippet}
           {#snippet description()}
-            {@render advancedMsg(authenticationSelection.helpText)()}
+            {@render advancedMsg(
+              resolveAuthSelectionMessage(authenticationSelection.helpText),
+            )()}
           {/snippet}
         </AuthChoice>
       {/each}
